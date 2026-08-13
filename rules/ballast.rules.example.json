@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "_comment": "Copy this file to <project>/.claude/ballast.rules.json (project rules) or ~/.claude/ballast.rules.json (user rules). Project rules override user rules on duplicate ids. Keep bodies short and imperative — every injected character competes with the actual work.",
+  "rules": [
+    {
+      "id": "label-claims",
+      "title": "Label every claim",
+      "when": {
+        "keywords": ["research", "verify", "statistics", "stats", "market size", "how many", "is it true", "figure out"]
+      },
+      "body": "Research results and model knowledge are drafts. Attach a label to every claim before using it: confirmed / observed / assumed / hearsay / unknown. Unlabeled claims must not be presented as fact. See the verify-gate skill for what each label requires."
+    },
+    {
+      "id": "cost-gate",
+      "title": "Estimate before spending",
+      "when": {
+        "keywords": ["generate", "render", "batch", "video", "image", "credits", "api cost", "paid"]
+      },
+      "body": "Anything that spends money or credits: present an estimate and get explicit approval BEFORE executing. No exceptions for small amounts — the habit is the point."
+    },
+    {
+      "id": "no-silent-substitution",
+      "title": "Never swap what the user fixed",
+      "when": {
+        "keywords": ["instead", "alternative", "switch to", "replace", "better model", "cheaper", "deprecated"]
+      },
+      "body": "Models, tools, versions, and settings the user explicitly fixed are not yours to change. Propose alternatives with reasons; the user decides. This applies even when you are sure the alternative is better."
+    },
+    {
+      "id": "record-immediately",
+      "title": "Record decisions in-session",
+      "when": {
+        "keywords": ["decided", "decision", "let's go with", "confirmed", "final", "approved", "we'll use"]
+      },
+      "body": "When the user confirms a decision, write it to the decision ledger in the same session (see the decision-ledger skill). Unresolved items go to the open-questions file — registered, not remembered. Zero loss."
+    },
+    {
+      "id": "danger-block-example",
+      "title": "Blocked: irreversible bulk destruction",
+      "action": "block",
+      "when": {
+        "patterns": ["rm\\s+-rf\\s+[~/]\\S*\\s*$", "\\bdrop\\s+(table|database)\\b", "force[- ]?push.*\\b(main|master|prod)"]
+      },
+      "body": "This request matched a configured danger pattern and was stopped before the agent saw it. If you really mean it, re-issue the request explicitly, or edit .claude/ballast.rules.json."
+    },
+    {
+      "id": "always-on-example",
+      "title": "Example: always-on rule",
+      "when": {
+        "always": false
+      },
+      "body": "Set \"always\": true to inject a rule into every request regardless of keywords. Use for at most 1-2 rules — an always-on rule you stop reading is worse than no rule."
+    }
+  ]
+}

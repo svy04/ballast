@@ -1,0 +1,12 @@
+{
+  "name": "ballast",
+  "description": "Discipline layer for Claude Code — rules hook, decision ledger, verify gate, proof standard, brain scaffold.",
+  "owner": { "name": "svy04" },
+  "plugins": [
+    {
+      "name": "ballast",
+      "source": "./",
+      "description": "Discipline layer for Claude Code: rules hook + decision ledger + verify gate + proof standard + brain scaffold."
+    }
+  ]
+}

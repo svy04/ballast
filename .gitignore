@@ -1,0 +1,17 @@
+# --- ballast publish-hygiene baseline (docs/PUBLISH-CHECKLIST.md) ---
+# Claude Code local state — can contain approved command strings with inline secrets
+.claude/settings.local.json
+# session transcripts / logs
+*.jsonl
+*.log
+# secrets
+.env
+.env.*
+!.env.example
+# real memory (this repo ships templates only — a live brain never belongs here)
+memory/
+
+# --- general ---
+node_modules/
+.DS_Store
+Thumbs.db
