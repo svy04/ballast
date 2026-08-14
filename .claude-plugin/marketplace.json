@@ -1,12 +1,12 @@
 {
   "name": "ballast",
-  "description": "Discipline layer for Claude Code — rules hook, decision ledger, verify gate, proof standard, brain scaffold.",
+  "description": "A goal engine for Claude Code that doesn't trust itself — terrain scan, verified atomic foundations, auto-delivered rules, decision ledger, proof standard.",
   "owner": { "name": "svy04" },
   "plugins": [
     {
       "name": "ballast",
       "source": "./",
-      "description": "Discipline layer for Claude Code: rules hook + decision ledger + verify gate + proof standard + brain scaffold."
+      "description": "Goal engine + discipline layer: goal pipeline, rules hook, pin, verify gate, decision ledger, proof standard, brain scaffold."
     }
   ]
 }

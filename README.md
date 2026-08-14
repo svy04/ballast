@@ -1,20 +1,30 @@
 # ⚓ ballast
 
-**A discipline layer for Claude Code — so your AI second brain doesn't drift.**
+**A goal engine for Claude Code that doesn't trust itself.**
 
-If you run Claude as your external memory — decisions, research, product facts, ongoing work — the failure mode isn't forgetting. It's **drift**: unverified claims harden into "facts", past decisions get quietly rewritten, and confident copy ships about features that don't exist.
+Hand it a goal — a campaign, a codebase, a field you've never touched. ballast structures Claude to *earn* the result instead of asserting it: scan the terrain before writing answers, build the full skeleton, break the foundations into atomic pieces, verify every piece before believing it, and build from bedrock to a verified done.
 
-ballast is the counterweight (the heavy stuff low in a ship's hull that keeps it upright). One plugin, five pieces:
+Ten seconds of the philosophy in action:
+
+> **You:** "that cheaper model looks fine — just switch to it"
+> **ballast** *(rule injected before Claude answers)*: "Never swap what the user fixed. Propose; the user decides."
+> **Claude:** "You pinned this model on Aug 13 (ledger D-012). Here's the comparison — your call."
+
+Claude didn't remember to be careful. The system made carefulness arrive.
+
+## What's in the box
 
 | Piece | Kind | What it does |
 |---|---|---|
-| **rules hook** | hook | Matches every user message against your rule catalog and injects the **full text** of the rules that apply — before the work starts. Can hard-block configured danger patterns. |
-| **decision-ledger** | skill | Append-only `DECISIONS.md`: decisions are never edited or deleted, only superseded — with links both ways. |
-| **verify-gate** | skill | Research and model knowledge are drafts until gated: refute-first, ≥2 primary sources, sample size, stated limits, 90-day freshness. Optional second-model verification. |
-| **proof-standard** | skill | No external claim about your product without evidence in a truth file. Four code states — implemented / wired / operational / verified — never blended. |
-| **brain-init** | skill | Scaffolds the memory structure (index, ledger, open questions, session log, product truth) in any project. |
+| **goal** | skill | The engine. Terrain scan (questions before answers) → full skeleton → atomic leaves, each verified before it's load-bearing → re-check loop → done means verified, not declared. |
+| **rules hook** | hook | Your standing rules, auto-injected into every message they apply to — full text, before the work starts. Danger patterns hard-blocked. Tell Claude once. |
+| **pin** | skill | Turns a correction you just made into a permanent rule, in one step. |
+| **verify-gate** | skill | Research and model knowledge stay drafts until gated: refute-first, ≥2 primary sources, sample size, stated limits, labels. |
+| **decision-ledger** | skill | Append-only `DECISIONS.md` — changed minds get supersede links, not silent edits. |
+| **proof-standard** | skill | No external claim about your product without evidence in a truth file. Four code states, never blended. |
+| **brain-init** | skill | Scaffolds the memory structure: index, ledger, open questions, session log, product truth. |
 
-Distilled from a real system: a non-developer ran their entire job through Claude Code for months. These are the pieces that kept that system honest, with the company-specific parts removed.
+Distilled from a real system: a non-developer ran their entire job through Claude Code for months, new fields included. These are the pieces that made the results hold up, with the company-specific parts removed.
 
 ## Install
 
@@ -27,13 +37,13 @@ The rules hook is a single zero-dependency script; it needs `node` (≥ 18) on y
 
 ## Quick start
 
-1. `/ballast:brain-init` — scaffold `memory/` and the session-start rules in your current project.
-2. Copy [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json) to `<project>/.claude/ballast.rules.json` and prune it to the rules you actually mean.
-3. Work normally. Confirm a decision → it lands in the ledger. Research something → claims get labels. Write product copy → it cites the truth file. Type something that matches a danger pattern → the hook stops it before the agent sees it.
+1. `/ballast:goal <something big>` — run a goal through the full pipeline. For an unfamiliar field it will collect the field's questions, traps, and standard tools *before* producing answers.
+2. Or start small: `/ballast:brain-init` scaffolds the memory structure in your project.
+3. Correct Claude about anything once → it offers to **pin** the correction as a rule → that rule now arrives automatically with every future message it applies to.
 
 ## The rules hook
 
-Claude Code loads your `CLAUDE.md` once — but long sessions drift away from it, and 40 standing rules cost context on every request whether relevant or not. The hook flips this: rules live in a catalog, and each user message gets **only the rules that match it**, injected as context at full text.
+Claude Code loads your `CLAUDE.md` once — but long sessions drift away from it, and standing rules cost context whether relevant or not. The hook flips the direction: rules live in a catalog, and each incoming message gets **only the rules that match it**, injected at full text.
 
 Catalogs, merged in this order (project wins on duplicate `id`):
 
@@ -52,23 +62,22 @@ Rule format:
 }
 ```
 
-- `keywords` — case-insensitive substring match against the message
-- `patterns` — regular expressions (case-insensitive)
-- `always: true` — inject on every message (use for 1–2 rules at most)
-- `action: "block"` — instead of injecting, stop the prompt and show `body` as the reason
-- Injection is capped (12 rules / ~6,000 chars) — if you hit the cap, your catalog needs pruning, not a bigger cap
+- `keywords` — case-insensitive substring match; `patterns` — regex; `always: true` — every message (1–2 rules max)
+- `action: "block"` — stop the prompt outright and show `body` as the reason
+- Injection is capped (12 rules / ~6,000 chars) — hitting the cap means your catalog needs pruning
+- Escape hatches: `BALLAST_DISABLE=1` turns the hook off; `BALLAST_DEBUG=1` prints diagnostics to stderr. A broken catalog never breaks your session — the hook fails silent by design.
 
-Escape hatches: `BALLAST_DISABLE=1` turns the hook off; `BALLAST_DEBUG=1` prints diagnostics to stderr. A broken catalog never breaks your session — the hook fails silent by design.
+Start from [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json), or just let **pin** write the catalog for you.
 
 ## Hygiene — read before you publish anything
 
 A Claude-operated workspace accumulates secrets and private facts in places you stopped looking at: `settings.local.json`, session transcripts, memory files. In 2026 alone, public reports include hundreds of npm packages that accidentally shipped `.claude/settings.local.json` (some with live credentials) and a major vendor shipping internal `CLAUDE.md` files inside a signed mobile app. Scanners like [claudleak](https://github.com/hazcod/claudleak) exist because this keeps happening.
 
-Before your first push from any Claude-operated repo, walk [docs/PUBLISH-CHECKLIST.md](docs/PUBLISH-CHECKLIST.md). ballast's own repo `.gitignore` follows it.
+Before your first push from any Claude-operated repo, walk [docs/PUBLISH-CHECKLIST.md](docs/PUBLISH-CHECKLIST.md). ballast's own `.gitignore` follows it.
 
 ## Prior art & an honesty note
 
-This README practices its own verify-gate labels: as of **August 2026** we searched for and could not find public projects doing per-message **rule-body** injection (closest: hooks that suggest skill *names*), a single append-only decision ledger with two-way supersede links (closest: decision-record-per-file conventions), or a product-truth file with a no-unproven-claims standard. `could not find` ≠ `does not exist` — if you know prior art, open an issue and we'll link it here.
+This README practices its own verify-gate labels: as of **August 2026** we searched for and could not find public projects doing per-message **rule-body** injection (closest: hooks that suggest skill *names*), a single append-only decision ledger with two-way supersede links, or a product-truth file with a no-unproven-claims standard. `could not find` ≠ `does not exist` — if you know prior art, open an issue and we'll link it here.
 
 ## License
 

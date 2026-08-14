@@ -1,8 +1,8 @@
 {
   "name": "ballast",
   "displayName": "ballast",
-  "version": "0.1.0",
-  "description": "A discipline layer for Claude Code: per-message rule injection, an append-only decision ledger, a verification gate for knowledge, and a proof standard for product claims — so your AI second brain doesn't drift.",
+  "version": "0.2.0",
+  "description": "A goal engine for Claude Code that doesn't trust itself: terrain scan before answers, atomic verified foundations, standing rules auto-injected per message, an append-only decision ledger, and a proof standard — from bedrock to a verified done.",
   "author": { "name": "svy04" },
   "license": "MIT",
   "homepage": "https://github.com/svy04/ballast",
