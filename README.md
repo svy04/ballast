@@ -6,15 +6,16 @@
 
 **ballast is a Claude Code plugin that turns working with Claude into a system that finishes goals. It mobilizes what you already hold, keeps what the work verifies, reuses every solved path, and calls nothing done until a check passes — session after session.**
 
-- **Zero dependencies, zero network** — one script, imports only `fs`/`os`/`path`; it reads local files and prints. Nothing is sent anywhere
+- **Zero dependencies, zero network** — one script, imports only `fs`/`os`/`path`; it reads local files and prints. ballast itself sends nothing anywhere (the optional verifier/researcher commands are local CLIs you configure)
 - **Two commands to install** — the plugin marketplace, nothing else
-- **One hook + nine skills** — only the hook is code-enforced, and the docs label which is which
+- **One hook + eleven skills** — only the hook is code-enforced, and the docs label which is which
+- **Checks stand before mistakes** — deliverables rehearse against a zero-context reader before shipping, and research collected by a second model arrives `hearsay`, never as fact
 - **Ships empty** — the hook stays silent until rules enter your catalog; [Quick start](#quick-start) is how they get there
-- **[Hook verified on 5 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog stays harmless; run `node hooks/scripts/verify-hook.mjs` to re-check
+- **[Hook verified on 5 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog stays harmless; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.4.0-blue" alt="Version 0.4.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.5.0-blue" alt="Version 0.5.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
@@ -51,7 +52,7 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 /plugin install ballast@ballast
 ```
 
-The hook runs on the `node` (≥ 18) already on your PATH. Everything else is markdown.
+The hook runs on the `node` (≥ 18) already on your PATH. Everything else is markdown. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
 
 ## Why ballast
 
@@ -64,17 +65,19 @@ In the fix column, *code* means a script enforces it whether Claude cooperates o
 | Plausible statements harden into facts | Confident answers on unverified claims | **verify gate** *(convention)* — every claim labeled; `confirmed` is earned |
 | Copy describes the roadmap, not the product | "We do X" about missing features | **proof standard** *(convention)* — external claims only from a truth file |
 | "Done" means Claude said so | Declared success, quiet failure | **goal** *(convention)* — done means a check passed |
+| Deliverables fail on first contact with their reader | Stalls and misreadings surface after shipping | **rehearsal** *(convention)* — a zero-context reader executes it before it ships |
+| Research and judgment travel as one | A second model's fluent summary lands as fact | **researcher** *(convention)* — collection delegated, judgment never; findings arrive `hearsay` |
 
 A truth file is a record of what the product verifiably does, with evidence attached; a passed check is a file that exists, a test that runs, an output actually inspected.
 
-Only one row is code-enforced. The four conventions hold exactly as well as Claude follows them — which means they can drift like any prompt.
+Only one row is code-enforced. The six conventions hold exactly as well as Claude follows them — which means they can drift like any prompt.
 
 ballast does not pretend otherwise. Its route from convention to enforcement is **pin**: when a convention slips, you correct it once, pin writes the correction into the rule catalog, and the hook delivers it from then on.
 
-The pieces also chain across a goal's whole life — every link below is a convention; the hook stays the only code:
+The pieces also chain across a goal's whole life — the hook is the only code in this chain; everything else is convention:
 
-- **Prepare** — goal mobilizes what the project already holds, then scans the terrain
-- **Accumulate** — knowledge-base and the decision ledger keep what the work verifies
+- **Prepare** — goal mobilizes what the project already holds, then scans the terrain; with a researcher configured, the collecting itself can be delegated
+- **Accumulate** — knowledge-base and the decision ledger keep what the work verifies; rehearsal is how a deliverable earns its passed check
 - **Reuse** — the rules hook, pin, and skill-forge put it back into later sessions
 - **Return** — checkpoint makes picking the goal back up a thirty-second read
 
@@ -83,13 +86,14 @@ flowchart TD
     G["a goal arrives — /ballast:goal"] --> M{"mobilize:<br/>already held in rules,<br/>knowledge, skills?"}
     M -- "held → using it is mandatory" --> W["the work"]
     M -- "gap → learn first" --> L["terrain scan → skeleton →<br/>smallest pieces, verified"]
+    L -. "collection delegated<br/>(optional) — returns hearsay" .-> X["researcher"] -.-> L
     L --> K[("memory/knowledge/<br/>labeled, sourced")]
     K --> W
     W -- "you correct Claude once" --> P["pin"] --> R[("rule catalog")]
     R -- "hook delivers on every<br/>matching message" --> W
     W -- "a solved path recurs" --> S["skill-forge →<br/>a skill file"] --> W
     W -- "pause" --> C[("CHECKPOINT.md")] -- "30-second return" --> W
-    W --> D["done = a check passed"]
+    W --> RH["rehearsal — a zero-context<br/>reader executes it"] --> D["done = a check passed"]
 ```
 
 ## What changes
@@ -97,9 +101,10 @@ flowchart TD
 | Before | After |
 |---|---|
 | The same correction, repeated every week | **pin** writes it once; it arrives with every matching message |
-| Standing rules cost context, relevant or not | Only matching rules delivered — max 12 / ~6,000 chars |
+| Standing rules cost context, relevant or not | Only matching rules delivered — max 12 rules / ~6,000 chars |
 | Prompts you'd rather have stopped go through | `action: "block"` refuses them, showing your rule as the reason |
 | Memory resets with every session | `memory/` persists: index, ledger, open questions, session log |
+| The goal's skeleton evaporates with the session | `memory/goal/<slug>.md` keeps the tree, its gaps, and the next leaf |
 
 The delivery cap is fixed in the hook source. Blocking is a guardrail, not a sandbox — the hook is fail-open (see [Quick start](#quick-start)).
 
@@ -107,25 +112,29 @@ The delivery cap is fixed in the hook source. Blocking is a guardrail, not a san
 
 | Piece | Kind | Role |
 |---|---|---|
-| **rules hook** | code — script on every prompt | Delivers every matching rule with the message; `block` rules stop the prompt instead |
+| **rules hook** | code — script on every prompt | Delivers each matching rule's full text with the message, up to the cap; `block` rules stop the prompt instead |
 | **decision-ledger** | convention — markdown skill | Append-only `DECISIONS.md`; changed minds get supersede links, never silent edits |
 | **verify-gate** | convention — markdown skill | Research and model knowledge stay drafts until refuted-and-survived, sourced, and labeled |
 | **knowledge-base** | convention — markdown skill | Gate-passed findings land in `memory/knowledge/`; every new question reads there before researching |
+| **researcher** | convention — markdown skill | Collection delegated to a configured second CLI, judgment never — findings arrive `hearsay` and must still pass the gate |
 | **proof-standard** | convention — markdown skill | No external claim without evidence in a truth file; copy may not blur code states |
 | **brain-init** | convention — markdown skill | Scaffolds memory: index, ledger, open questions, session log, product truth; appends a session-start block to `CLAUDE.md` |
 | **goal** | convention — markdown skill | Mobilizes what you already hold, maps a field's traps, splits the goal into verifiable pieces, calls nothing done until a check passes |
+| **rehearsal** | convention — markdown skill | A zero-context reader executes the deliverable before it ships; the stall log becomes the done-check's evidence |
 | **checkpoint** | convention — markdown skill | `CHECKPOINT.md` keeps a thirty-second return point; `HANDOFF.md` carries orders read once, then deleted |
 | **pin** | convention — writes hook rules | Turns the correction you just made into a permanent rule, in one step |
 | **skill-forge** | convention — markdown skill | A procedure that recurred and passed its check becomes a skill file; the next run starts from the solved path |
 
 verify-gate's labels: `confirmed` / `observed` / `assumed` / `hearsay` / `unknown`. proof-standard tracks code in four states — implemented, wired, operational, verified.
 
+Every skill is callable as `/ballast:<name>`; most also fire on their own cue — each skill file's description says when.
+
 ## One goal, start to finish
 
 1. `/ballast:goal build the pricing page` — mobilize finds a pricing rule already in the catalog and brand facts in `memory/knowledge/`. Both get used, not rediscovered.
-2. One branch is a gap — checkout copy conventions. That branch starts with a terrain scan; what survives the verify gate lands in `memory/knowledge/`, labeled and sourced.
+2. One branch is a gap — checkout copy conventions. That branch starts with a terrain scan (a configured researcher can do the collecting; everything it returns arrives `hearsay`); what survives the verify gate lands in `memory/knowledge/`, labeled and sourced. The skeleton itself lives in `memory/goal/pricing-page.md`, so tomorrow's session starts from the same tree.
 3. Mid-work you correct Claude once: "prices include VAT." pin writes it to the catalog; the hook delivers it with every pricing message after that.
-4. "Page is live, form tested" is a claim — it needs a passed check before the goal may be called done.
+4. "Page is live, form tested" is a claim — a zero-context reader walks the page cold (rehearsal), and the stall-free round is the passed check that lets the goal be called done.
 5. You stop for the day. checkpoint writes the thirty-second return point; tomorrow starts at *next first action*, not at "where were we".
 6. Next quarter's pricing page starts from the solved path — skill-forge kept the procedure as a skill.
 
@@ -135,7 +144,7 @@ One correction, one verified fact, one solved procedure — each outlives its se
 
 ### First session
 
-0. **Smoke-test in 60 seconds.** Copy [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json) to `<project>/.claude/ballast.rules.json`, then send any message containing "generate". A `[ballast]` block above the reply means the hook is live.
+0. **Smoke-test in 60 seconds.** Create `<project>/.claude/ballast.rules.json` from the example catalog ([`rules/ballast.rules.example.json`](rules/ballast.rules.example.json) — installed from the marketplace? ask Claude to copy it from the ballast plugin, or paste the JSON under [Write the catalog by hand](#write-the-catalog-by-hand)). Then send any message containing "generate": a `[ballast]` block above the reply means the hook is live.
 1. **Pin your first rule.** Correct Claude about anything once — a correction is the **pin** skill's cue: Claude drafts the rule entry, shows it to you, and writes it to the catalog on your OK. If no draft appears, call `/ballast:pin` directly.
 2. **`/ballast:brain-init`** scaffolds the memory files in your project — and appends a session-start block to your `CLAUDE.md`, so expect that file to change.
 3. **`/ballast:goal <something big>`** runs the full pipeline — in an unfamiliar field it maps what's argued, what's settled, and where beginners get burned before producing a single answer.
@@ -148,6 +157,7 @@ Before any rule exists, your message arrives alone. With the example catalog fro
 [ballast] Standing rules that apply to this request:
 - Estimate before spending: Anything that spends money or credits:
   present an estimate and get explicit approval BEFORE executing.
+  No exceptions for small amounts — the habit is the point.
 ```
 
 ### Write the catalog by hand
@@ -163,17 +173,17 @@ Rules live in `<project>/.claude/ballast.rules.json` and `~/.claude/ballast.rule
       "title": "Estimate before spending",
       "when": { "keywords": ["generate", "credits"], "patterns": ["\\bbatch\\b"] },
       "action": "inject",
-      "body": "Anything that spends money: estimate first, explicit approval, then execute."
+      "body": "Anything that spends money or credits: present an estimate and get explicit approval BEFORE executing. No exceptions for small amounts — the habit is the point."
     }
   ]
 }
 ```
 
-- `keywords` — case-insensitive substring match; the string must appear verbatim in the message, so add keywords in the language you chat in
+- `keywords` — case-insensitive substring match; the string must appear verbatim in the message, so add keywords in the language you chat in. Short keywords match inside longer words — `npm` also fires on `pnpm`
 - `patterns` — regex match
 - `always: true` — fires on every message; keep to 1–2 rules
 - `action: "block"` — stops the prompt and shows `body` as the reason
-- `BALLAST_DISABLE=1` — turns the hook off
+- `BALLAST_DISABLE=1` — turns the hook off (set env vars in the environment you launch Claude Code from)
 - `BALLAST_DEBUG=1` — prints load failures and bad patterns to stderr; the hook otherwise swallows them
 
 Start from [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json), or let **pin** write entries for you.
@@ -185,11 +195,15 @@ Two design choices to keep in mind:
 - **Fail-silent** — a broken catalog, a bad regex, or an internal error never breaks your session.
 - **Fail-open** — if the hook cannot run at all (`node` missing from PATH, catalog unreadable), `block` rules do not fire either. Treat blocks as a guardrail, not a sandbox.
 
-Fail-open has no error screen — the only symptom is a missing `[ballast]` block on a message that should match. Check that `node --version` prints 18+ (install Node if it doesn't), then rerun with `BALLAST_DEBUG=1` for the specific failure.
+Fail-open has no error screen — the only symptom is a missing `[ballast]` block on a message that should match. Check that `node --version` prints 18+ (install Node if it doesn't), restart Claude Code if the plugin was installed this session, then rerun with `BALLAST_DEBUG=1` for the specific failure.
 
-To put a second model on verification duty, copy [`rules/ballast.verifier.example.json`](rules/ballast.verifier.example.json) to `.claude/ballast.verifier.json`.
+To put a second model on verification duty, create `<project>/.claude/ballast.verifier.json` — the whole file is `{ "command": "your-verifier-cli --check" }` ([example](rules/ballast.verifier.example.json)).
 
-Point `command` at any CLI that will argue against a claim — the verify-gate skill runs it and weighs the refutation before labeling anything `confirmed`.
+Point `command` at any CLI that will argue against a claim — the verify-gate skill runs it with the claim as the final argument and weighs the refutation before labeling anything `confirmed`. Without the file — or when the command fails, said once — the gate still runs on primary sources alone, labeled `(self-gated)`.
+
+To delegate collection the same way, create `<project>/.claude/ballast.researcher.json` — same shape, `{ "command": "your-researcher-cli --search" }` ([example](rules/ballast.researcher.example.json)); the researcher skill runs it with the question as the final argument.
+
+Collection is delegated, judgment is not: findings arrive `hearsay` and must still pass the gate. Without the file Claude collects as before, and a command that fails gets said once.
 
 Before your first push from any Claude-operated repo, walk [docs/PUBLISH-CHECKLIST.md](docs/PUBLISH-CHECKLIST.md) — these workspaces accumulate secrets in files you stopped looking at.
 
@@ -199,13 +213,15 @@ ballast assumes that when work with Claude goes wrong, the usual cause is memory
 
 Decisions live in a ledger that cannot be quietly rewritten. Claims carry labels until they earn `confirmed`.
 
+The pieces share one arrangement: the check stands before the mistake — rules arrive before the reply, mobilize runs before the work, rehearsal runs before the reader ever sees the deliverable. That order came from months of fixing accidents after they shipped — the same months the disclosure below files under `hearsay`; ballast is built to close the room they happened in.
+
 By those labels, this README owes you two disclosures:
 
 - **The track record is `hearsay`.** ballast exists because one person with no development background runs an entire job through Claude Code and must be able to trust the results.
   But those months of daily use happened in a private company workspace, and this public repo dates from August 2026 — no history here opens.
 - **The novelty claim is `unknown`.** Injecting context on prompt submit is a documented Claude Code hook pattern, and append-only records long predate software. "We have not seen the whole loop elsewhere" is the most ballast can say.
 
-What you can check is the mechanism: the hook, the nine skills, and the rule format are all in this repo, readable in an afternoon. If you know prior art for the loop, [open an issue](https://github.com/svy04/ballast/issues) and we'll link it.
+What you can check is the mechanism: the hook, the eleven skills, and the rule format are all in this repo, readable in an afternoon. If you know prior art for the loop, [open an issue](https://github.com/svy04/ballast/issues) and we'll link it.
 
 ## Maintenance
 
