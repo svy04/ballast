@@ -30,20 +30,29 @@ Branches the mobilization table marked as gaps come here first. In an unfamiliar
 - Ask explicitly, of the field and of yourself: *"what important thing have I not written down?"* A well-verified map that misses the core is the failure mode here.
 - Output: a terrain map the user can read in a minute, every item labeled (confirmed / observed / assumed / hearsay / unknown — see verify-gate).
 
-## Phase 2 — Skeleton (top-down)
+## Phase 2 — Skeleton (top-down, pyramid-structured)
 
-- From the terrain, derive the full tree: everything that must be known, true, or built for the goal — down to **atomic leaves**, each small enough to verify or build in one pass.
+- From the terrain, derive the full tree — **pyramid discipline**: every parent is a conclusion its children must jointly carry, and at every level the children are MECE (no overlap, nothing missing). If a level fails that test, the cut is wrong — recut it now, not later.
+- Go down to **atomic leaves**. A leaf is atomic only if it passes all four tests: no hidden premises inside it · one axis of judgment · compressible to a single question · no other leaf needs to restate its content. Fail any one → it is not a leaf, split it.
 - The skeleton is disposable by design. In a new field expect to re-cut it two or three times; version each cut and supersede the old one — never silently overwrite, or you will lose track of which map was right.
 
 ## Phase 3 — Leaves (bottom-up, goal-pulled)
 
 - Fill leaves in the order the goal pulls, not encyclopedia order. Learning must never swallow the goal.
 - **Every leaf passes the verify gate before it becomes load-bearing**: refute first, primary sources, sample size, stated limits, label attached.
+- **Atom recursion**: if a leaf turns out to contain a named sub-field while you work it, register its children in the tree at that moment — by name, even unfilled. Zero silent gaps: a branch you cannot fill today still gets a name today.
 - Build alongside learning. A leaf proven in use beats a leaf proven on paper.
 
 ## Phase 4 — Re-check (top-down again, then loop)
 
-- Walk the skeleton against what the leaves taught you. Branches that turned out wrong get superseded, not patched around.
+Four signals send you back up the tree — do not wait for a scheduled review:
+
+1. The goal or its constraints changed from outside → re-check immediately.
+2. **Working a leaf exposed a skeleton error** — the main signal. Detection: before starting any leaf, ask "is everything this leaf depends on already in the tree?" A missing dependency *is* an unnamed branch; register it on the spot.
+3. A leaf keeps failing or shows no progress → the cut is wrong, not the effort.
+4. A major branch is finished → survey the whole before descending again.
+
+- Repair by **diff, not demolition**: supersede the dead branches, add the new ones, keep the rest. A full re-cut is only for a pivot of the goal itself.
 - Loop phases 2↔3↔4 until the definition of done is met.
 
 ## Phase 5 — Done means verified
