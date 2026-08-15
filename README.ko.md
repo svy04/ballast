@@ -1,15 +1,17 @@
 # ballast
 
+**[English →](README.md)**
+
 **ballast는 긴 세션의 표류를 막는 Claude Code 플러그인이에요. 정해둔 상시 규칙은 걸리는 메시지마다 함께 도착하고, 한번 내린 결정은 원장(덧붙이기만 하고 고쳐 쓰지 않는 결정 기록부)에 잠겨요.**
 
 - **의존성 0** — 스크립트 하나, 요구사항은 `node` 18 이상뿐이에요
 - **설치 명령 두 줄** — 플러그인 마켓플레이스로 끝나요
-- **훅 1개 + 스킬 6종** — 코드로 강제되는 건 훅(메시지마다 자동으로 도는 스크립트) 하나뿐이고, 문서가 그걸 그대로 표시해요
+- **훅 1개 + 스킬 9종** — 코드로 강제되는 건 훅(메시지마다 자동으로 도는 스크립트) 하나뿐이고, 문서가 그걸 그대로 표시해요
 - **빈 채로 출발** — 카탈로그(규칙을 모아두는 파일)에 규칙이 들어오기 전까지 훅은 조용해요. 넣는 법은 [빠른 시작](#빠른-시작)이에요
-- **훅 실동작 5케이스 통과** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그 무해
+- **[훅 실동작 5케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그 무해, `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
 - **MIT** — 장치 전체가 한나절이면 다 읽히는 분량이에요
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) · [Changelog](CHANGELOG.md)
+[![Version: 0.4.0](https://img.shields.io/badge/version-0.4.0-blue)](CHANGELOG.md) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) · [Changelog](CHANGELOG.md) (영문)
 
 [설치](#설치) · [왜 ballast인가](#왜-ballast인가) · [무엇이 달라지나](#무엇이-달라지나) · [구성 조각](#구성-조각) · [빠른 시작](#빠른-시작) · [철학](#철학) · [유지보수](#유지보수)
 
@@ -57,6 +59,13 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 
 대신 규약을 강제로 끌어올리는 통로가 **pin**이에요. 규약이 미끄러지면 한 번만 교정하세요 — pin이 그 교정을 카탈로그에 적고, 그다음부터는 훅이 배달해요.
 
+조각들은 목표의 한살이를 따라 사슬로도 이어져요 — 아래 고리는 전부 규약이고, 코드는 여전히 훅 하나예요:
+
+- **준비** — goal이 프로젝트가 이미 가진 것부터 동원하고, 그다음 지형을 살펴요
+- **축적** — knowledge-base(지식 창고)와 결정 원장이 일이 검증해 낸 것을 쌓아요
+- **재사용** — rules hook · pin · skill-forge(스킬 대장간)가 쌓인 것을 다음 세션에 되돌려요
+- **복귀** — checkpoint(복귀 지점)가 목표로 돌아오는 일을 30초 읽기로 만들어요
+
 ## 무엇이 달라지나
 
 | 이전 | 이후 |
@@ -75,50 +84,62 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 | **rules hook** | 코드 — 프롬프트마다 도는 스크립트 | 걸린 규칙 전부를 본문 그대로 메시지와 함께 배달, `block` 규칙은 프롬프트를 세워요 |
 | **decision-ledger** | 규약 — 마크다운 스킬 | 덧붙이기만 되는 `DECISIONS.md` — 번복은 대체 링크로, 조용한 수정은 없어요 |
 | **verify-gate** | 규약 — 마크다운 스킬 | 반박을 견디고 출처를 대기 전까지, 조사 결과와 모델 지식은 초안 취급이에요 |
+| **knowledge-base** | 규약 — 마크다운 스킬 | 관문을 통과한 발견을 `memory/knowledge/`에 쌓아요 — 새 질문은 조사 전에 먼저 여길 봐요 |
 | **proof-standard** | 규약 — 마크다운 스킬 | 진실 파일에 증거가 없으면 대외 주장 금지 — 카피가 코드 상태를 흐리면 안 돼요 |
-| **brain-init** | 규약 — 마크다운 스킬 | 기억 골격을 깔아요: 인덱스, 원장, 미해결 질문, 세션 로그, 제품 진실 |
-| **goal** | 규약 — 마크다운 스킬 | 함정부터 지도로 그리고, 검증 가능한 크기로 쪼개고, 검사 통과 전엔 완료라 안 해요 |
+| **brain-init** | 규약 — 마크다운 스킬 | 기억 골격을 깔아요: 인덱스, 원장, 미해결 질문, 세션 로그, 제품 진실 — `CLAUDE.md`에 세션 시작 블록도 붙여요 |
+| **goal** | 규약 — 마크다운 스킬 | 가진 것부터 동원하고, 함정을 지도로 그리고, 검증 가능한 크기로 쪼개고, 검사 통과 전엔 완료라 안 해요 |
+| **checkpoint** | 규약 — 마크다운 스킬 | `CHECKPOINT.md`가 30초 복귀 지점을 지켜요 — `HANDOFF.md`의 지시는 한 번 읽히면 바로 지워져요 |
 | **pin** | 규약 — 훅이 강제할 규칙을 써요 | 방금 받은 교정을 한 번에 영구 규칙으로 바꿔요 |
+| **skill-forge** | 규약 — 마크다운 스킬 | 또 올 일에서 검사까지 통과한 절차를 스킬 파일로 벼려요 — 다음엔 푼 길에서 시작해요 |
 
 verify-gate의 라벨은 다섯 가지예요: `confirmed` / `observed`(관찰됨) / `assumed`(가정) / `hearsay`(전언) / `unknown`(모름). proof-standard는 코드를 4단계 — 구현됨 · 연결됨 · 가동 중 · 검증됨 — 로 추적해요.
 
 ## 빠른 시작
 
-### 첫 규칙을 심으세요
+### 첫 세션
 
-1. 아무 일에서든 Claude를 한 번 교정해 보세요. 교정이 곧 **pin** 스킬의 신호예요 — Claude가 규칙 초안을 보여주고, OK 하면 카탈로그에 적어요.
-2. `/ballast:brain-init` — 프로젝트에 기억 파일의 골격을 깔아요.
-3. `/ballast:goal <큰 목표>` — 전체 파이프라인을 돌려요. 낯선 분야라면 답을 내놓기 전에 쟁점 · 정설 · 초심자 함정부터 지도로 그려요.
+0. **60초 스모크 테스트.** [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json)을
+   `<프로젝트>/.claude/ballast.rules.json`으로 복사하고, "생성"이 들어간 메시지를 아무거나 보내 보세요.
+   답 위에 `[ballast]` 블록이 뜨면 훅이 살아 있는 거예요.
+1. **첫 규칙을 심으세요.** 아무 일에서든 Claude를 한 번 교정해 보세요 — 교정이 곧 **pin** 스킬의 신호라, Claude가 규칙 초안을 보여주고 OK 하면 카탈로그에 적어요. 초안이 안 뜨면 `/ballast:pin`을 직접 부르세요.
+2. **`/ballast:brain-init`** — 프로젝트에 기억 파일의 골격을 깔아요. 이때 `CLAUDE.md`에 세션 시작 블록도 덧붙여요 — 그 파일이 바뀌는 게 정상이에요.
+3. **`/ballast:goal <큰 목표>`** — 전체 파이프라인을 돌려요. 낯선 분야라면 답을 내놓기 전에 쟁점 · 정설 · 초심자 함정부터 지도로 그려요.
 
-규칙이 없을 땐 메시지가 혼자 도착해요. 아래 `cost-gate` 규칙이 카탈로그에 들어간 뒤에는, "generate"가 들어간 메시지가 이렇게 도착해요:
+규칙이 없을 땐 메시지가 혼자 도착해요. 0단계의 예시 카탈로그가 깔려 있으면 "생성"이 `cost-gate` 규칙에 걸려, 메시지가 이렇게 도착해요:
 
 ```
-> generate 40 images for the launch batch
+> 이미지 40장 생성해줘
 
 [ballast] Standing rules that apply to this request:
-- Estimate before spending: Anything that spends money: estimate first,
-  explicit approval, then execute.
+- Estimate before spending: Anything that spends money or credits:
+  present an estimate and get explicit approval BEFORE executing.
 ```
 
 ### 카탈로그를 직접 쓰세요
 
-규칙은 `<프로젝트>/.claude/ballast.rules.json`과 `~/.claude/ballast.rules.json`에 있어요(`id`가 겹치면 프로젝트 쪽이 이겨요):
+규칙은 `<프로젝트>/.claude/ballast.rules.json`과 `~/.claude/ballast.rules.json`에 있어요(`id`가 겹치면 프로젝트 쪽이 이겨요). `version`/`rules` 껍데기까지가 파일 형식이에요 — 규칙 객체만 달랑 저장하면 소리 없이 0규칙으로 읽혀요:
 
 ```json
 {
-  "id": "cost-gate",
-  "title": "Estimate before spending",
-  "when": { "keywords": ["generate", "credits"], "patterns": ["\\bbatch\\b"] },
-  "action": "inject",
-  "body": "Anything that spends money: estimate first, explicit approval, then execute."
+  "version": 1,
+  "rules": [
+    {
+      "id": "cost-gate",
+      "title": "Estimate before spending",
+      "when": { "keywords": ["generate", "생성", "credits", "크레딧"], "patterns": ["\\bbatch\\b"] },
+      "action": "inject",
+      "body": "Anything that spends money: estimate first, explicit approval, then execute."
+    }
+  ]
 }
 ```
 
-- `keywords` — 대소문자 구분 없는 부분일치
+- `keywords` — 대소문자 구분 없는 부분일치. 메시지에 그 문자열이 그대로 있어야 걸려요 — 한국어로 대화하면 위처럼 한국어 키워드를 병기하세요
 - `patterns` — 정규식
 - `always: true` — 매 메시지 발동, 1~2개로 아껴 쓰세요
 - `action: "block"` — 프롬프트를 세우고 `body`를 사유로 보여줘요
 - `BALLAST_DISABLE=1` — 훅이 꺼져요
+- `BALLAST_DEBUG=1` — 카탈로그 로드 실패, 잘못된 정규식을 stderr로 보여줘요. 평소엔 훅이 삼키고 조용해요
 
 시작은 [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json)을 복사하거나, **pin**에게 맡기세요.
 
@@ -129,11 +150,13 @@ verify-gate의 라벨은 다섯 가지예요: `confirmed` / `observed`(관찰됨
 - **조용한 실패** — 카탈로그가 망가져도, 정규식이 틀려도, 내부 오류가 나도 세션은 안 깨져요.
 - **fail-open** — 훅이 아예 못 도는 상황(PATH에 `node` 없음, 카탈로그 읽기 실패)에서는 `block` 규칙도 같이 안 걸려요. 차단은 가드레일로 쓰시고, 뚫리지 않는 샌드박스로 믿지는 마세요.
 
+fail-open엔 오류 화면이 없어요 — 걸렸어야 할 메시지에 `[ballast]` 블록이 안 뜨는 게 유일한 증상이에요. `node --version`이 18 이상인지 확인하고(없으면 Node부터 설치), `BALLAST_DEBUG=1`로 다시 돌려 원인을 보세요.
+
 검증에 두 번째 모델을 세우고 싶으면 [`rules/ballast.verifier.example.json`](rules/ballast.verifier.example.json)을 `.claude/ballast.verifier.json`으로 복사하세요.
 
 `command`에 주장을 반박해 줄 CLI를 지정하면, verify-gate 스킬이 그걸 실행해 반박을 견줘본 뒤에야 `confirmed`를 붙여요.
 
-Claude가 굴려온 저장소에서 처음 푸시하기 전에는 [docs/PUBLISH-CHECKLIST.md](docs/PUBLISH-CHECKLIST.md)를 한 줄씩 밟으세요 — 이런 작업 공간에는 어느새 안 들여다보게 된 파일들에 비밀값이 쌓여요.
+Claude가 굴려온 저장소에서 처음 푸시하기 전에는 [docs/PUBLISH-CHECKLIST.md](docs/PUBLISH-CHECKLIST.md)(영문)를 한 줄씩 밟으세요 — 이런 작업 공간에는 어느새 안 들여다보게 된 파일들에 비밀값이 쌓여요.
 
 ## 철학
 
@@ -146,12 +169,14 @@ Claude가 굴려온 저장소에서 처음 푸시하기 전에는 [docs/PUBLISH-
 - **실적은 `hearsay`예요.** 개발 배경 없는 한 사람이 업무 전체를 Claude Code로 돌리며 그 결과를 믿어야 했던 게 ballast의 출발이에요. 하지만 그 몇 달의 일상 사용은 비공개 회사 작업 공간에서 있었고, 이 공개 저장소는 2026년 8월에 시작됐어요 — 열어볼 수 있는 이력이 여기엔 없어요.
 - **새로움 주장은 `unknown`이에요.** 프롬프트 제출 시점의 컨텍스트 주입은 문서화된 Claude Code 훅 패턴이고, 덧붙이기만 하는 기록은 소프트웨어보다 오래된 방식이에요. ballast가 말할 수 있는 최대치는 "이 루프 전체를 묶어놓은 걸 다른 데서는 못 봤다"까지예요.
 
-대신 장치는 확인할 수 있어요 — 훅, 스킬 여섯 개, 규칙 형식이 전부 이 저장소에 있고, 한나절이면 다 읽혀요. 루프의 선례를 아시면 이슈로 알려주세요. 링크해 둘게요.
+대신 장치는 확인할 수 있어요 — 훅, 스킬 아홉 개, 규칙 형식이 전부 이 저장소에 있고, 한나절이면 다 읽혀요. 루프의 선례를 아시면 [이슈](https://github.com/svy04/ballast/issues)로 알려주세요. 링크해 둘게요.
 
 ## 유지보수
 
-버전 이력은 [CHANGELOG.md](CHANGELOG.md)에 있어요 — 릴리스마다 무엇이 바뀌고 무엇이 정정됐는지 적어요. 이슈로 물으면 문서에 반영해요 — README에 있었어야 할 답은 README에 적어둘게요.
+버전 이력은 [CHANGELOG.md](CHANGELOG.md)(영문)에 있어요 — 릴리스마다 무엇이 바뀌고 무엇이 정정됐는지 적어요. [이슈](https://github.com/svy04/ballast/issues)로 물으면 문서에 반영해요 — README에 있었어야 할 답은 README에 적어둘게요.
+
+PR은 [CONTRIBUTING.md](CONTRIBUTING.md)(영문)에서 출발하세요 — 요지는 두 줄이에요: 훅은 의존성 0에 조용한 실패를 지키고, 문서는 동작과 어긋나면 안 돼요.
 
 ---
 
-MIT · English: [README.md](README.md)
+MIT

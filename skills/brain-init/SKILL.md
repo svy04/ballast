@@ -26,3 +26,4 @@ Set up the ballast memory structure in the current project. Decide everything yo
 - **Open questions never dissolve silently.** Unresolved items are registered in `OPEN-QUESTIONS.md` and closed with a link to the decision that resolved them.
 - **The session log is cheap insurance.** A few dated bullets per working session; when context resets, this is the recovery path.
 - **Claims carry labels; product claims carry proof.** See verify-gate and proof-standard.
+- **The scaffold is a floor, not a ceiling.** Other skills grow `memory/` later — checkpoint adds `CHECKPOINT.md`, `checkpoints/`, and the single-use `HANDOFF.md`; verified reference material accumulates under `memory/knowledge/`. Don't pre-create these; give each a row in the index when it first appears.

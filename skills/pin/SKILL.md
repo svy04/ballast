@@ -27,7 +27,7 @@ A correction that lives only in the conversation dies with the conversation. Pin
      "body": "Anything that spends money: estimate first, explicit approval, then execute."
    }
    ```
-3. **On the user's OK** (a plain "yes/좋아/그래" is enough), merge it into `<project>/.claude/ballast.rules.json` — create the file with `{"version": 1, "rules": []}` if missing. If an entry with the same `id` exists, update its body and say what changed instead of duplicating.
+3. **On the user's OK** (a plain "yes/좋아/그래" is enough), merge it into `<project>/.claude/ballast.rules.json` — or `~/.claude/ballast.rules.json` when the rule is about how the user works everywhere, not just this project. Create the file with `{"version": 1, "rules": []}` if missing; if an entry with the same `id` exists, update its body and say what changed instead of duplicating.
 4. **Confirm in one line**: "Pinned `<id>` — it now arrives with every matching message." Nothing more.
 
 ## Rules

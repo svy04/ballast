@@ -6,7 +6,7 @@
     {
       "name": "ballast",
       "source": "./",
-      "description": "Goal engine + discipline layer: goal pipeline, rules hook, pin, verify gate, decision ledger, proof standard, brain scaffold."
+      "description": "One code-enforced rules hook plus nine convention skills spanning the goal's whole life: mobilize what you hold, verify claims, accumulate knowledge, reuse it, return in thirty seconds."
     }
   ]
 }

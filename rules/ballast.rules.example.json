@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "_comment": "Copy this file to <project>/.claude/ballast.rules.json (project rules) or ~/.claude/ballast.rules.json (user rules). Project rules override user rules on duplicate ids. Keep bodies short and imperative — every injected character competes with the actual work.",
+  "_comment": "Copy this file to <project>/.claude/ballast.rules.json (project rules) or ~/.claude/ballast.rules.json (user rules). Project rules override user rules on duplicate ids. Keywords are literal substring matches — pair them in every language you chat in, as these examples pair English with Korean. Keep bodies short and imperative — every injected character competes with the actual work.",
   "rules": [
     {
       "id": "label-claims",
       "title": "Label every claim",
       "when": {
-        "keywords": ["research", "verify", "statistics", "stats", "market size", "how many", "is it true", "figure out"]
+        "keywords": ["research", "verify", "statistics", "stats", "market size", "how many", "is it true", "figure out", "조사", "검증", "통계", "시장 규모", "몇 개", "사실이야", "알아봐"]
       },
       "body": "Research results and model knowledge are drafts. Attach a label to every claim before using it: confirmed / observed / assumed / hearsay / unknown. Unlabeled claims must not be presented as fact. See the verify-gate skill for what each label requires."
     },
@@ -14,7 +14,7 @@
       "id": "cost-gate",
       "title": "Estimate before spending",
       "when": {
-        "keywords": ["generate", "render", "batch", "video", "image", "credits", "api cost", "paid"]
+        "keywords": ["generate", "render", "batch", "video", "image", "credits", "api cost", "paid", "생성", "렌더", "영상", "이미지", "크레딧", "비용", "유료"]
       },
       "body": "Anything that spends money or credits: present an estimate and get explicit approval BEFORE executing. No exceptions for small amounts — the habit is the point."
     },
@@ -22,7 +22,7 @@
       "id": "no-silent-substitution",
       "title": "Never swap what the user fixed",
       "when": {
-        "keywords": ["instead", "alternative", "switch to", "replace", "better model", "cheaper", "deprecated"]
+        "keywords": ["instead", "alternative", "switch to", "replace", "better model", "cheaper", "deprecated", "대신", "대안", "바꿔", "교체", "더 나은", "더 싼"]
       },
       "body": "Models, tools, versions, and settings the user explicitly fixed are not yours to change. Propose alternatives with reasons; the user decides. This applies even when you are sure the alternative is better."
     },
@@ -30,7 +30,7 @@
       "id": "record-immediately",
       "title": "Record decisions in-session",
       "when": {
-        "keywords": ["decided", "decision", "let's go with", "confirmed", "final", "approved", "we'll use"]
+        "keywords": ["decided", "decision", "let's go with", "confirmed", "final", "approved", "we'll use", "결정", "확정", "이걸로 가자", "이걸로 하자", "승인"]
       },
       "body": "When the user confirms a decision, write it to the decision ledger in the same session (see the decision-ledger skill). Unresolved items go to the open-questions file — registered, not remembered. Zero loss."
     },

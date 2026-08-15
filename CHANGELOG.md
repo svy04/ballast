@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — 2026-08-15
+
+The conventions now chain across a goal's whole life — prepare, accumulate, reuse, return. Three new skills, one revised, and the hook gains a runnable test harness. All new pieces are conventions; the rules hook remains the only code-enforced part.
+
+- new skill `knowledge-base`: verified findings accumulate in `memory/knowledge/` — lookup before any research, verify-gate labels on drafts, promotion only through the gate (claim + sources + sample + limits + date), back-notes on processed drafts so nothing gets re-verified from scratch, 90-day freshness
+- new skill `skill-forge`: a procedure that will recur *and* passed a real check is promoted to a skill file — when-to-use, the steps as they actually ran (traps included), verification date, evidence; one-line lessons go to pin instead
+- new skill `checkpoint`: `memory/CHECKPOINT.md` with five fixed sections for a thirty-second return, outgoing versions archived append-only under `memory/checkpoints/`, and `memory/HANDOFF.md` as single-use orders — read once, then deleted
+- goal skill: new Phase 0.5 (Mobilize) — split the goal into coarse MECE branches, match each against held assets (rules catalog, knowledge base, ledger, skills); where an asset exists, using it is mandatory; gaps enter the terrain scan first
+- brain-init: notes the scaffold is a floor, not a ceiling — checkpoint and knowledge files join the memory index as they appear
+- hook test harness `hooks/scripts/verify-hook.mjs`: runs the hook as a child process against an isolated temp home, 5 cases (keyword inject, silence on no match, block with exit 2, legacy `prompt` field, broken catalog stays harmless), currently 5/5 passing
+- README (EN/KO) usability pass: keyword matching is verbatim, so write keywords in the language you chat in — Korean keywords added to the example catalog and demos; JSON examples now show the full file with the required `version`/`rules` wrapper; `BALLAST_DEBUG=1` documented; 60-second smoke test as Quick start step 0; fail-open symptom and recovery spelled out; issue links made real; version badge added
+
 ## 0.3.1 — 2026-08-15
 
 Density pass on the README (EN/KO) — layout only, no content or claim changes.

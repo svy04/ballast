@@ -1,6 +1,6 @@
 ---
 name: goal
-description: Run a large or unfamiliar goal through the full ballast pipeline — terrain scan, full skeleton, atomic foundation learning with verification, then build from bedrock to a verified done. Use when the user hands over a big goal, enters a new field, or asks to learn X in order to achieve Y.
+description: Run a large or unfamiliar goal through the full ballast pipeline — mobilize what you already hold, terrain scan, full skeleton, atomic foundation learning with verification, then build from bedrock to a verified done. Use when the user hands over a big goal, enters a new field, or asks to learn X in order to achieve Y.
 ---
 
 # Goal engine
@@ -13,9 +13,18 @@ Premise: **don't trust what you already think you know.** Big goals rarely fail 
 - Check what already exists before planning to build anything: prior art, standard tools, the user's own assets. Adopting beats rebuilding.
 - Ensure the memory structure exists (run brain-init if not). From here on, decisions are recorded the moment they happen, and unresolved items are registered, not remembered.
 
+## Phase 0.5 — Mobilize (summon what you already hold)
+
+A goal never starts from zero: by the time it arrives you already hold rules, recorded decisions, verified notes, and skills. This phase exists because of a real, quiet failure: work can proceed competently from a blank page while the exact knowledge it needed sits unread in a file — knowledge held but not summoned degrades the result as surely as knowledge missing.
+
+- Split the goal into branches that do not overlap and together cover the whole of it (MECE). Keep this coarse — a handful of branches, not a skeleton; Phase 2 does the fine cutting.
+- For each branch, write down what it needs to be done well.
+- Judge each branch against what already exists: the rules catalog, `memory/knowledge/`, the decision ledger, existing skills. Where an asset exists, **using it is mandatory** — open it now and let it steer the branch, don't defer it to "later". Where nothing exists, learning *is* that branch's first task, and it enters the terrain scan first.
+- Leave a mobilization table the user can glance at: branch · what it needs · what's held (with the file) · gap → first move.
+
 ## Phase 1 — Terrain scan (questions before answers)
 
-In an unfamiliar field, your sense of what matters is the least trustworthy thing you have. So do not start by producing answers.
+Branches the mobilization table marked as gaps come here first. In an unfamiliar field, your sense of what matters is the least trustworthy thing you have. So do not start by producing answers.
 
 - Collect the field's live debates, solved vs unsolved problems, beginner traps, and standard tooling — as questions and a map, not conclusions.
 - Ask explicitly, of the field and of yourself: *"what important thing have I not written down?"* A well-verified map that misses the core is the failure mode here.
@@ -48,4 +57,4 @@ In an unfamiliar field, your sense of what matters is the least trustworthy thin
 - Blocked? Try three distinct routes before asking. When you do ask, present the fork, not the confusion.
 - Anything that spends money or is hard to reverse: estimate → explicit approval → act.
 - Anything externally visible ships only with the user's click.
-- Keep a checkpoint note so the user can return at any moment and catch up in thirty seconds: where we are, what's decided, the one thing they need to decide, the next move.
+- Keep a checkpoint note so the user can return at any moment and catch up in thirty seconds: where we are, what's decided, the one thing they need to decide, the next move (the checkpoint skill owns the format).
