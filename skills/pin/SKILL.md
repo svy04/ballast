@@ -12,9 +12,21 @@ A correction that lives only in the conversation dies with the conversation. Pin
 1. **Extract the rule.** One imperative sentence, at most two. The user's own wording beats your paraphrase. If the correction references a specific incident, keep the incident as a short parenthetical — future-you needs the why.
 2. **Propose the entry** in one compact block and ask nothing else:
    - `id`: short kebab-case
-   - `triggers`: 4–8 keywords likely to appear in future messages where this rule matters — in the language(s) the user actually types. Too-generic triggers ("please", "make") spam every turn; too-narrow ones never fire.
+   - `title`: a few words — this is the label shown when the rule is injected
+   - `when.keywords`: 4–8 keywords likely to appear in future messages where this rule matters (case-insensitive substring match) — in the language(s) the user actually types. Too-generic keywords ("please", "make") spam every turn; too-narrow ones never fire. For shapes keywords can't catch, add `when.patterns` (regex, case-insensitive). `when.always: true` fires on every message — reserve it for 1–2 rules at most.
    - `body`: the rule text
-   - `action`: "inject" (default) or "block" if the user wants the request stopped outright
+   - `action`: omit it (inject is the default) or "block" if the user wants matching requests stopped outright
+
+   Example entry, exactly as it will sit in the catalog:
+
+   ```json
+   {
+     "id": "cost-gate",
+     "title": "Estimate before spending",
+     "when": { "keywords": ["generate", "credits", "batch"] },
+     "body": "Anything that spends money: estimate first, explicit approval, then execute."
+   }
+   ```
 3. **On the user's OK** (a plain "yes/좋아/그래" is enough), merge it into `<project>/.claude/ballast.rules.json` — create the file with `{"version": 1, "rules": []}` if missing. If an entry with the same `id` exists, update its body and say what changed instead of duplicating.
 4. **Confirm in one line**: "Pinned `<id>` — it now arrives with every matching message." Nothing more.
 

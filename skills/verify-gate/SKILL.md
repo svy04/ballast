@@ -29,7 +29,7 @@ Unlabeled claims must not be presented as fact — in chat, in documents, in cod
 
 ## Second-model verification (optional, recommended)
 
-Different vendors have different blind spots. If the project has `.claude/ballast.verifier.json`:
+Different vendors have different blind spots. If the project has `.claude/ballast.verifier.json` (this skill reads it — the rules hook does not; a copy-ready example ships in the ballast repo at `rules/ballast.verifier.example.json`):
 
 ```json
 { "command": "your-verifier-cli --check" }

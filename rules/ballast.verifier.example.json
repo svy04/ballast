@@ -1,0 +1,4 @@
+{
+  "_comment": "Copy this file to <project>/.claude/ballast.verifier.json to enable second-model verification in the verify-gate skill. Note who reads it: the SKILL, not the rules hook — when the file exists, Claude runs `command` with the claim appended as the final argument and weighs the refutation before labeling anything `confirmed`. Any CLI that takes a claim and argues against it works (a different vendor's model is the point — different blind spots).",
+  "command": "your-verifier-cli --check"
+}

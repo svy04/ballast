@@ -1,8 +1,8 @@
 {
   "name": "ballast",
   "displayName": "ballast",
-  "version": "0.2.0",
-  "description": "A goal engine for Claude Code that doesn't trust itself: terrain scan before answers, atomic verified foundations, standing rules auto-injected per message, an append-only decision ledger, and a proof standard — from bedrock to a verified done.",
+  "version": "0.3.0",
+  "description": "Keeps long Claude Code sessions from drifting — matching rules arrive with every message, decisions lock into an append-only ledger, and claims stay labeled drafts until verified.",
   "author": { "name": "svy04" },
   "license": "MIT",
   "homepage": "https://github.com/svy04/ballast",
