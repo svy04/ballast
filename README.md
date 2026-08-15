@@ -6,7 +6,7 @@
 
 **ballast is a Claude Code plugin that turns working with Claude into a system that finishes goals. It mobilizes what you already hold, keeps what the work verifies, reuses every solved path, and calls nothing done until a check passes — session after session.**
 
-- **Zero dependencies** — one script; `node` ≥ 18 is the only requirement
+- **Zero dependencies, zero network** — one script, imports only `fs`/`os`/`path`; it reads local files and prints. Nothing is sent anywhere
 - **Two commands to install** — the plugin marketplace, nothing else
 - **One hook + nine skills** — only the hook is code-enforced, and the docs label which is which
 - **Ships empty** — the hook stays silent until rules enter your catalog; [Quick start](#quick-start) is how they get there
