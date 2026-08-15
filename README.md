@@ -87,9 +87,9 @@ The pieces also chain across a goal's whole life — the hook is the only code i
 flowchart TD
     G["a goal arrives — /ballast:goal"] --> M{"mobilize:<br/>already held in rules,<br/>knowledge, skills?"}
     M -- "held → using it is mandatory" --> W["the work"]
-    M -- "gap → learn first" --> L["terrain scan → skeleton →<br/>smallest pieces, verified"]
+    M -- "gap → learn first" --> L["terrain scan → top-down skeleton →<br/>bottom-up leaves, each verified"]
     L -. "collection delegated<br/>(optional) — returns hearsay" .-> X["researcher"] -.-> L
-    L --> K[("memory/knowledge/<br/>labeled, sourced")]
+    L --> V["verify gate — refute first,<br/>a second model may argue back"] --> K[("memory/knowledge/<br/>labeled, sourced")]
     K --> W
     W -- "you correct Claude once" --> P["pin"] --> R[("rule catalog")]
     R -- "hook delivers on every<br/>matching message" --> W
@@ -121,7 +121,7 @@ The delivery cap is fixed in the hook source. Blocking is a guardrail, not a san
 | **researcher** | convention — markdown skill | Collection delegated to a configured second CLI, judgment never — findings arrive `hearsay` and must still pass the gate |
 | **proof-standard** | convention — markdown skill | No external claim without evidence in a truth file; copy may not blur code states |
 | **brain-init** | convention — markdown skill | Scaffolds memory: index, ledger, open questions, session log, product truth; appends a session-start block to `CLAUDE.md` (on Codex, `AGENTS.md`) |
-| **goal** | convention — markdown skill | Mobilizes what you already hold, maps a field's traps, splits the goal into verifiable pieces, calls nothing done until a check passes |
+| **goal** | convention — markdown skill | Mobilizes what you already hold, maps the field, splits the goal top-down into a pyramid of atomic pieces — no overlaps, no gaps — and fills them bottom-up, each verified before it bears weight |
 | **rehearsal** | convention — markdown skill | A zero-context reader executes the deliverable before it ships; the stall log becomes the done-check's evidence |
 | **checkpoint** | convention — markdown skill | `CHECKPOINT.md` keeps a thirty-second return point; `HANDOFF.md` carries orders read once, then deleted |
 | **pin** | convention — writes hook rules | Turns the correction you just made into a permanent rule, in one step |
@@ -134,7 +134,7 @@ Every skill is callable as `/ballast:<name>`; most also fire on their own cue �
 ## One goal, start to finish
 
 1. `/ballast:goal build the pricing page` — mobilize finds a pricing rule already in the catalog and brand facts in `memory/knowledge/`. Both get used, not rediscovered.
-2. One branch is a gap — checkout copy conventions. That branch starts with a terrain scan (a configured researcher can do the collecting; everything it returns arrives `hearsay`); what survives the verify gate lands in `memory/knowledge/`, labeled and sourced. The skeleton itself lives in `memory/goal/pricing-page.md`, so tomorrow's session starts from the same tree.
+2. One branch is a gap — checkout copy conventions. That branch starts with a terrain scan (a configured researcher can do the collecting; everything it returns arrives `hearsay`), then the goal gets cut top-down into a pyramid of atomic pieces and the gaps get learned bottom-up — what survives the verify gate lands in `memory/knowledge/`, labeled and sourced. The skeleton itself lives in `memory/goal/pricing-page.md`, so tomorrow's session starts from the same tree.
 3. Mid-work you correct Claude once: "prices include VAT." pin writes it to the catalog; the hook delivers it with every pricing message after that.
 4. "Page is live, form tested" is a claim — a zero-context reader walks the page cold (rehearsal), and the stall-free round is the passed check that lets the goal be called done.
 5. You stop for the day. checkpoint writes the thirty-second return point; tomorrow starts at *next first action*, not at "where were we".
