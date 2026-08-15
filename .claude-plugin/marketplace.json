@@ -1,6 +1,6 @@
 {
   "name": "ballast",
-  "description": "Keeps long Claude Code sessions from drifting — matching rules arrive with every message, decisions lock into an append-only ledger.",
+  "description": "Turns working with Claude Code into a system that finishes goals — what you teach, verify, and solve once stays in use.",
   "owner": { "name": "svy04" },
   "plugins": [
     {
