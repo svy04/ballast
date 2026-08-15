@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 — 2026-08-16
+
+Two layers the distillation was missing: deliverables get checked before they ship, and research collection can be delegated without delegating judgment. No new code — the rules hook remains the only code-enforced part.
+
+- new skill `rehearsal`: a zero-context executor receives the deliverable and nothing else, actually runs it, and reports every stall — fix, rerun, three rounds at most; a pass under the wrong persona is not a pass; the round log is citable evidence for goal's done-check
+- new skill `researcher` + `rules/ballast.researcher.example.json`: point `.claude/ballast.researcher.json` at any CLI that takes a question — collection is delegated, judgment is not; everything returns `hearsay` and still passes the verify gate; a command that fails is said out loud once, then Claude collects directly; briefs carry the search language, established-methods/known-failure-axes questions, and a verification threshold, because hook rules never reach external tools
+- goal: the skeleton now lives in `memory/goal/<slug>.md` — the tree with leaf statuses, the single next leaf, known gaps by name, the done-check, superseded cuts — so a session ending loses nothing the file holds; Phase 1 can delegate collection; Phase 5 cites the rehearsal log
+- decision-ledger: a supersede now ends with a sweep — the old wording is hunted across docs, copy, and configs, or registered as an open question; until then the dead decision keeps working
+- pin: corrections that follow an incident get a first-line classification (default regression / propagation miss / delegation leak / variant evasion — one owner's working taxonomy) so the remedy matches the failure
+- verify-gate: a configured verifier that fails is now said out loud once, then `(self-gated)` — a silent never-ran is the worst outcome
+- README (EN/KO): the two new pieces enter the tables, the diagram, and the walkthrough; counts 9 → 11
+
+These are one owner's working practices, generalized. Whether they help you is `unknown` until your own checks pass.
+
 ## 0.4.0 — 2026-08-15
 
 The conventions now chain across a goal's whole life — prepare, accumulate, reuse, return. Three new skills, one revised, and the hook gains a runnable test harness. All new pieces are conventions; the rules hook remains the only code-enforced part.
