@@ -1,7 +1,7 @@
 {
   "name": "ballast",
   "displayName": "ballast",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Turns working with Claude Code into a system that finishes goals: what you teach, verify, and solve once stays in use — session after session.",
   "author": { "name": "svy04" },
   "license": "MIT",

@@ -15,7 +15,7 @@ Set up the ballast memory structure in the current project. Decide everything yo
    - `templates/OPEN-QUESTIONS.md` → `memory/OPEN-QUESTIONS.md`
    - `templates/SESSION-LOG.md` → `memory/SESSION-LOG.md`
    - `templates/PRODUCT-TRUTH.md` → `memory/PRODUCT-TRUTH.md` — only if the project is (or documents) a product; skip for pure-knowledge projects and say so
-2. Append the session-start block from `templates/CLAUDE-snippet.md` to the project's `CLAUDE.md` (create the file if missing; if the block is already there, don't duplicate it).
+2. Append the session-start block from `templates/CLAUDE-snippet.md` to the project's `CLAUDE.md` (create the file if missing; if the block is already there, don't duplicate it). The snippet is tool-neutral — if the project also uses Codex, append the same block to `AGENTS.md` (see `docs/CODEX.md`).
 3. If the user keeps rules in `.claude/ballast.rules.json`, leave it untouched; if they ask for a starter catalog, copy `rules/ballast.rules.example.json` from the plugin root to `.claude/ballast.rules.json` and tell them to prune it.
 4. Report: files created, files skipped (and why), and the one-line habit — "decisions get recorded the moment they're confirmed."
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.1 — 2026-08-16
+
+ballast now runs on Codex too — as conventions. No code changes.
+
+- new doc `docs/CODEX.md`: wires the eleven skills and the shared rule catalog into Codex through an `AGENTS.md` block; custom-prompt wrappers for direct invocation; honest limits — nothing is code-enforced on Codex, the hook's matching/cap/env mechanics don't exist there, the hook stays Claude Code-only
+- observed live on Codex CLI 0.130 (`codex exec`, one session each — an observation, not a harness): a catalog rule held (estimate presented, approval requested before executing), and the rehearsal and verify-gate skills were read and followed unprompted, labels included
+- brain-init: the session-start block also goes to `AGENTS.md` when the project uses Codex
+- README (EN/KO): a Codex pointer under Install
+
 ## 0.5.0 — 2026-08-16
 
 Two layers the distillation was missing: deliverables get checked before they ship, and research collection can be delegated without delegating judgment. No new code — the rules hook remains the only code-enforced part.

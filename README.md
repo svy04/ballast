@@ -15,7 +15,7 @@
 - **MIT** — the whole mechanism is readable in an afternoon
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.5.0-blue" alt="Version 0.5.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.5.1-blue" alt="Version 0.5.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
@@ -53,6 +53,8 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 ```
 
 The hook runs on the `node` (≥ 18) already on your PATH. Everything else is markdown. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
+
+Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the eleven skills over: [docs/CODEX.md](docs/CODEX.md). Only the hook stays Claude Code-specific, so on Codex everything is convention.
 
 ## Why ballast
 
@@ -118,7 +120,7 @@ The delivery cap is fixed in the hook source. Blocking is a guardrail, not a san
 | **knowledge-base** | convention — markdown skill | Gate-passed findings land in `memory/knowledge/`; every new question reads there before researching |
 | **researcher** | convention — markdown skill | Collection delegated to a configured second CLI, judgment never — findings arrive `hearsay` and must still pass the gate |
 | **proof-standard** | convention — markdown skill | No external claim without evidence in a truth file; copy may not blur code states |
-| **brain-init** | convention — markdown skill | Scaffolds memory: index, ledger, open questions, session log, product truth; appends a session-start block to `CLAUDE.md` |
+| **brain-init** | convention — markdown skill | Scaffolds memory: index, ledger, open questions, session log, product truth; appends a session-start block to `CLAUDE.md` (on Codex, `AGENTS.md`) |
 | **goal** | convention — markdown skill | Mobilizes what you already hold, maps a field's traps, splits the goal into verifiable pieces, calls nothing done until a check passes |
 | **rehearsal** | convention — markdown skill | A zero-context reader executes the deliverable before it ships; the stall log becomes the done-check's evidence |
 | **checkpoint** | convention — markdown skill | `CHECKPOINT.md` keeps a thirty-second return point; `HANDOFF.md` carries orders read once, then deleted |

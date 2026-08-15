@@ -15,7 +15,7 @@
 - **MIT** — 장치 전체가 한나절이면 다 읽히는 분량이에요
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.5.0-blue" alt="버전 0.5.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.5.1-blue" alt="버전 0.5.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 
@@ -53,6 +53,8 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 ```
 
 훅은 PATH에 이미 있는 `node`(18 이상)로 돌아가요. 나머지는 전부 마크다운이에요. (설치 명령의 표기는 `플러그인@마켓플레이스`인데, 여기선 둘 다 이름이 ballast라 두 번 나와요.)
+
+Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클론 + `AGENTS.md` 블록 하나 + 예시 카탈로그)으로 스킬 열한 개가 그대로 옮겨져요: [docs/CODEX.md](docs/CODEX.md)(영문). 훅만 Claude Code 전용이라, Codex에서는 전부 규약이에요.
 
 ## 왜 ballast인가
 
@@ -120,7 +122,7 @@ flowchart TD
 | **knowledge-base** | 규약 — 마크다운 스킬 | 관문을 통과한 발견을 `memory/knowledge/`에 쌓아요 — 새 질문은 조사 전에 먼저 여길 봐요 |
 | **researcher** | 규약 — 마크다운 스킬 | 수집을 연결된 두 번째 CLI에 맡겨요 — 판정은 안 맡기고, 결과는 `hearsay`로 도착해 관문을 거쳐야 해요 |
 | **proof-standard** | 규약 — 마크다운 스킬 | 진실 파일에 증거가 없으면 대외 주장 금지 — 카피가 코드 상태를 흐리면 안 돼요 |
-| **brain-init** | 규약 — 마크다운 스킬 | 기억 골격을 깔아요: 인덱스, 원장, 미해결 질문, 세션 로그, 제품 진실 — `CLAUDE.md`에 세션 시작 블록도 붙여요 |
+| **brain-init** | 규약 — 마크다운 스킬 | 기억 골격을 깔아요: 인덱스, 원장, 미해결 질문, 세션 로그, 제품 진실 — 세션 시작 블록은 `CLAUDE.md`(Codex면 `AGENTS.md`)에 붙여요 |
 | **goal** | 규약 — 마크다운 스킬 | 가진 것부터 동원하고, 함정을 지도로 그리고, 검증 가능한 크기로 쪼개고, 검사 통과 전엔 완료라 안 해요 |
 | **rehearsal** | 규약 — 마크다운 스킬 | 내보내기 전에 맥락 없는 독자가 결과물을 실제로 실행해요 — 막힌 기록이 완료 판정의 증거가 돼요 |
 | **checkpoint** | 규약 — 마크다운 스킬 | `CHECKPOINT.md`가 30초 복귀 지점을 지켜요 — `HANDOFF.md`(다음 세션에 주는 1회용 지시문)는 한 번 읽히면 바로 지워져요 |
