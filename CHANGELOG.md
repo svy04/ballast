@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 — 2026-08-15
+
+Density pass on the README (EN/KO) — layout only, no content or claim changes.
+
+- walls of prose cut to ≤2-sentence paragraphs; first screen rebuilt as fact bullets + one-line caption; a real before/after injection transcript added
+- Quick start split under verb headings; table cells compressed to phrases; Korean lines capped at 180 chars with glosses on first use only; new Maintenance section
+
 ## 0.3.0 — 2026-08-15
 
 Repair release: documentation brought in line with what the engine actually reads. No engine changes.
