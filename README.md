@@ -13,13 +13,20 @@
 
 [Install](#install) · [Why](#why-ballast) · [What changes](#what-changes) · [Pieces](#the-pieces) · [Quick start](#quick-start) · [Philosophy](#philosophy) · [Maintenance](#maintenance)
 
-What that looks like in a session:
+What that looks like in a session — you set a rule once, weeks ago, after the second broken lockfile:
 
-> **You:** "that cheaper model looks fine — just switch to it"
-> **rules hook** *(delivered with your message, before Claude answers)*: "Never swap what the user fixed. Check `memory/DECISIONS.md` first; propose, the user decides."
-> **Claude:** "You pinned this model on Aug 13 — entry D-012 in your ledger. Here's the comparison; your call."
+```
+> add a setup script — npm install and we're done
 
-The middle line is the part ballast guarantees: "switch" matched a rule, so its full text arrived with the message — and the last line is Claude following what it was handed, not what it remembered.
+[ballast] Standing rules that apply to this request:
+- Use pnpm here: This repo uses pnpm. npm install has broken the
+  lockfile twice; write scripts and commands with pnpm.
+
+Claude: Using pnpm — your rule says npm broke the lockfile twice.
+The setup script runs pnpm install.
+```
+
+The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its full text arrived with this message. The reply follows what Claude was handed, not what it remembered.
 
 ## Install
 
