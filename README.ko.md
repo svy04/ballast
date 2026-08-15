@@ -13,9 +13,21 @@
 - **[훅 실동작 5케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그 무해, `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
 - **MIT** — 장치 전체가 한나절이면 다 읽히는 분량이에요
 
-[![Version: 0.4.0](https://img.shields.io/badge/version-0.4.0-blue)](CHANGELOG.md) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) · [Changelog](CHANGELOG.md) (영문)
+<p align="center">
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.4.0-blue" alt="버전 0.4.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
+</p>
 
-[설치](#설치) · [왜 ballast인가](#왜-ballast인가) · [무엇이 달라지나](#무엇이-달라지나) · [구성 조각](#구성-조각) · [빠른 시작](#빠른-시작) · [철학](#철학) · [유지보수](#유지보수)
+<p align="center">
+  <a href="#설치">설치</a> ·
+  <a href="#왜-ballast인가">왜 ballast인가</a> ·
+  <a href="#무엇이-달라지나">무엇이 달라지나</a> ·
+  <a href="#구성-조각">구성 조각</a> ·
+  <a href="#목표-하나-처음부터-끝까지">목표 하나</a> ·
+  <a href="#빠른-시작">빠른 시작</a> ·
+  <a href="#철학">철학</a> ·
+  <a href="#유지보수">유지보수</a>
+</p>
 
 한 번 겪은 사고는 규칙이 돼요. 몇 주 전 npm이 락파일을 깨뜨렸을 때 규칙을 심어뒀다면, 오늘 세션은 이렇게 흘러가요:
 
@@ -68,6 +80,20 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 - **재사용** — rules hook · pin · skill-forge(스킬 대장간)가 쌓인 것을 다음 세션에 되돌려요
 - **복귀** — checkpoint(복귀 지점)가 목표로 돌아오는 일을 30초 읽기로 만들어요
 
+```mermaid
+flowchart TD
+    G["목표 도착 — /ballast:goal"] --> M{"동원:<br/>규칙·지식·스킬에<br/>이미 있나?"}
+    M -- "있음 → 반드시 사용" --> W["작업"]
+    M -- "빈칸 → 학습 먼저" --> L["지형 훑기 → 뼈대 →<br/>가장 작은 조각부터 검증"]
+    L --> K[("memory/knowledge/<br/>라벨·출처와 함께")]
+    K --> W
+    W -- "한 번 교정하면" --> P["pin"] --> R[("규칙 카탈로그")]
+    R -- "걸리는 메시지마다<br/>훅이 배달" --> W
+    W -- "뚫은 길이 또 오면" --> S["skill-forge →<br/>스킬 파일"] --> W
+    W -- "잠시 멈추면" --> C[("CHECKPOINT.md")] -- "30초 복귀" --> W
+    W --> D["완료 = 검사 통과"]
+```
+
 ## 무엇이 달라지나
 
 | 이전 | 이후 |
@@ -95,6 +121,17 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 | **skill-forge** | 규약 — 마크다운 스킬 | 또 올 일에서 검사까지 통과한 절차를 스킬 파일로 벼려요 — 다음엔 푼 길에서 시작해요 |
 
 verify-gate의 라벨은 다섯 가지예요: `confirmed` / `observed`(관찰됨) / `assumed`(가정) / `hearsay`(전언) / `unknown`(모름). proof-standard는 코드를 4단계 — 구현됨 · 연결됨 · 가동 중 · 검증됨 — 로 추적해요.
+
+## 목표 하나, 처음부터 끝까지
+
+1. `/ballast:goal 가격 페이지 만들기` — 동원이 카탈로그의 가격 규칙과 `memory/knowledge/`의 브랜드 사실부터 찾아요. 둘 다 다시 조사하지 않고 그대로 써요.
+2. 한 가지(결제 카피 관례)는 빈칸이에요. 그 가지는 지형 훑기부터 시작하고, 검증 관문을 통과한 것만 라벨·출처와 함께 `memory/knowledge/`에 쌓여요.
+3. 일하다 한 번 교정해요 — "가격은 부가세 포함으로." pin이 카탈로그에 적고, 그 뒤로는 가격 얘기가 나올 때마다 훅이 배달해요.
+4. "페이지 올라갔고 폼 테스트됐어요"는 아직 주장이에요. 검사를 통과해야 완료라고 부를 수 있어요.
+5. 오늘은 여기까지 — checkpoint가 30초 복귀 지점을 적어둬요. 내일은 "어디까지 했더라"가 아니라 *다음 첫 동작*에서 시작해요.
+6. 다음 분기의 가격 페이지는 뚫어둔 길에서 시작해요 — skill-forge가 그 절차를 스킬로 남겨뒀거든요.
+
+교정 하나, 검증된 사실 하나, 뚫은 절차 하나 — 전부 세션보다 오래 살아요. 그게 이 플러그인의 전부예요.
 
 ## 빠른 시작
 

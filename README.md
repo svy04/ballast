@@ -13,9 +13,21 @@
 - **[Hook verified on 5 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog stays harmless; run `node hooks/scripts/verify-hook.mjs` to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
 
-[![Version: 0.4.0](https://img.shields.io/badge/version-0.4.0-blue)](CHANGELOG.md) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) · [Changelog](CHANGELOG.md)
+<p align="center">
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.4.0-blue" alt="Version 0.4.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
+</p>
 
-[Install](#install) · [Why](#why-ballast) · [What changes](#what-changes) · [Pieces](#the-pieces) · [Quick start](#quick-start) · [Philosophy](#philosophy) · [Maintenance](#maintenance)
+<p align="center">
+  <a href="#install">Install</a> ·
+  <a href="#why-ballast">Why</a> ·
+  <a href="#what-changes">What changes</a> ·
+  <a href="#the-pieces">Pieces</a> ·
+  <a href="#one-goal-start-to-finish">One goal</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#philosophy">Philosophy</a> ·
+  <a href="#maintenance">Maintenance</a>
+</p>
 
 What that looks like in a session — you set a rule once, weeks ago, after the second broken lockfile:
 
@@ -66,6 +78,20 @@ The pieces also chain across a goal's whole life — every link below is a conve
 - **Reuse** — the rules hook, pin, and skill-forge put it back into later sessions
 - **Return** — checkpoint makes picking the goal back up a thirty-second read
 
+```mermaid
+flowchart TD
+    G["a goal arrives — /ballast:goal"] --> M{"mobilize:<br/>already held in rules,<br/>knowledge, skills?"}
+    M -- "held → using it is mandatory" --> W["the work"]
+    M -- "gap → learn first" --> L["terrain scan → skeleton →<br/>smallest pieces, verified"]
+    L --> K[("memory/knowledge/<br/>labeled, sourced")]
+    K --> W
+    W -- "you correct Claude once" --> P["pin"] --> R[("rule catalog")]
+    R -- "hook delivers on every<br/>matching message" --> W
+    W -- "a solved path recurs" --> S["skill-forge →<br/>a skill file"] --> W
+    W -- "pause" --> C[("CHECKPOINT.md")] -- "30-second return" --> W
+    W --> D["done = a check passed"]
+```
+
 ## What changes
 
 | Before | After |
@@ -93,6 +119,17 @@ The delivery cap is fixed in the hook source. Blocking is a guardrail, not a san
 | **skill-forge** | convention — markdown skill | A procedure that recurred and passed its check becomes a skill file; the next run starts from the solved path |
 
 verify-gate's labels: `confirmed` / `observed` / `assumed` / `hearsay` / `unknown`. proof-standard tracks code in four states — implemented, wired, operational, verified.
+
+## One goal, start to finish
+
+1. `/ballast:goal build the pricing page` — mobilize finds a pricing rule already in the catalog and brand facts in `memory/knowledge/`. Both get used, not rediscovered.
+2. One branch is a gap — checkout copy conventions. That branch starts with a terrain scan; what survives the verify gate lands in `memory/knowledge/`, labeled and sourced.
+3. Mid-work you correct Claude once: "prices include VAT." pin writes it to the catalog; the hook delivers it with every pricing message after that.
+4. "Page is live, form tested" is a claim — it needs a passed check before the goal may be called done.
+5. You stop for the day. checkpoint writes the thirty-second return point; tomorrow starts at *next first action*, not at "where were we".
+6. Next quarter's pricing page starts from the solved path — skill-forge kept the procedure as a skill.
+
+One correction, one verified fact, one solved procedure — each outlives its session. That is the whole plugin.
 
 ## Quick start
 
