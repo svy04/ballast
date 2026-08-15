@@ -4,7 +4,7 @@
 
 ![ballast — a ship that holds steady because of the weight riding low in its hull](assets/banner.png)
 
-**ballast is a Claude Code plugin that keeps long sessions from drifting: each standing rule you set arrives with every message it matches, and every decision locks into an append-only ledger.**
+**ballast is a Claude Code plugin that keeps Claude working the way you decided — through long sessions, all the way to a finished goal. It mobilizes what you already hold, keeps what the work verifies, reuses every solved path, and calls nothing done until a check passes.**
 
 - **Zero dependencies** — one script; `node` ≥ 18 is the only requirement
 - **Two commands to install** — the plugin marketplace, nothing else
