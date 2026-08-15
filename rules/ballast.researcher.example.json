@@ -1,0 +1,4 @@
+{
+  "_comment": "Copy this file to <project>/.claude/ballast.researcher.json to let the researcher skill delegate collection to a second model. Note who reads it: the SKILL, not the rules hook — when the file exists, Claude runs `command` with the research question appended as the final argument. Collection is delegated, judgment is not: everything returned arrives as `hearsay` and must pass the verify gate before use. Without this file Claude simply collects directly, as before.",
+  "command": "your-researcher-cli --search"
+}

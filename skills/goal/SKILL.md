@@ -9,7 +9,7 @@ Premise: **don't trust what you already think you know.** Big goals rarely fail 
 
 ## Phase 0 — Intake
 
-- Restate the goal and its definition of done, one line each. Confirm only what is genuinely the user's to decide: direction, taste, budget, deadlines. Tools and order are yours — do not ask about them.
+- Restate the goal and its definition of done, one line each. Confirm only what is genuinely the user's to decide: direction, taste, budget, deadlines, and who a deliverable is for. Tools and order are yours — do not ask about them.
 - Check what already exists before planning to build anything: prior art, standard tools, the user's own assets. Adopting beats rebuilding.
 - Ensure the memory structure exists (run brain-init if not). From here on, decisions are recorded the moment they happen, and unresolved items are registered, not remembered.
 
@@ -27,14 +27,16 @@ A goal never starts from zero: by the time it arrives you already hold rules, re
 Branches the mobilization table marked as gaps come here first. In an unfamiliar field, your sense of what matters is the least trustworthy thing you have. So do not start by producing answers.
 
 - Collect the field's live debates, solved vs unsolved problems, beginner traps, and standard tooling — as questions and a map, not conclusions.
+- With a researcher configured (see the researcher skill), the collecting itself can be delegated — findings return as `hearsay`; the map, the labels, and the judgment stay yours.
 - Ask explicitly, of the field and of yourself: *"what important thing have I not written down?"* A well-verified map that misses the core is the failure mode here.
-- Output: a terrain map the user can read in a minute, every item labeled (confirmed / observed / assumed / hearsay / unknown — see verify-gate).
+- Output: a terrain map the user can read in a minute, every item labeled (confirmed / observed / assumed / hearsay / unknown — see verify-gate). It lives at the top of `memory/goal/<slug>.md`, above the skeleton it will produce.
 
 ## Phase 2 — Skeleton (top-down, pyramid-structured)
 
 - From the terrain, derive the full tree — **pyramid discipline**: every parent is a conclusion its children must jointly carry, and at every level the children are MECE (no overlap, nothing missing). If a level fails that test, the cut is wrong — recut it now, not later.
 - Go down to **atomic leaves**. A leaf is atomic only if it passes all four tests: no hidden premises inside it · one axis of judgment · compressible to a single question · no other leaf needs to restate its content. Fail any one → it is not a leaf, split it.
 - The skeleton is disposable by design. In a new field expect to re-cut it two or three times; version each cut and supersede the old one — never silently overwrite, or you will lose track of which map was right.
+- The skeleton lives in a file, not in the session: `memory/goal/<slug>.md` (slug: 2–4 kebab-case words from the goal's key nouns — list `memory/goal/` first and reuse a matching file rather than minting a twin) holds the goal and its definition of done, the tree with each leaf marked filled / named-unfilled / superseded (labels attached), the single next leaf, known gaps by name, the done-check, and superseded cuts kept below. That file is the canonical copy of this goal's structure — a session ending loses nothing the file holds. (checkpoint still owns session state; this file owns the goal's shape.)
 
 ## Phase 3 — Leaves (bottom-up, goal-pulled)
 
@@ -57,7 +59,7 @@ Four signals send you back up the tree — do not wait for a scheduled review:
 
 ## Phase 5 — Done means verified
 
-- "Done" is a claim and passes the same gate as any claim: show the evidence (the thing runs, the test passes, the deliverable survived a cold-reader rehearsal).
+- "Done" is a claim and passes the same gate as any claim: show the evidence (the thing runs, the test passes, the deliverable survived rehearsal — see the rehearsal skill; its round log is the citable part).
 - Remaining expectations are registered as hypotheses with a judgment date — not folded into the victory lap.
 - Distill before leaving: procedures that repeated become skills; corrections that hurt become pinned rules (see pin).
 

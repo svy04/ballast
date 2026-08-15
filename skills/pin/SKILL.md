@@ -7,6 +7,17 @@ description: Turn a correction or working preference the user just expressed int
 
 A correction that lives only in the conversation dies with the conversation. Pinning it writes it into the ballast rule catalog, so the rules hook delivers it with every future message it applies to.
 
+## When the correction follows an incident, classify first
+
+Before writing the rule, name which net failed — the remedy differs by type:
+
+- **default regression** — the rule existed but wasn't in front of the generating moment → fix delivery: keywords that will actually match future messages
+- **propagation miss** — one surface got fixed, its copies didn't → sweep the remaining surfaces now, then pin; when a ledger decision changed, decision-ledger's supersede sweep is the same move
+- **delegation leak** — the work went through a subagent or external tool the hook never reaches → the rule belongs in the brief, not only the catalog
+- **variant evasion** — only the literal wording was watched and a rephrasing walked through → pin `patterns`, not just keywords
+
+One clause in the entry's parenthetical is enough ("propagation miss: fixed README, missed plugin.json"). An apology without a classification fixes nothing. These four types are one owner's working taxonomy — when an incident fits none of them, that's a fifth type worth naming.
+
 ## Steps
 
 1. **Extract the rule.** One imperative sentence, at most two. The user's own wording beats your paraphrase. If the correction references a specific incident, keep the incident as a short parenthetical — future-you needs the why.
@@ -24,7 +35,7 @@ A correction that lives only in the conversation dies with the conversation. Pin
      "id": "cost-gate",
      "title": "Estimate before spending",
      "when": { "keywords": ["generate", "credits", "batch"] },
-     "body": "Anything that spends money: estimate first, explicit approval, then execute."
+     "body": "Anything that spends money or credits: present an estimate and get explicit approval BEFORE executing. No exceptions for small amounts — the habit is the point."
    }
    ```
 3. **On the user's OK** (a plain "yes/좋아/그래" is enough), merge it into `<project>/.claude/ballast.rules.json` — or `~/.claude/ballast.rules.json` when the rule is about how the user works everywhere, not just this project. Create the file with `{"version": 1, "rules": []}` if missing; if an entry with the same `id` exists, update its body and say what changed instead of duplicating.

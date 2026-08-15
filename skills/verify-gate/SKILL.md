@@ -37,6 +37,8 @@ Different vendors have different blind spots. If the project has `.claude/ballas
 
 run that command with the claim as its final argument, and weigh its refutation before confirming. Without an external verifier, you may still reach `confirmed` — but only via primary sources you actually opened, and note `(self-gated)` next to the label.
 
+**Health-check the verifier.** The first time a session leans on it, confirm the command actually runs. If it fails, **say so once** and proceed `(self-gated)` — a configured verifier that silently never ran is the worst outcome, because the label implies a scrutiny that never happened.
+
 ## Success is also a claim
 
 "Task done" passes the same gate: verify the thing actually happened (file exists, test passes, output is correct) before reporting success. An enthusiastic user reaction is sense-data, not verification — log it as a hypothesis and design a check.
