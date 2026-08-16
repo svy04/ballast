@@ -1,6 +1,6 @@
 # ballast
 
-**[한국어 문서 →](README.ko.md)**
+**[한국어 문서 →](README.ko.md) · [简体中文 →](README.zh-CN.md)**
 
 ![ballast — a ship that holds steady because of the weight riding low in its hull](assets/banner.png)
 

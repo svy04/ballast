@@ -1,6 +1,6 @@
 # ballast
 
-**[English →](README.md)**
+**[English →](README.md) · [简体中文 →](README.zh-CN.md)**
 
 ![ballast — 선체 아래 낮게 실린 무게 덕에 흔들리지 않는 배](assets/banner.png)
 
