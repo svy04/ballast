@@ -1,6 +1,8 @@
 # Using ballast with Codex
 
-ballast is packaged as a Claude Code plugin, but eleven of its twelve pieces are plain markdown conventions — files any capable agent can read. This guide wires them into Codex CLI.
+ballast takes a goal in a field you have no expertise in and builds up to it: it splits the goal into the foundations it actually needs, mobilizes the ones you already hold, learns the ones you are missing, and leaves every path it solves behind — as a rule, a verified note, or a skill the next goal starts from. Nothing is called done until a check passes.
+
+It is packaged as a Claude Code plugin, but eleven of its twelve pieces are plain markdown conventions — files any capable agent can read. This guide wires them into Codex CLI.
 
 **What carries over:** all eleven skills (`SKILL.md` is plain markdown — Codex is simply told to read it), the `memory/` conventions, and the config files. One rule catalog can serve both tools on the same project.
 
@@ -60,4 +62,4 @@ One wrapper file per skill you call often — `ballast-brain-init.md`, `ballast-
 - **No enforcement.** On Claude Code the hook delivers matching rules whether the model cooperates or not; on Codex the AGENTS.md block asks, and Codex complies as well as it follows any instruction. Blocks are a stated refusal, not a stopped prompt.
 - **The hook's mechanics don't exist here.** No substring matching, no 12-rule / ~6,000-char cap, no `BALLAST_DISABLE` / `BALLAST_DEBUG`: matching is the model's judgment, and the whole catalog gets read each task — keep it lean.
 - **Delivery timing differs.** The hook injects per message; AGENTS.md is read per session. A long Codex session can drift from the catalog like any instruction file — re-point it at the block when it does.
-- **The evidence is `observed`, not a harness.** 2026-08-16, Codex CLI 0.130, `codex exec`, one session each: given the block above plus the example catalog, Codex presented an estimate and asked approval before a spending task, and read and followed the rehearsal and verify-gate skills unprompted — labels included. Two sessions is an observation; instruction-following is probabilistic. The runnable 5-case harness exists only for the Claude Code hook.
+- **The evidence is `observed`, not a harness.** 2026-08-16, Codex CLI 0.130, `codex exec`, one session each: given the block above plus the example catalog, Codex presented an estimate and asked approval before a spending task, and read and followed the rehearsal and verify-gate skills unprompted — labels included. Both sessions ran with a non-default model and service-tier override, not the CLI's stock config — instruction-following varies by model. Two sessions is an observation, not a rate. The runnable 6-case harness exists only for the Claude Code hook.

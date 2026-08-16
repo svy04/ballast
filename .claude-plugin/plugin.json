@@ -1,9 +1,11 @@
 {
   "name": "ballast",
   "displayName": "ballast",
-  "version": "0.5.1",
-  "description": "Turns working with Claude Code into a system that finishes goals: what you teach, verify, and solve once stays in use — session after session.",
-  "author": { "name": "svy04" },
+  "version": "0.6.0",
+  "description": "Builds up to a goal in a field you have no expertise in: splits it into the foundations that goal actually needs, mobilizes what you already hold, learns what is missing, and leaves every solved path behind for the next goal. Nothing is called done until a check passes.",
+  "author": {
+    "name": "svy04"
+  },
   "license": "MIT",
   "homepage": "https://github.com/svy04/ballast",
   "repository": "https://github.com/svy04/ballast",

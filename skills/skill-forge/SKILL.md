@@ -22,6 +22,7 @@ The skill file records the procedure **as it actually ran**, not as it should ha
 - **Procedure** — the steps in the order that worked, including the traps hit along the way (`step 3 fails silently if the cache wasn't cleared first` is the most valuable line in the file).
 - **Verified** — the date the procedure last succeeded.
 - **Evidence** — what confirmed success: the test that passed, the file that existed, the output that was checked. This line is what separates a skill from a hopeful note.
+- **Source** — the `memory/knowledge/` entry the procedure rests on, when there is one. Include this line only in that case; it is what makes the third freshness trigger below reachable.
 
 Frontmatter follows the usual shape: `name` matching the directory, `description` saying what it does and when to use it.
 
@@ -31,4 +32,4 @@ pin promotes a **one-line rule** — a correction or preference that should arri
 
 ## Freshness
 
-A procedure is a claim that these steps still work. Two triggers force a refresh: the verification date is more than 90 days old, or the procedure fails when followed. Either way, re-run it, fix what changed, and update the date and evidence — a skill that silently stopped working is worse than no skill, because it carries the authority of a past success.
+A procedure is a claim that these steps still work. Three triggers force a refresh: the verification date is more than 90 days old, the procedure fails when followed, or the knowledge entry this procedure rests on changed. Any of them, re-run it, fix what changed, and update the date and evidence — a skill that silently stopped working is worse than no skill, because it carries the authority of a past success.

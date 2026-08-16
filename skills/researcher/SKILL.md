@@ -36,7 +36,7 @@ A configured researcher that silently never ran is worse than none, and retrying
 
 The brief *is* the question: everything below travels inside that final argument, as one string — there is no side channel.
 
-- **Name the search language.** Ask where the answer lives: facts about a market in that market's language, platform and research originals usually in English. Don't leave the language to the tool.
+- **Name the search language.** Ask where the answer lives, on three axes: facts about a market belong in that market's language; platform and research originals are usually in English; hands-on know-how belongs in whichever language that practice is densest in. Pick one primary language per question — never run them all in parallel. Add at most one secondary, and only when the answer steers a decision or a spend. Don't leave the language to the tool.
 - **Before building anything standard-shaped**, ask for the established methods *and their known failure axes*. Your approach working on your sample proves little — the literature usually already knows where it breaks.
 - **Set the verification budget up front**: rank sources (your own measurements > observed behavior > primary documents > practitioner accounts > public advice) and verify only the claims that steer decisions or spending — the rest stay labeled instead.
 - **Rules don't travel.** The rules hook fires on your prompts only; an external CLI — or a subagent — never sees your catalog. Whatever constraint matters, write it into the brief itself.

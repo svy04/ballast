@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6.0 — 2026-08-16
+
+An audit against the private workspace this project was distilled from: identity first, then the gaps the distillation left behind. One hook change; everything else is convention and copy.
+
+- **identity** — the lead now says what ballast is for: taking a goal in a field you have no expertise in and building up to it, then keeping every solved path for the next goal. Verification, rehearsal, rule delivery and done-means-checked protect that, and are described inside the loop instead of as the headline. Applied to README (EN/KO), `plugin.json`, `marketplace.json` and `docs/CODEX.md` together — those surfaces had drifted apart
+- **rules hook** — a catalog file that exists but cannot be read now gets one line back to the user, naming the file and stating that its rules are not being delivered. Every other failure stays silent, and a parse failure still never blocks the prompt. A missing catalog is unchanged: that is the normal starting state and stays quiet
+- **hook harness** `hooks/scripts/verify-hook.mjs` — 6 cases, 6/6 passing; the two new ones cover the notice above and the guarantee that a broken catalog still exits 0
+- **verify-gate** — an empty, truncated or off-topic verifier reply counts as a failed run, not a pass; a partial refutation is confirmed at its narrowed wording rather than rejected whole; the gate's result gets written down where the claim lives
+- **knowledge-base** — a finding that contradicts a standing entry surfaces the conflict before it is filed; editing an entry updates the skills resting on it
+- **proof-standard** — a freshness rule, and one truth file per subject split by what kind of evidence is available; the "not implemented" section is called out as the part that rots toward understating the product
+- **skill-forge** — a third refresh trigger: the knowledge entry a procedure rests on changed
+- **goal** — the Phase 0 restatement is re-read before done is claimed; leaves report the sub-fields they exposed and tree nodes carry evidence; leaves filled in parallel get one refutation pass over the batch
+- **researcher** — search language picks one primary per question, at most one secondary, never all in parallel
+- **checkpoint, knowledge-base** — new memory files register a row in the index the first time they appear
+- **README (EN/KO)** — "Why ballast" split into *The fixes* and *The chain*; the chain's fourth link is quality, not return; verifier and researcher setup folded into `<details>`; a reference link to `skills/`; the zero-dependency claim now names its scope (the hook is one script; the check harness is separate and spawns `node`)
+
 ## 0.5.1 — 2026-08-16
 
 ballast now runs on Codex too — as conventions. No code changes.

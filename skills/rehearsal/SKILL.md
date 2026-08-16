@@ -31,4 +31,4 @@ One redesign is normal. A second redesign that still isn't clean ends the loop: 
 - **A clean pass earns the done-check, not the ship.** Anything externally visible still leaves only with the user's click (goal's standing behavior).
 - **Keep the log.** Rounds, stalls, fixes — beside the deliverable, or in the goal file's done-check (`memory/goal/<slug>.md`) when the work runs under goal. The log is citable evidence that the deliverable survived contact (`observed`, dated); "it reads fine to me" cites nothing.
 
-ballast's own releases go through this procedure — the README you installed from survived its rounds.
+Every ballast release goes through this procedure — v0.5's README converged in three rounds.

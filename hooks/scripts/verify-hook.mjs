@@ -2,14 +2,15 @@
 /**
  * ballast — hook verification harness
  *
- * Runs ballast-rules.mjs as a child process against five cases and checks
+ * Runs ballast-rules.mjs as a child process against six cases and checks
  * the observable contract (stdout / stderr / exit code):
  *
  *   1. keyword match      -> injects matching rule bodies as additionalContext
  *   2. no match           -> stays silent (no stdout, exit 0)
  *   3. action: "block"    -> blocks the prompt (exit 2, reason on stderr)
  *   4. legacy input field -> accepts "prompt" as well as "prompt_text"
- *   5. broken catalog     -> stays harmless (exit 0, no output, no crash)
+ *   5. broken catalog     -> says so, and delivers no rules
+ *   6. broken catalog     -> still never blocks the session (exit 0)
  *
  * Self-contained: builds its own temp catalogs, isolates the child's home
  * and project directories from the real machine, and cleans up after itself.
@@ -127,11 +128,24 @@ const cases = [
     },
   },
   {
-    name: "broken catalog JSON stays harmless",
+    name: "broken catalog says so instead of failing silently",
     run: () => runHook({ prompt_text: "deploy something" }, "{ this is not valid JSON"),
     check: (r) => {
       if (r.status !== 0) return `expected exit 0, got ${r.status}`;
-      if (r.stdout.trim() !== "") return `expected empty stdout, got: ${r.stdout}`;
+      const ctx = parseContext(r.stdout);
+      if (!ctx) return "expected a notice on stdout, got nothing";
+      if (!ctx.includes("could not be read")) return `notice did not name the failure: ${ctx}`;
+      if (ctx.includes("Standing rules that apply"))
+        return "a broken catalog must not deliver rules";
+      return null;
+    },
+  },
+  {
+    name: "a broken catalog never blocks the session",
+    run: () => runHook({ prompt_text: "deploy something" }, "{ this is not valid JSON"),
+    check: (r) => {
+      if (r.status === 2) return "a parse failure must not block the prompt";
+      if (r.status !== 0) return `expected exit 0, got ${r.status}`;
       return null;
     },
   },

@@ -1,12 +1,14 @@
 {
   "name": "ballast",
-  "description": "Turns working with Claude Code into a system that finishes goals — what you teach, verify, and solve once stays in use.",
-  "owner": { "name": "svy04" },
+  "description": "Builds up to a goal in a field you have no expertise in — learns the foundations it needs and keeps every solved path for the next goal.",
+  "owner": {
+    "name": "svy04"
+  },
   "plugins": [
     {
       "name": "ballast",
       "source": "./",
-      "description": "One code-enforced rules hook plus eleven convention skills spanning the goal's whole life: mobilize what you hold, split the goal top-down into verified atomic pieces, delegate collection but never judgment, verify claims against refutation, rehearse deliverables before they ship, reuse what worked, return in thirty seconds."
+      "description": "Builds up to a goal in a field you have no expertise in: splits it into the foundations that goal actually needs, mobilizes what you already hold, learns what is missing, and leaves every solved path behind for the next goal. Nothing is called done until a check passes."
     }
   ]
 }

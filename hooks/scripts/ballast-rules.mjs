@@ -11,7 +11,9 @@
  *   2. <project>/.claude/ballast.rules.json   — project-level rules
  *
  * Design contract: this hook must NEVER break a session.
- * Any internal error -> exit 0 with no output.
+ * Any internal error -> exit 0. Output stays empty except for one case:
+ * a catalog that exists but cannot be parsed gets one line back to the user,
+ * because a silently dropped catalog is indistinguishable from "nothing matched".
  * Set BALLAST_DEBUG=1 to see errors on stderr.
  * Set BALLAST_DISABLE=1 to turn the hook off without uninstalling.
  */
@@ -35,15 +37,24 @@ function readStdin() {
   }
 }
 
-function loadCatalog(path) {
+// A missing catalog and a broken one are different events. Missing is the normal
+// starting state and stays silent. Broken means rules the user wrote are not being
+// delivered, and a silent session looks identical to one where nothing matched —
+// so the failure gets one line back to the user, never an exception.
+function loadCatalog(path, broken) {
   try {
     if (!existsSync(path)) return [];
     const parsed = JSON.parse(readFileSync(path, "utf8"));
     const rules = Array.isArray(parsed) ? parsed : parsed.rules;
-    if (!Array.isArray(rules)) return [];
+    if (!Array.isArray(rules)) {
+      debug("no rules array", path);
+      broken.push(path);
+      return [];
+    }
     return rules.filter((r) => r && typeof r === "object" && typeof r.body === "string");
   } catch (e) {
     debug("failed to load", path, e && e.message);
+    broken.push(path);
     return [];
   }
 }
@@ -89,17 +100,24 @@ function main() {
   ];
 
   const byId = new Map();
+  const broken = [];
   let anon = 0;
   for (const path of catalogPaths) {
-    for (const rule of loadCatalog(path)) {
+    for (const rule of loadCatalog(path, broken)) {
       byId.set(typeof rule.id === "string" && rule.id ? rule.id : `anon-${anon++}`, rule);
     }
   }
-  if (byId.size === 0) return 0;
+  const notices = [];
+  if (broken.length) {
+    notices.push(
+      `[ballast] The rule catalog at ${broken.join(", ")} could not be read — rules from it are NOT being delivered this session. Fix the JSON, or set BALLAST_DEBUG=1 to see the parse error.`
+    );
+  }
 
   const promptLower = prompt.toLowerCase();
-  const matched = [...byId.values()].filter((r) => matches(r, promptLower, prompt));
-  if (matched.length === 0) return 0;
+  const matched = byId.size
+    ? [...byId.values()].filter((r) => matches(r, promptLower, prompt))
+    : [];
 
   const block = matched.find((r) => r.action === "block");
   if (block) {
@@ -120,12 +138,17 @@ function main() {
     used += entry.length;
     shown++;
   }
-  if (lines.length === 0) return 0;
-  if (shown < matched.length) {
+  if (lines.length && shown < matched.length) {
     lines.push(`(${matched.length - shown} more matched rules truncated — keep catalogs lean)`);
   }
 
-  const context = ["[ballast] Standing rules that apply to this request:", ...lines].join("\n");
+  const sections = [...notices];
+  if (lines.length) {
+    sections.push(["[ballast] Standing rules that apply to this request:", ...lines].join("\n"));
+  }
+  if (sections.length === 0) return 0;
+
+  const context = sections.join("\n\n");
 
   process.stdout.write(
     JSON.stringify({

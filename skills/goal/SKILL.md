@@ -36,13 +36,14 @@ Branches the mobilization table marked as gaps come here first. In an unfamiliar
 - From the terrain, derive the full tree — **pyramid discipline**: every parent is a conclusion its children must jointly carry, and at every level the children are MECE (no overlap, nothing missing). If a level fails that test, the cut is wrong — recut it now, not later.
 - Go down to **atomic leaves**. A leaf is atomic only if it passes all four tests: no hidden premises inside it · one axis of judgment · compressible to a single question · no other leaf needs to restate its content. Fail any one → it is not a leaf, split it.
 - The skeleton is disposable by design. In a new field expect to re-cut it two or three times; version each cut and supersede the old one — never silently overwrite, or you will lose track of which map was right.
-- The skeleton lives in a file, not in the session: `memory/goal/<slug>.md` (slug: 2–4 kebab-case words from the goal's key nouns — list `memory/goal/` first and reuse a matching file rather than minting a twin) holds the goal and its definition of done, the tree with each leaf marked filled / named-unfilled / superseded (labels attached), the single next leaf, known gaps by name, the done-check, and superseded cuts kept below. That file is the canonical copy of this goal's structure — a session ending loses nothing the file holds. (checkpoint still owns session state; this file owns the goal's shape.)
+- The skeleton lives in a file, not in the session: `memory/goal/<slug>.md` (slug: 2–4 kebab-case words from the goal's key nouns — list `memory/goal/` first and reuse a matching file rather than minting a twin) holds the goal and its definition of done, the tree with each leaf marked filled / named-unfilled / superseded (labels attached) and **every node carrying what it rests on — the file path or link; a named-unfilled node carries the lead it will be filled from, or `no source yet`, never a blank**, the single next leaf, known gaps by name, the done-check, and superseded cuts kept below. That file is the canonical copy of this goal's structure — a session ending loses nothing the file holds. (checkpoint still owns session state; this file owns the goal's shape.)
 
 ## Phase 3 — Leaves (bottom-up, goal-pulled)
 
 - Fill leaves in the order the goal pulls, not encyclopedia order. Learning must never swallow the goal.
 - **Every leaf passes the verify gate before it becomes load-bearing**: refute first, primary sources, sample size, stated limits, label attached.
-- **Atom recursion**: if a leaf turns out to contain a named sub-field while you work it, register its children in the tree at that moment — by name, even unfilled. Zero silent gaps: a branch you cannot fill today still gets a name today.
+- **Batch refutation**: when leaves are filled in parallel, refute the whole batch once more before any of them bears weight — only what survives that pass enters the tree.
+- **Atom recursion**: if a leaf turns out to contain a named sub-field while you work it, register its children in the tree at that moment — by name, even unfilled. Zero silent gaps: a branch you cannot fill today still gets a name today. This is an output, not a thing to notice: every filled leaf ships the line **"sub-foundations exposed: `<name — atomic / not atomic → split into …>`, …"**, and a leaf that exposed none writes `none` there. A blank is not an answer — treat the leaf as unfinished until that line exists.
 - Build alongside learning. A leaf proven in use beats a leaf proven on paper.
 
 ## Phase 4 — Re-check (top-down again, then loop)
@@ -54,11 +55,13 @@ Four signals send you back up the tree — do not wait for a scheduled review:
 3. A leaf keeps failing or shows no progress → the cut is wrong, not the effort.
 4. A major branch is finished → survey the whole before descending again.
 
+- Check the file itself on every trip up: **a node marked filled with no source beside it is not filled** — drop it back to named-unfilled until one is attached.
 - Repair by **diff, not demolition**: supersede the dead branches, add the new ones, keep the rest. A full re-cut is only for a pivot of the goal itself.
 - Loop phases 2↔3↔4 until the definition of done is met.
 
 ## Phase 5 — Done means verified
 
+- Before showing the evidence, re-read the one-line restatement from Phase 0 and say plainly whether the deliverable answers *that* — a passed check on the wrong goal is still a miss.
 - "Done" is a claim and passes the same gate as any claim: show the evidence (the thing runs, the test passes, the deliverable survived rehearsal — see the rehearsal skill; its round log is the citable part).
 - Remaining expectations are registered as hypotheses with a judgment date — not folded into the victory lap.
 - Distill before leaving: procedures that repeated become skills; corrections that hurt become pinned rules (see pin).

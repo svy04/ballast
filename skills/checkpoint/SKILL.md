@@ -37,6 +37,7 @@ Rules:
 - **Next first action is the load-bearing line.** A cold session must be able to execute it before reading a single other file: concrete verb, concrete object, no prerequisite. "Continue the analysis" fails this test; "run the export script against the staging list and diff the counts" passes.
 - **Tried is a map of dead ends.** An approach that failed and went unrecorded will be attempted again, in good faith, by a session that has no way to know better. One line per dead end — what was tried, why it didn't work.
 - **Archive on every update.** Before overwriting, copy the outgoing version to `memory/checkpoints/{YYYYMMDD-HHMM}-<short-title>.md`. That directory is append-only and sorts itself by filename — the full trail of how the work moved, at zero extra cost.
+- **Index each file the first time it appears.** When this skill first creates `memory/CHECKPOINT.md`, `memory/checkpoints/`, or `memory/HANDOFF.md`, add a row for it to the File map in `memory/00-INDEX.md` — a file missing from the map is a file the next session never opens.
 
 ## HANDOFF.md — single-use, then destroyed
 

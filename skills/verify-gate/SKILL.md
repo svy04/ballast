@@ -27,6 +27,8 @@ Unlabeled claims must not be presented as fact — in chat, in documents, in cod
 4. **Limits stated.** Where does the claim *not* hold?
 5. **Date stamped.** Verified knowledge expires — re-verify anything older than 90 days before relying on it.
 
+Write the gate's result down where the claim lives — what was argued against it, which sources were opened, what survived. A `confirmed` label with no retrievable record is `assumed` wearing a badge.
+
 ## Second-model verification (optional, recommended)
 
 Different vendors have different blind spots. If the project has `.claude/ballast.verifier.json` (this skill reads it — the rules hook does not; a copy-ready example ships in the ballast repo at `rules/ballast.verifier.example.json`):
@@ -38,6 +40,11 @@ Different vendors have different blind spots. If the project has `.claude/ballas
 run that command with the claim as its final argument, and weigh its refutation before confirming. Without an external verifier, you may still reach `confirmed` — but only via primary sources you actually opened, and note `(self-gated)` next to the label.
 
 **Health-check the verifier.** The first time a session leans on it, confirm the command actually runs. If it fails, **say so once** and proceed `(self-gated)` — a configured verifier that silently never ran is the worst outcome, because the label implies a scrutiny that never happened.
+
+Two things to get right when reading what comes back:
+
+- An empty, truncated, or off-topic reply counts as a **failed** run, not a pass — say so and fall back to `(self-gated)`.
+- A refutation is rarely all-or-nothing: read the per-claim verdicts and any restatement the verifier proposes, and confirm the **narrowed** wording rather than rejecting the whole claim.
 
 ## Success is also a claim
 
