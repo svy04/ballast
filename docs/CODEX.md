@@ -2,9 +2,9 @@
 
 ballast takes a goal in a field you have no expertise in and builds up to it: it splits the goal into the foundations it actually needs, mobilizes the ones you already hold, learns the ones you are missing, and leaves every path it solves behind — as a rule, a verified note, or a skill the next goal starts from. Nothing is called done until a check passes.
 
-It is packaged as a Claude Code plugin, but eleven of its twelve pieces are plain markdown conventions — files any capable agent can read. This guide wires them into Codex CLI.
+It is packaged as a Claude Code plugin, but twelve of its thirteen pieces are plain markdown conventions — files any capable agent can read. This guide wires them into Codex CLI.
 
-**What carries over:** all eleven skills (`SKILL.md` is plain markdown — Codex is simply told to read it), the `memory/` conventions, and the config files. One rule catalog can serve both tools on the same project.
+**What carries over:** all twelve skills (`SKILL.md` is plain markdown — Codex is simply told to read it), the `memory/` conventions, and the config files. One rule catalog can serve both tools on the same project.
 
 **What does not:** the rules hook. It is a Claude Code `UserPromptSubmit` hook with no Codex equivalent — so on Codex, rule delivery is a convention too. Nothing is code-enforced on Codex.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 — 2026-08-17
+
+- **new skill `recall`** — sweeps everything the project already holds *before answering*, at a session's first substantive reply and again at every subject shift. Five places, all of them: `memory/00-INDEX.md`, `memory/knowledge/`, `DECISIONS.md`, the rule catalog, and `skills/` + `memory/goal/`. Scan at index level, open what looks relevant, read it, and leave one line saying what was swept and opened — including when nothing matched.
+- The skill's own rule is that finding one thing does not end the sweep. The layers hold different kinds of thing (a rule is not a verified fact is not a settled decision is not a forged procedure), so one layer answering does not mean the others have nothing to add.
+- Why it is separate from what already existed: `goal`'s mobilize phase reasons **down** from a stated task and can only summon what the task is known to need; `knowledge-base`'s lookup runs before *researching*. `recall` reasons **up** from what is held and runs before *answering at all*. That gap is where "but that was already written down" happens.
+- README (EN/KO) and `docs/CODEX.md`: symptom list, fixes table, pieces table, chain, and every skill count updated together.
+
 ## 0.6.0 — 2026-08-16
 
 An audit against the private workspace this project was distilled from: identity first, then the gaps the distillation left behind. One hook change; everything else is convention and copy.

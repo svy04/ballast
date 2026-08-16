@@ -15,8 +15,10 @@ Before writing the rule, name which net failed — the remedy differs by type:
 - **propagation miss** — one surface got fixed, its copies didn't → sweep the remaining surfaces now, then pin; when a ledger decision changed, decision-ledger's supersede sweep is the same move
 - **delegation leak** — the work went through a subagent or external tool the hook never reaches → the rule belongs in the brief, not only the catalog
 - **variant evasion** — only the literal wording was watched and a rephrasing walked through → pin `patterns`, not just keywords
+- **compression loss** — shortening or re-toning a text dropped something the text had already settled → diff the trimmed version against the one before it, part by part; a rule pinned here belongs in the editing brief, not the keyword catalog
+- **substitute illusion** — something adjacent to what the rule asked for got done, and that was scored as compliance → check that the artifact the rule names actually exists, rather than that the work felt covered
 
-One clause in the entry's parenthetical is enough ("propagation miss: fixed README, missed plugin.json"). An apology without a classification fixes nothing. These four types are one owner's working taxonomy — when an incident fits none of them, that's a fifth type worth naming.
+The last two are worth separating from the first: they happen with the rule already in view, so better delivery does not reduce them. One clause in the entry's parenthetical is enough ("propagation miss: fixed README, missed plugin.json"). An apology without a classification fixes nothing. These six types are one owner's working taxonomy, and it grew — it started at four. When an incident fits none of them, that's the next type worth naming.
 
 ## Steps
 
