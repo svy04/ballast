@@ -4,6 +4,8 @@
 
 ![ballast — a ship that holds steady because of the weight riding low in its hull](assets/banner.png)
 
+**ballast is a Claude Code plugin that takes a goal you have no expertise in, builds it up from the foundations, and carries it through — then keeps every solved path so the next goal starts further along.**
+
 A few weeks into working with Claude, this piles up:
 
 - **You give the same correction again next month** — the rule arrives with the message it fits
@@ -15,15 +17,11 @@ A few weeks into working with Claude, this piles up:
 - **Another model's tidy summary lands as fact** — it can fetch, but it cannot rule
 - **You re-research what the project already wrote down** — everything held is swept before the answer
 
-All eight have one thing in common: the weight sits in the conversation and nowhere else.
+All eight have one cause: the weight sits in the conversation and nowhere else. Ships fix this by loading weight low in the hull, under everything else — that weight is called ballast. Here, it is rules, decisions, and verified facts riding in files, under the conversation.
 
-A ship rolls the same way when its cargo rides light. So crews load weight low in the hull, under everything else. That weight is called ballast.
+And it accumulates. A method you only found after dead ends, a fact that survived checking, a vague problem finally cut into pieces — each one stays, and the next goal starts on top of it. You do not dig the same hole twice.
 
-**This is the plugin that loads it into your work with Claude. Rules, decisions, and verified facts live in files, so a goal in a field you have never worked in can be built up from the foundations it needs and carried through.**
-
-And ballast accumulates. A method you only found after dead ends, a fact that survived checking, a vague problem finally cut into pieces — each one stays, and the next goal starts on top of it. You do not dig the same hole twice.
-
-Here is that first line, in a session. You set the rule once, weeks ago:
+Here is the first line of that list, in a session. You set the rule once, weeks ago:
 
 ```
 > add a setup script — npm install and we're done
@@ -105,7 +103,7 @@ The pieces also chain across a goal's whole life — the hook is the only code i
 - **Reuse and replicate** — the rules hook, pin, and skill-forge put it back into later sessions, and into the next goal
 - **Quality holds** — verify-gate stands between a claim and `confirmed`, rehearsal stands between a deliverable and its reader, and goal calls nothing done until a check passes
 
-checkpoint carries that chain across a break: picking the goal back up is a thirty-second read. Drawn as the path one goal takes through it, the same chain looks like this — boxes are pieces, cylinders are files that outlive the session.
+checkpoint carries that chain across a break: picking the goal back up is a thirty-second read. The same chain, drawn as one goal's path — boxes are pieces, cylinders are files that outlive the session:
 
 ```mermaid
 flowchart TD
@@ -134,7 +132,7 @@ flowchart TD
 
 The delivery cap is fixed in the hook source. Blocking is a guardrail, not a sandbox — the hook is fail-open (see [Quick start](#quick-start)).
 
-That is the one code-enforced piece doing its job. Counting the other twelve, the pieces divide like this.
+That is the one code-enforced piece doing its job. Here are all thirteen, labeled.
 
 ## The pieces
 
@@ -144,7 +142,7 @@ That is the one code-enforced piece doing its job. Counting the other twelve, th
 | **decision-ledger** | convention — markdown skill | Append-only `DECISIONS.md`; changed minds get supersede links, never silent edits |
 | **verify-gate** | convention — markdown skill | Research and model knowledge stay drafts until refuted-and-survived, sourced, and labeled |
 | **knowledge-base** | convention — markdown skill | Gate-passed findings land in `memory/knowledge/`; every new question reads there before researching |
-| **researcher** | convention — markdown skill | Collection delegated to a configured second CLI, judgment never — findings arrive `hearsay` and must still pass the gate |
+| **researcher** | convention — markdown skill | Hands collection to a configured second CLI — findings arrive `hearsay` and still face the gate |
 | **proof-standard** | convention — markdown skill | No external claim without evidence in a truth file; copy may not blur code states |
 | **brain-init** | convention — markdown skill | Scaffolds memory: index, ledger, open questions, session log, product truth; appends a session-start block to `CLAUDE.md` (on Codex, `AGENTS.md`) |
 | **goal** | convention — markdown skill | Mobilizes what you already hold, maps the field, splits the goal top-down into a pyramid of atomic pieces — no overlaps, no gaps — and fills them bottom-up, each verified before it bears weight |
@@ -158,7 +156,7 @@ verify-gate's labels: `confirmed` / `observed` / `assumed` / `hearsay` / `unknow
 
 Reference: [skills/](skills/) — each skill file's front matter says when it fires. Every skill is also callable as `/ballast:<name>`.
 
-The thirteen do not run separately; they attach to one goal in order. That single pass looks like this.
+The thirteen attach to one goal, in order. One pass:
 
 ## One goal, start to finish
 
@@ -257,7 +255,7 @@ What breaks it is memory and overconfidence. So rules live in files and arrive w
 
 Decisions live in a ledger that cannot be quietly rewritten. Claims carry labels until they earn `confirmed`.
 
-The pieces share one arrangement: the check stands before the mistake — rules arrive before the reply, mobilize runs before the work, rehearsal runs before the reader ever sees the deliverable. That order came from months of fixing accidents after they shipped — the same months the disclosure below files under `hearsay`; ballast is built to close the room they happened in.
+The pieces share one arrangement: the check stands before the mistake — rules arrive before the reply, mobilize runs before the work, rehearsal runs before the reader ever sees the deliverable. That order came from months of fixing accidents after they shipped — the same months the disclosure below files under `hearsay`. ballast is built to leave those accidents no room to happen.
 
 By those labels, this README owes you two disclosures:
 
