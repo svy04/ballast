@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 — 2026-08-17
+
+- **`codex exec` gets real rule delivery** — new `hooks/scripts/ballast-codex.mjs` wraps `codex exec`: it runs the same rule engine, prepends matching rules to the prompt, and honors `block` rules (refuse + reason, exit 2). Verified live on codex-cli 0.130: a spending prompt arrived with the cost-gate rule and Codex opened with an estimate and approval request; the block path stops before Codex is invoked.
+- Why a wrapper and not a hook: Codex's lifecycle-hook system (same `UserPromptSubmit` event and JSON shape ballast already emits) exists in openai/codex main, but released CLIs through 0.147.0 do not load user hook configs — checked against the 0.147.0 binary on 2026-08-17. When that ships, the existing hook plugs in unchanged; the wrapper is the bridge until then.
+- Interactive Codex sessions remain convention-only, and the docs still say so — `docs/CODEX.md` now separates the three states plainly: Claude Code (hook, code-enforced) · codex exec (wrapper, code-enforced) · interactive Codex (convention).
+- README (EN/KO/ZH): the Codex line updated to match; version badges to 0.8.0.
+
+
 ## 0.7.0 — 2026-08-17
 
 - **new skill `recall`** — sweeps everything the project already holds *before answering*, at a session's first substantive reply and again at every subject shift. Five places, all of them: `memory/00-INDEX.md`, `memory/knowledge/`, `DECISIONS.md`, the rule catalog, and `skills/` + `memory/goal/`. Scan at index level, open what looks relevant, read it, and leave one line saying what was swept and opened — including when nothing matched.

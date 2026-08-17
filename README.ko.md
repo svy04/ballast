@@ -45,10 +45,10 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 
 Claude Code에서 위 두 줄이면 끝나요. 훅은 PATH에 이미 있는 `node`(18 이상)로 돌아가고, 나머지는 전부 마크다운이에요. (설치 명령의 표기는 `플러그인@마켓플레이스`인데, 여긴 둘 다 이름이 ballast라 두 번 나와요.)
 
-Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클론 + `AGENTS.md` 블록 하나 + 예시 카탈로그)으로 스킬 열두 개가 그대로 옮겨져요: [docs/CODEX.md](docs/CODEX.md)(영문). 훅만 Claude Code 전용이라, Codex에서는 전부 규약이에요.
+Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클론 + `AGENTS.md` 블록 하나 + 예시 카탈로그)으로 스킬 열두 개가 그대로 옮겨져요: [docs/CODEX.md](docs/CODEX.md)(영문). 대화형 Codex는 규약으로 돌고, `codex exec` 경로는 동봉된 래퍼로 규칙이 실제 배달돼요(같은 문서에 있어요).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.7.0-blue" alt="버전 0.7.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="버전 0.8.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 

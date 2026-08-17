@@ -1,7 +1,7 @@
 {
   "name": "ballast",
   "displayName": "ballast",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Builds up to a goal in a field you have no expertise in: splits it into the foundations that goal actually needs, mobilizes what you already hold, learns what is missing, and leaves every solved path behind for the next goal. Nothing is called done until a check passes.",
   "author": {
     "name": "svy04"

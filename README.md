@@ -45,10 +45,10 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; everything else is markdown. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
 
-Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the twelve skills over: [docs/CODEX.md](docs/CODEX.md). Only the hook stays Claude Code-specific, so on Codex everything is convention.
+Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the twelve skills over: [docs/CODEX.md](docs/CODEX.md). Interactive Codex sessions run on convention — and `codex exec` gets real rule delivery through a bundled wrapper (same guide).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.7.0-blue" alt="Version 0.7.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="Version 0.8.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 

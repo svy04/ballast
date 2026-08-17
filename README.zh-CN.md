@@ -47,10 +47,10 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 在 Claude Code 里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余全部是 markdown。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
 
-用 Codex 的话 — 那边没有插件市场，一次简短的手动设置（clone + 一段 `AGENTS.md` + 示例规则目录）就能把十二个 skills 原样搬过去：[docs/CODEX.md](docs/CODEX.md)（英文）。只有 hook 是 Claude Code 专属，所以在 Codex 上一切都靠约定。
+用 Codex 的话 — 那边没有插件市场，一次简短的手动设置（clone + 一段 `AGENTS.md` + 示例规则目录）就能把十二个 skills 原样搬过去：[docs/CODEX.md](docs/CODEX.md)（英文）。交互式 Codex 会话靠约定运行，而 `codex exec` 路径可以通过随附的 wrapper 获得真实的规则送达（见同一文档）。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.7.0-blue" alt="版本 0.7.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="版本 0.8.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 
