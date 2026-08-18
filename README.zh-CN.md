@@ -6,7 +6,7 @@
 
 ![ballast — 一艘因舱底压载的重量而稳住的船](assets/banner.png)
 
-**ballast 是一个 Claude Code 插件：接住一个你毫无经验的领域的目标，从地基开始一层层搭到完成 — 再把打通的每条路留下来，让下一个目标从更前面出发。**
+**ballast 是一个 Claude Code 和 Codex 插件：接住一个你毫无经验的领域的目标，从地基开始一层层搭到完成 — 再把打通的每条路留下来，让下一个目标从更前面出发。**
 
 和 Claude 一起工作几周后，这些事会越积越多：
 
@@ -47,10 +47,17 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十二个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
 
-用 Codex 的话 — 那边没有插件市场，一次简短的手动设置（clone + 一段 `AGENTS.md` + 示例规则目录）就能把那十二个 skills 原样搬过去：[docs/CODEX.md](docs/CODEX.md)（英文）。交互式 Codex 会话靠约定（无代码强制的指令）运行，而 `codex exec` 路径可以通过随附的 wrapper 获得真实的规则送达（见同一文档）。
+使用 Codex 时，同一个仓库可以作为原生 Codex 插件安装：
+
+```
+codex plugin marketplace add svy04/ballast
+codex plugin add ballast@ballast
+```
+
+十二个 skills 和共享规则 hook 会一起加载；`AGENTS.md` 与随附的 `codex exec` wrapper 只保留给不支持插件的客户端：[docs/CODEX.md](docs/CODEX.md)（英文）。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="版本 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="版本 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 

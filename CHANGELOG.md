@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.0 — 2026-08-18
+
+- Added a native Codex package at `.codex-plugin/plugin.json`; the existing repository marketplace can now install `ballast@ballast` in Codex.
+- Updated the shared `UserPromptSubmit` hook to the current nested schema accepted by both Claude Code and Codex. The rule engine remains one zero-dependency Node script.
+- Reframed `AGENTS.md` and `hooks/scripts/ballast-codex.mjs` as fallbacks for clients without plugin or hook support. The Codex guide no longer recommends deprecated custom-prompt wrappers and now includes the previously omitted `recall` skill.
+- Rehearsal round 1 was clean: a zero-context Windows user completed an isolated Codex marketplace install, confirmed the plugin installed and enabled, passed Claude Code manifest validation, and passed the existing 6-case hook harness without a guide stall.
+
 ## 0.8.0 — 2026-08-17
 
 - **`codex exec` gets real rule delivery** — new `hooks/scripts/ballast-codex.mjs` wraps `codex exec`: it runs the same rule engine, prepends matching rules to the prompt, and honors `block` rules (refuse + reason, exit 2). Verified live on codex-cli 0.130: a spending prompt arrived with the cost-gate rule and Codex opened with an estimate and approval request; the block path stops before Codex is invoked.

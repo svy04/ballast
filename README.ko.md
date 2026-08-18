@@ -4,7 +4,7 @@
 
 ![ballast — 선체 아래 낮게 실린 무게 덕에 흔들리지 않는 배](assets/banner.png)
 
-**ballast는 전문성이 없는 분야의 목표도 기반부터 쌓아 올려 끝까지 끌고 가고, 한 번 뚫은 길을 남겨 다음 목표가 더 앞에서 시작하게 하는 Claude Code 플러그인이에요.**
+**ballast는 전문성이 없는 분야의 목표도 기반부터 쌓아 올려 끝까지 끌고 가고, 한 번 뚫은 길을 남겨 다음 목표가 더 앞에서 시작하게 하는 Claude Code와 Codex 플러그인이에요.**
 
 Claude와 몇 주 일하다 보면 이런 게 쌓여요.
 
@@ -45,11 +45,17 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 
 Claude Code(터미널·IDE에서 쓰는 Claude 에이전트)에서 위 두 줄이면 끝나요. 훅은 PATH에 이미 있는 `node`(18 이상)로 돌아가고, 나머지 열두 조각은 마크다운 스킬이에요. (설치 명령의 표기는 `플러그인@마켓플레이스`인데, 여긴 둘 다 이름이 ballast라 두 번 나와요.)
 
-Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클론 + `AGENTS.md` 블록 하나 + 예시 카탈로그)으로 그 스킬 열두 개가 그대로 옮겨져요: [docs/CODEX.md](docs/CODEX.md)(영문).
-대화형 Codex는 규약(코드 강제 없는 지침)으로 돌고, `codex exec` 경로는 동봉된 래퍼로 규칙이 실제 배달돼요(같은 문서에 있어요).
+Codex를 쓰신다면 같은 저장소를 네이티브 Codex 플러그인으로 설치할 수 있어요.
+
+```
+codex plugin marketplace add svy04/ballast
+codex plugin add ballast@ballast
+```
+
+열두 스킬과 공용 규칙 훅이 함께 로드되고, `AGENTS.md`와 동봉된 `codex exec` 래퍼는 플러그인을 지원하지 않는 클라이언트용 fallback으로 남아요: [docs/CODEX.md](docs/CODEX.md)(영문).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="버전 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="버전 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 

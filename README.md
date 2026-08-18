@@ -4,7 +4,7 @@
 
 ![ballast — a ship that holds steady because of the weight riding low in its hull](assets/banner.png)
 
-**ballast is a Claude Code plugin that takes a goal you have no expertise in, builds it up from the foundations, and carries it through — then keeps every solved path so the next goal starts further along.**
+**ballast is a Claude Code and Codex plugin that takes a goal you have no expertise in, builds it up from the foundations, and carries it through — then keeps every solved path so the next goal starts further along.**
 
 A few weeks into working with Claude, this piles up:
 
@@ -45,10 +45,17 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other twelve pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
 
-Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the twelve skills over: [docs/CODEX.md](docs/CODEX.md). Interactive Codex sessions run on convention (instructions, no enforcement), and `codex exec` gets real rule delivery through a bundled wrapper (same guide).
+Using Codex instead? The same repository installs as a native Codex plugin:
+
+```
+codex plugin marketplace add svy04/ballast
+codex plugin add ballast@ballast
+```
+
+That loads all twelve skills and the shared rules hook; `AGENTS.md` and the bundled `codex exec` wrapper remain fallbacks for clients without plugin support. See [docs/CODEX.md](docs/CODEX.md).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="Version 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="Version 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
