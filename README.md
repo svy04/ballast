@@ -48,7 +48,7 @@ Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) 
 Using Codex instead? The same repository installs as a native Codex plugin:
 
 ```
-codex plugin marketplace add svy04/ballast
+codex plugin marketplace add dxtjclee/ballast
 codex plugin add ballast@ballast
 ```
 
