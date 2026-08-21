@@ -45,10 +45,10 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other twelve pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
 
-Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the twelve skills over: [docs/CODEX.md](docs/CODEX.md). Interactive Codex sessions run on convention (instructions, no enforcement), and `codex exec` gets real rule delivery through a bundled wrapper (same guide).
+Using Codex instead? The same repository installs as a Codex plugin — `codex plugin marketplace add svy04/ballast`, then `codex plugin add ballast@ballast` — and the same hook runs there: Codex loads `hooks/hooks.json` once you trust it in `/hooks`. Without the plugin, a project-level `.codex/hooks.json` does the same, and the bundled `codex exec` wrapper stays for builds without hooks: [docs/CODEX.md](docs/CODEX.md).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="Version 0.8.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="Version 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
@@ -92,7 +92,7 @@ Anything said about the product outside the repo passes proof-standard first. Ex
 
 **Done is a claim, so done passes a check.** A zero-context reader walks the deliverable cold (rehearsal); the check passes when a round comes back stall-free, and that round's log is the evidence. A passed check is a file that exists, a test that runs, an output actually inspected.
 
-What the goal solved then stays. Decisions go to the ledger, changed only by supersede. A procedure that will recur becomes a skill (skill-forge). A pause becomes a thirty-second return (checkpoint). Next quarter's pricing page opens on the solved path.
+What the goal solved then stays. Decisions go to the ledger, changed only by supersede — and only what the user actually said goes in; a reading of their silence stays in open questions. A procedure that will recur becomes a skill (skill-forge). A pause becomes a thirty-second return (checkpoint). Next quarter's pricing page opens on the solved path.
 
 The same loop, drawn — boxes are pieces, cylinders are files that outlive the session:
 
@@ -120,7 +120,7 @@ ballast does not pretend otherwise. Its route from convention to enforcement is 
 | Piece | Kind | Role |
 |---|---|---|
 | **rules hook** | code — script on every prompt | Delivers each matching rule's full text with the message, up to a per-message cap fixed in the source (at most 12 rules / ~6,000 chars); `block` rules stop the prompt instead, showing your rule as the reason |
-| **decision-ledger** | convention — markdown skill | Append-only `DECISIONS.md`; changed minds get supersede links, never silent edits |
+| **decision-ledger** | convention — markdown skill | Append-only `DECISIONS.md`; changed minds get supersede links, never silent edits; a non-answer is not a decision — readings the user never confirmed stay in open questions as `assumed` |
 | **verify-gate** | convention — markdown skill | Research and model knowledge stay drafts until refuted-and-survived, sourced, and labeled |
 | **knowledge-base** | convention — markdown skill | Gate-passed findings land in `memory/knowledge/`; every new question reads there before researching |
 | **researcher** | convention — markdown skill | Hands collection to a configured second CLI — findings arrive `hearsay` and still face the gate |

@@ -47,10 +47,10 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十二个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
 
-用 Codex 的话 — 那边没有插件市场，一次简短的手动设置（clone + 一段 `AGENTS.md` + 示例规则目录）就能把那十二个 skills 原样搬过去：[docs/CODEX.md](docs/CODEX.md)（英文）。交互式 Codex 会话靠约定（无代码强制的指令）运行，而 `codex exec` 路径可以通过随附的 wrapper 获得真实的规则送达（见同一文档）。
+用 Codex 的话 — 同一个仓库也能装成 Codex 插件：`codex plugin marketplace add svy04/ballast`，再 `codex plugin add ballast@ballast`。同一个 hook 在那边照样跑：Codex 会读取 `hooks/hooks.json`，在 `/hooks` 里信任一次就生效。不装插件的话，项目里一份 `.codex/hooks.json` 也能做同样的事；没有 hook 的构建还保留了 `codex exec` wrapper：[docs/CODEX.md](docs/CODEX.md)（英文）。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="版本 0.8.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="版本 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 
@@ -94,7 +94,7 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 **完成也是一个主张，所以完成也要过检查。** 零上下文读者把交付物从头跑一遍（彩排），跑出一轮无卡点，检查才算通过 — 那一轮的记录就是证据。"通过检查"的意思是：文件在、测试跑过、产出物亲眼看过。
 
-目标解决过的东西会留下来。决定进台账，推翻只走替代记录。还会再来的流程锻成 skill（skill-forge）。暂停的位置变成 30 秒回归点（checkpoint）。下个季度的定价页，从打通的路上出发。
+目标解决过的东西会留下来。决定进台账，推翻只走替代记录 — 而且只记用户真正说过的；对沉默的解读留在未决问题里。还会再来的流程锻成 skill（skill-forge）。暂停的位置变成 30 秒回归点（checkpoint）。下个季度的定价页，从打通的路上出发。
 
 同一条闭环画出来是下图 — 方块是部件，圆柱是会话结束后仍留存的文件：
 
@@ -122,7 +122,7 @@ ballast 不装作不是这样。把约定强行拉回来的通道是 **pin**：�
 | 部件 | 类型 | 职责 |
 |---|---|---|
 | **rules hook** | 代码 — 每个 prompt 运行的脚本 | 把命中的规则原文随消息送达 — 每条消息的上限写死在源码里（最多 12 条 · 约 6,000 字符）；`block` 规则会拦停 prompt，并把那条规则当理由亮出来 |
-| **decision-ledger** | 约定 — markdown skill | 只追加的 `DECISIONS.md` — 推翻用替代（supersede）链接，不存在悄悄修改 |
+| **decision-ledger** | 约定 — markdown skill | 只追加的 `DECISIONS.md` — 推翻用替代（supersede）链接，不存在悄悄修改；没回答不算决定 — 用户没确认的解读留在未决问题里，标为 `assumed` |
 | **verify-gate** | 约定 — markdown skill | 扛住反驳、给出出处之前，调研结果和模型知识一律按草稿对待 |
 | **knowledge-base** | 约定 — markdown skill | 过了关的发现存进 `memory/knowledge/` — 新问题先看这里再去调研 |
 | **researcher** | 约定 — markdown skill | 把收集交给接入的第二个 CLI — 结果以 `hearsay` 到达，仍要过关 |

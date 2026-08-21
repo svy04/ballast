@@ -2,12 +2,13 @@
 /**
  * ballast-codex — rule delivery for `codex exec`.
  *
- * Codex CLI has no released hook loading yet (lifecycle hooks exist in
- * openai/codex main, but shipped binaries up to 0.147.0 do not read a user
- * hook config — checked 2026-08-17). Until that ships, this wrapper gives the
- * non-interactive path real delivery: it runs the same ballast-rules engine,
- * prepends every matching rule to the prompt, honors "block" rules, then
- * hands off to `codex exec`.
+ * Codex CLI runs UserPromptSubmit hooks natively — project .codex/hooks.json,
+ * user ~/.codex/hooks.json, or the plugin's hooks/hooks.json — so on a current
+ * build the hook itself is the primary path (see docs/CODEX.md). This wrapper
+ * stays for builds and environments without hooks, and for automation that
+ * would rather prepend rules than bypass hook trust: it runs the same
+ * ballast-rules engine, prepends every matching rule to the prompt, honors
+ * "block" rules, then hands off to `codex exec`.
  *
  *   node ballast-codex.mjs "your prompt here"
  *   node ballast-codex.mjs "your prompt" -- -C /path/to/project -s read-only
@@ -17,8 +18,8 @@
  *
  * Same contract as the hook: zero dependencies, and a failure in the rule
  * step never eats your run — delivery is skipped, the prompt goes through,
- * and you get one line on stderr. Interactive Codex sessions are out of
- * scope: there, rule delivery stays a convention (see docs/CODEX.md).
+ * and you get one line on stderr. Interactive sessions are the hook's job,
+ * not this wrapper's.
  */
 
 import { spawnSync } from "node:child_process";

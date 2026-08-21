@@ -23,7 +23,9 @@ stands, told to someone with zero context.>
 ledger ids where they exist.>
 
 ## Waiting on the user
-<Decisions only the user can make. Empty is a valid and welcome state.>
+<Decisions only the user can make, and the readings in force from
+OPEN-QUESTIONS that are due a question — one line each, so they get asked
+here, at the break, not mid-flow. Empty is a valid and welcome state.>
 
 ## Next first action
 <ONE line, executable immediately without reading anything else.>
@@ -52,6 +54,6 @@ On resume — new session, context reset, or the user asking where things stand:
 
 1. If `memory/HANDOFF.md` exists, read it, absorb the orders, delete it.
 2. Read `memory/CHECKPOINT.md` and brief the user in thirty seconds: the story, what's decided, what they owe a decision on, the next first action.
-3. Scan for unfinished signals: work whose start is recorded (session log, open questions) but whose conclusion is nowhere. Surface each one — never let it dissolve silently.
+3. Scan for unfinished signals: work whose start is recorded (session log, open questions) but whose conclusion is nowhere. Surface each one — never let it dissolve silently. Include the readings in force: one relied on again since the last checkpoint is due its question in this briefing.
 
 Then execute the next first action, unless the user redirects.

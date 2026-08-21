@@ -45,11 +45,12 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 
 Claude Code(터미널·IDE에서 쓰는 Claude 에이전트)에서 위 두 줄이면 끝나요. 훅은 PATH에 이미 있는 `node`(18 이상)로 돌아가고, 나머지 열두 조각은 마크다운 스킬이에요. (설치 명령의 표기는 `플러그인@마켓플레이스`인데, 여긴 둘 다 이름이 ballast라 두 번 나와요.)
 
-Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클론 + `AGENTS.md` 블록 하나 + 예시 카탈로그)으로 그 스킬 열두 개가 그대로 옮겨져요: [docs/CODEX.md](docs/CODEX.md)(영문).
-대화형 Codex는 규약(코드 강제 없는 지침)으로 돌고, `codex exec` 경로는 동봉된 래퍼로 규칙이 실제 배달돼요(같은 문서에 있어요).
+Codex를 쓰신다면 — 같은 저장소가 Codex 플러그인으로도 설치돼요: `codex plugin marketplace add svy04/ballast` 다음 `codex plugin add ballast@ballast`.
+같은 훅이 거기서도 돌아요 — Codex가 `hooks/hooks.json`을 읽고, `/hooks`에서 한 번 신뢰하면 켜져요.
+플러그인 없이도 프로젝트의 `.codex/hooks.json` 하나면 같은 일을 하고, 훅이 없는 빌드를 위해 `codex exec` 래퍼도 남겨 뒀어요: [docs/CODEX.md](docs/CODEX.md)(영문).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="버전 0.8.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="버전 0.9.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 
@@ -67,7 +68,8 @@ Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클
   (선택으로 연결하는 verifier/researcher 명령은 사용자가 고른 로컬 CLI고, 검사용 verify 스크립트는 별개라 `node`를 띄워 훅만 다시 돌려요)
 - **훅 1개 + 스킬 12종** — 코드로 강제되는 건 훅 하나뿐이고, 어느 조각이 코드고 어느 조각이 규약인지 표에 다 적어놨어요
 - **빈 채로 출발** — 카탈로그(규칙을 모아두는 파일)에 규칙이 들어오기 전까지 훅은 조용해요. 넣는 법은 [빠른 시작](#빠른-시작)이에요
-- **[훅 실동작 7케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그는 그렇다고 알림 · 그래도 세션은 안 막음 · 훅 선언 파일이 Claude Code가 읽는 모양인지, 저장소를 클론하면 `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
+- **[훅 실동작 7케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그는 그렇다고 알림 · 그래도 세션은 안 막음 · 훅 선언 파일이 Claude Code가 읽는 모양인지.
+  저장소를 클론하면 `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
 - **MIT** — 장치 전체가 한나절이면 다 읽히는 분량이에요
 
 </details>
@@ -100,7 +102,7 @@ goal 스킬은 목표를 가지로 쪼갠 뒤, 가지마다 그 목록과 대조
 **완료도 주장이라, 완료도 검사를 통과해야 해요.** 맥락 없는 독자가 결과물을 처음부터 직접 따라가 보고(리허설), 막힌 곳 없는 라운드가 나와야 검사가 통과돼요 — 그 라운드의 기록이 증거예요.
 검사 통과란 파일이 있고, 테스트가 돌고, 산출물을 실제로 봤다는 뜻이에요.
 
-목표가 푼 것은 그대로 남아요. 결정은 원장에 — 바뀌면 대체 기록으로만. 또 올 절차는 스킬이 되고(skill-forge), 멈춘 자리는 30초 복귀 지점이 돼요(checkpoint). 다음 분기의 가격 페이지는 뚫어둔 길 위에서 출발해요.
+목표가 푼 것은 그대로 남아요. 결정은 원장에 — 바뀌면 대체 기록으로만, 그리고 실제로 말한 것만 들어가요. 침묵을 읽은 해석은 미해결 질문에 남아요. 또 올 절차는 스킬이 되고(skill-forge), 멈춘 자리는 30초 복귀 지점이 돼요(checkpoint). 다음 분기의 가격 페이지는 뚫어둔 길 위에서 출발해요.
 
 같은 루프를 그림으로 — 네모는 조각이고, 원통은 세션이 끝나도 남는 파일이에요:
 
@@ -129,7 +131,7 @@ ballast는 이걸 아닌 척하지 않아요. 대신 규약을 강제로 끌어�
 | 조각 | 종류 | 역할 |
 |---|---|---|
 | **rules hook** | 코드 — 프롬프트마다 도는 스크립트 | 걸린 규칙을 본문 그대로 메시지와 함께 배달 — 한 번에 최대 규칙 12개 · 약 6,000자(소스에 고정된 상한). `block` 규칙은 프롬프트를 멈추고 그 규칙을 사유로 보여줘요 |
-| **decision-ledger** | 규약 — 마크다운 스킬 | 덧붙이기만 되는 `DECISIONS.md` — 번복은 대체(supersede) 링크로, 조용한 수정은 없어요 |
+| **decision-ledger** | 규약 — 마크다운 스킬 | 덧붙이기만 되는 `DECISIONS.md` — 번복은 대체(supersede) 링크로, 조용한 수정은 없어요. 무응답은 결정이 아니라서, 확인 안 된 해석은 `assumed` 표시로 미해결 질문에 남아요 |
 | **verify-gate** | 규약 — 마크다운 스킬 | 반박을 견디고 출처를 대기 전까지, 조사 결과와 모델 지식은 초안 취급이에요 |
 | **knowledge-base** | 규약 — 마크다운 스킬 | 관문을 통과한 발견을 `memory/knowledge/`에 쌓아요 — 새 질문은 조사 전에 먼저 여길 봐요 |
 | **researcher** | 규약 — 마크다운 스킬 | 수집을 연결된 두 번째 CLI에 넘겨요 — 결과는 `hearsay`로 도착해 관문을 거쳐요 |
