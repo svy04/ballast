@@ -25,7 +25,7 @@ Codex reads the repository's marketplace file and `.codex-plugin/plugin.json`, c
 
 Once trusted, every session opens with one line — `[ballast] hook live — N rules loaded (…)` — so a hook that is not running is visible as the absence of that line.
 
-Observed 2026-08-21, codex-cli 0.147.0, Windows, installed from a local clone path: `codex plugin list` read `installed, enabled`, and a probe rule from the project catalog arrived as developer context on the first prompt. The `owner/repo` form is the same loader over git per Codex's documentation; a remote install is not in this note yet.
+Observed 2026-08-21, codex-cli 0.147.0, Windows — twice: from a local clone path before publishing, and from GitHub after it (`codex plugin marketplace add svy04/ballast`, then `codex plugin add ballast@ballast`). Both times `codex plugin list` read `installed, enabled` (0.9.0 the second time); on the first prompt both hooks ran (`hook: SessionStart`, `hook: UserPromptSubmit` in the exec log) and a probe rule from the project catalog arrived as developer context.
 
 Seed the catalog the same way as on Claude Code: copy `rules/ballast.rules.example.json` to `<project>/.claude/ballast.rules.json` and prune it. The optional second-model configs (`.claude/ballast.verifier.json`, `.claude/ballast.researcher.json`) are read by the verify-gate and researcher skills, not by any hook — format in the README's [Know the limits](../README.md#know-the-limits). `memory/` appears once brain-init runs (on Codex, its session-start block goes to `AGENTS.md`).
 
