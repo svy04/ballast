@@ -16,6 +16,12 @@
  * because a silently dropped catalog is indistinguishable from "nothing matched".
  * Set BALLAST_DEBUG=1 to see errors on stderr.
  * Set BALLAST_DISABLE=1 to turn the hook off without uninstalling.
+ *
+ * Status mode (SessionStart, or --status): prints ONE line per session saying the hook is
+ * live and how many rules loaded — to the user (systemMessage) and to the model
+ * (additionalContext). A dead hook (node missing, manifest rejected, Codex hook untrusted)
+ * otherwise looks exactly like a quiet one; this line is the difference.
+ * Set BALLAST_QUIET=1 to turn the status line off.
  */
 
 import { readFileSync, existsSync } from "node:fs";
@@ -87,11 +93,8 @@ function main() {
   } catch {
     return 0;
   }
-  // Field name differs across Claude Code versions: current docs say prompt_text,
-  // earlier versions used prompt. Accept both.
-  const prompt =
-    [input.prompt_text, input.prompt].find((v) => typeof v === "string" && v.trim()) || "";
-  if (!prompt) return 0;
+  const event = typeof input.hook_event_name === "string" ? input.hook_event_name : "";
+  const statusMode = process.argv.includes("--status") || event === "SessionStart";
 
   const projectDir = process.env.CLAUDE_PROJECT_DIR || input.cwd || process.cwd();
   const catalogPaths = [
@@ -101,9 +104,16 @@ function main() {
 
   const byId = new Map();
   const broken = [];
+  const counts = []; // per catalog path: rules loaded, or -1 when the file does not exist
   let anon = 0;
   for (const path of catalogPaths) {
-    for (const rule of loadCatalog(path, broken)) {
+    if (!existsSync(path)) {
+      counts.push(-1);
+      continue;
+    }
+    const rules = loadCatalog(path, broken);
+    counts.push(rules.length);
+    for (const rule of rules) {
       byId.set(typeof rule.id === "string" && rule.id ? rule.id : `anon-${anon++}`, rule);
     }
   }
@@ -113,6 +123,36 @@ function main() {
       `[ballast] The rule catalog at ${broken.join(", ")} could not be read — rules from it are NOT being delivered this session. Fix the JSON, or set BALLAST_DEBUG=1 to see the parse error.`
     );
   }
+
+  if (statusMode) {
+    // One line per session, so a dead hook never looks like a quiet one.
+    if (process.env.BALLAST_QUIET === "1") return 0;
+    const always = [...byId.values()].filter((r) => r.when && r.when.always === true).length;
+    const seen = catalogPaths
+      .map((_, i) => (counts[i] < 0 ? null : `${counts[i]} from the ${i === 0 ? "user" : "project"} catalog`))
+      .filter(Boolean);
+    let line;
+    if (byId.size === 0 && seen.length === 0 && broken.length === 0) {
+      line = "[ballast] hook live — no rule catalog yet (create .claude/ballast.rules.json; see the README's Quick start)";
+    } else {
+      const n = byId.size;
+      line = `[ballast] hook live — ${n} rule${n === 1 ? "" : "s"} loaded (${seen.join(", ") || "none readable"}${always ? `; ${always} always-on` : ""})`;
+    }
+    const context = [line, ...notices].join("\n");
+    process.stdout.write(
+      JSON.stringify({
+        hookSpecificOutput: { hookEventName: "SessionStart", additionalContext: context },
+        systemMessage: context,
+      })
+    );
+    return 0;
+  }
+
+  // Field name differs across Claude Code versions: current docs say prompt_text,
+  // earlier versions used prompt. Codex sends prompt. Accept both.
+  const prompt =
+    [input.prompt_text, input.prompt].find((v) => typeof v === "string" && v.trim()) || "";
+  if (!prompt) return 0;
 
   const promptLower = prompt.toLowerCase();
   const matched = byId.size

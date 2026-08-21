@@ -21,7 +21,9 @@ codex plugin marketplace add svy04/ballast
 codex plugin add ballast@ballast
 ```
 
-Codex reads the repository's marketplace file and `.codex-plugin/plugin.json`, copies the plugin into its cache, and loads `skills/` and `hooks/hooks.json`. Then, in a Codex session, run `/hooks` and trust the ballast hook: Codex records trust against the hook's hash and skips untrusted hooks without a word, so until that step the skills are loaded and the hook is not. Edit the hook command later and the review comes back — that is the hash doing its job.
+Codex reads the repository's marketplace file and `.codex-plugin/plugin.json`, copies the plugin into its cache, and loads `skills/` and `hooks/hooks.json`. Then, in a Codex session, run `/hooks` and trust the ballast hooks: Codex records trust against each hook's hash and skips untrusted hooks without a word, so until that step the skills are loaded and the hooks are not. Edit a hook command later and the review comes back — that is the hash doing its job.
+
+Once trusted, every session opens with one line — `[ballast] hook live — N rules loaded (…)` — so a hook that is not running is visible as the absence of that line.
 
 Observed 2026-08-21, codex-cli 0.147.0, Windows, installed from a local clone path: `codex plugin list` read `installed, enabled`, and a probe rule from the project catalog arrived as developer context on the first prompt. The `owner/repo` form is the same loader over git per Codex's documentation; a remote install is not in this note yet.
 
@@ -34,6 +36,18 @@ Copy [`rules/ballast.codex-hooks.example.json`](../rules/ballast.codex-hooks.exa
 ```json
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<BALLAST>/hooks/scripts/ballast-rules.mjs\" --status",
+            "timeout": 10,
+            "statusMessage": "ballast status"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -52,7 +66,7 @@ Copy [`rules/ballast.codex-hooks.example.json`](../rules/ballast.codex-hooks.exa
 
 Two trust steps, both one-time: project-local hooks load only when Codex trusts the project's `.codex` layer (it asks when you open the folder), and the hook itself waits for review in `/hooks`. The same file at `~/.codex/hooks.json` runs in every project. `commandWindows` is an optional Windows-only override.
 
-Observed 2026-08-21, codex-cli 0.147.0, Windows: a project hook in a trusted folder delivered a probe rule on the first prompt (`hook: UserPromptSubmit … Completed` in the exec log). The engine behind it is the one the 7-case harness covers.
+Observed 2026-08-21, codex-cli 0.147.0, Windows: a project hook in a trusted folder delivered a probe rule on the first prompt (`hook: UserPromptSubmit … Completed` in the exec log). The engine behind it is the one the 10-case harness covers.
 
 ## Automation: `codex exec`
 
@@ -96,7 +110,8 @@ Codex custom prompts give slash-style invocation of a skill without the plugin �
 
 ## Know the limits
 
-- **Trust is a manual step, and untrusted is silent.** Until the `/hooks` review, the hook does not run and says nothing — the same silence as "no rule matched". If a `[ballast]` block never appears on Codex, check `/hooks` before anything else.
-- **The evidence is `observed`, not a harness.** One machine (Windows, codex-cli 0.147.0, 2026-08-21), one probe per path — plugin hook and project hook. The 7-case harness exercises the engine, which is shared; there is no Codex-side harness. Whether the Codex IDE extension runs hooks: `unknown` — the hooks reference does not say.
+- **Trust is a manual step, and untrusted is silent.** Until the `/hooks` review, the hooks do not run and say nothing — not even the session-start line. If `[ballast] hook live` never appears on Codex, check `/hooks` before anything else.
+- **ballast does not touch providers or routing.** The hook reads two JSON files and prints. Tools that switch model vendors or route requests (CC Switch, claude-code-router and the like) sit beside it, not under it — use both.
+- **The evidence is `observed`, not a harness.** One machine (Windows, codex-cli 0.147.0, 2026-08-21), one probe per path — plugin hook and project hook. The 10-case harness exercises the engine, which is shared; there is no Codex-side harness. Whether the Codex IDE extension runs hooks: `unknown` — the hooks reference does not say.
 - **Hooks can be turned off.** `[features] hooks = false` in `config.toml` (or a managed policy) disables them; Codex is then back to the conventions above.
 - **Correction, kept on purpose.** Editions 0.5.1–0.8.0 of this guide said released Codex CLIs did not load user hook configs. That was our test's error, not Codex's gap: on 2026-08-17 we had written `~/.codex/hooks.toml`, a file Codex never reads — the real files are `hooks.json`, or a `[hooks]` table inside `config.toml`. Recorded here so nobody repeats it.

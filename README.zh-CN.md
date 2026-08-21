@@ -36,7 +36,7 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 安装脚本我用 pnpm install 写好了。
 ```
 
-`[ballast]` 那一块就是 ballast 保证的部分。"npm" 命中了规则，整段规则原文随这条消息一起送达；下面的回答不是 Claude 记性好，而是它照着递到眼前的规则做了。
+`[ballast]` 那一块就是 ballast 保证的部分。"npm" 命中了规则，整段规则原文随这条消息一起送达。下面的回答那一行是示意 — hook 保证的是送达，不是服从。
 
 ## 安装
 
@@ -47,7 +47,7 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十二个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
 
-用 Codex 的话 — 同一个仓库也能装成 Codex 插件：`codex plugin marketplace add svy04/ballast`，再 `codex plugin add ballast@ballast`。同一个 hook 在那边照样跑：Codex 会读取 `hooks/hooks.json`，在 `/hooks` 里信任一次就生效。不装插件的话，项目里一份 `.codex/hooks.json` 也能做同样的事；没有 hook 的构建还保留了 `codex exec` wrapper：[docs/CODEX.md](docs/CODEX.md)（英文）。
+用 Codex 的话 — 同一个仓库也能装成 Codex 插件：`codex plugin marketplace add svy04/ballast`，再 `codex plugin add ballast@ballast`。同一个 hook 在那边照样跑：Codex 会读取 `hooks/hooks.json`，在 `/hooks` 里信任一次就生效。不装插件的话，项目里一份 `.codex/hooks.json` 也能做同样的事；没有 hook 的构建还保留了 `codex exec` wrapper：[docs/CODEX.md](docs/CODEX.md)（英文）。它不碰模型供应商与路由，和 CC Switch / claude-code-router 可以并存。
 
 <p align="center">
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="版本 0.9.0"></a>
@@ -66,8 +66,8 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 - **零依赖、零网络** — hook 是一个脚本，import 只有 `fs`/`os`/`path`。ballast 本身不向外发送任何东西（可选接入的 verifier/researcher 命令是你自己挑的本地 CLI；检查用的 verify 脚本是独立的，只是再起一个 `node` 把 hook 重跑一遍）
 - **1 个 hook + 12 个 skills** — 代码强制的只有 hook 一个，哪块是代码、哪块是约定，表里全部写明
-- **出厂为空** — 规则目录（存规则的文件）里没有规则之前，hook 保持沉默。怎么放进第一条见[快速开始](#快速开始)
-- **[hook 实测 7 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话 · hook 声明文件是 Claude Code 能加载的形状；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
+- **出厂为空，但会说出来** — 每次会话开始都有一行：`[ballast] hook live — 已加载 N 条规则`，起初是 0；消息上要等规则命中才会出声。怎么放进第一条见[快速开始](#快速开始)。常驻开销：十二个 skill 的描述约 490 个英文词，skill 正文只在被调用时才加载
+- **[hook 实测 10 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话 · hook 声明文件的形状 · 会话开始那一行（有规则时、没有目录时、目录损坏时）。这套测试检查 hook 输出了什么，不检查模型是否服从；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
 - **MIT** — 整套机制一个下午就能读完
 
 </details>
@@ -193,11 +193,11 @@ verify-gate 的标签有五种：`confirmed` / `observed`（观察到）/ `assum
 
 设计上有三件事要先知道：
 
-- **静默失败，只有一个例外** — 正则写错、内部出错，会话都不会崩、也不会说话。例外是目录存在却读不出来 — 只有这时会提示一行。不然"规则整包丢失"和"只是没命中"看起来一模一样。
+- **静默失败，只有两个例外** — 正则写错、内部出错，会话都不会崩、也不会说话。例外一是目录存在却读不出来 — 这时会提示一行，不然"规则整包丢失"和"只是没命中"看起来一模一样；例外二是每次会话开始那一行状态 — 不然"hook 已死"和"hook 安静"也一模一样。
 - **fail-open** — hook 完全跑不起来时（PATH 里没有 `node`、目录读取失败），`block` 规则也一起失效。拦截当护栏用，不要当成攻不破的沙箱。
-- **只装上不会发生任何可见变化** — hook 出厂为空，skills 是等信号才醒的约定：纠正一次唤醒 pin，会话首答唤醒 recall（跑 `/ballast:brain-init` 之前，recall 连可翻的记忆文件都没有）。`BALLAST_DISABLE=1` 关掉 hook；skills 随插件卸载一起离开。
+- **只装上会多出一样看得见的东西** — 会话开始那一行（`[ballast] hook live — 还没有规则目录`，直到你的目录里有了规则）。其余都等信号才醒：纠正一次唤醒 pin，会话首答唤醒 recall（跑 `/ballast:brain-init` 之前，recall 连可翻的记忆文件都没有）。`BALLAST_DISABLE=1` 关掉 hook，`BALLAST_QUIET=1` 只关状态行；skills 随插件卸载一起离开。项目目录会跟着仓库走：clone 来的项目里的 `.claude/ballast.rules.json` 是别人的常驻指令 — 状态行会数出规则数和 always 规则数，打开陌生仓库时先看那一行。
 
-fail-open 没有报错界面 — 唯一的症状是本该命中的消息上没有出现 `[ballast]` 块。看到这个症状就按顺序查三样：
+fail-open 没有报错界面 — 症状有两个：会话开始时没有出现 `[ballast] hook live` 那一行，或者本该命中的消息上没有出现 `[ballast]` 块。看到任一个就按顺序查三样：
 
 1. 确认 `node --version` 是 18+ — 没有就先装 Node
 2. 刚装好插件的话，重启 Claude Code

@@ -1,6 +1,18 @@
 {
-  "description": "ballast rules hook for Codex CLI. Copy to <project>/.codex/hooks.json (one project) or ~/.codex/hooks.json (every project) and replace <BALLAST> with your clone path. Same shape Claude Code loads; same engine; same catalogs (.claude/ballast.rules.json in the project and ~/.claude/). Project hooks load only in a project Codex trusts, and every non-managed hook waits for a one-time review in /hooks — trust is recorded per hash, so edit the command and you review again. commandWindows is optional.",
+  "description": "ballast rules hook for Codex CLI. Copy to <project>/.codex/hooks.json (one project) or ~/.codex/hooks.json (every project) and replace <BALLAST> with your clone path. Same shape Claude Code loads; same engine; same catalogs (.claude/ballast.rules.json in the project and ~/.claude/). SessionStart prints the one-line status (hook live, N rules); UserPromptSubmit delivers matching rules. Project hooks load only in a project Codex trusts, and every non-managed hook waits for a one-time review in /hooks — trust is recorded per hash, so edit a command and you review again. commandWindows is optional.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<BALLAST>/hooks/scripts/ballast-rules.mjs\" --status",
+            "timeout": 10,
+            "statusMessage": "ballast status"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

@@ -2,7 +2,7 @@
 /**
  * ballast — hook verification harness
  *
- * Runs ballast-rules.mjs as a child process against seven cases and checks
+ * Runs ballast-rules.mjs as a child process against ten cases and checks
  * the observable contract (stdout / stderr / exit code), plus the shape of
  * the plugin's hook manifest:
  *
@@ -15,6 +15,9 @@
  *   7. hooks/hooks.json   -> every event entry wraps its commands in a nested
  *                            "hooks" array (the shape Claude Code and Codex load;
  *                            the flat shape fails plugin load — fixed in 0.8.1)
+ *   8. SessionStart       -> status line says the hook is live and counts the rules
+ *   9. SessionStart       -> with no catalog at all, the line still appears ("no rule catalog yet")
+ *  10. SessionStart       -> with a broken catalog, the line appears and names the failure
  *
  * Self-contained: builds its own temp catalogs, isolates the child's home
  * and project directories from the real machine, and cleans up after itself.
@@ -175,6 +178,47 @@ const cases = [
           });
         });
       }
+      return null;
+    },
+  },
+  {
+    name: "session start: status line counts the loaded rules",
+    run: () => runHook({ hook_event_name: "SessionStart", source: "startup" }, goodCatalog),
+    check: (r) => {
+      if (r.status !== 0) return `expected exit 0, got ${r.status}`;
+      let out;
+      try { out = JSON.parse(r.stdout); } catch { return `expected JSON on stdout, got: ${r.stdout || "(empty)"}`; }
+      const ctx = out.hookSpecificOutput && out.hookSpecificOutput.additionalContext;
+      if (!ctx) return "expected hookSpecificOutput.additionalContext";
+      if (out.hookSpecificOutput.hookEventName !== "SessionStart") return "hookEventName should be SessionStart";
+      if (!ctx.includes("hook live")) return `status line missing: ${ctx}`;
+      if (!ctx.includes("2 rules")) return `expected the 2 catalog rules to be counted: ${ctx}`;
+      if (!ctx.includes("project catalog")) return `expected the project catalog to be named: ${ctx}`;
+      if (typeof out.systemMessage !== "string" || !out.systemMessage.includes("hook live")) return "systemMessage (the user-visible copy) missing";
+      if (ctx.includes("Standing rules that apply")) return "status mode must not deliver rules";
+      return null;
+    },
+  },
+  {
+    name: "session start: no catalog at all still prints the line",
+    run: () => runHook({ hook_event_name: "SessionStart", source: "startup" }, undefined),
+    check: (r) => {
+      if (r.status !== 0) return `expected exit 0, got ${r.status}`;
+      const ctx = parseContext(r.stdout);
+      if (!ctx) return `expected a status line, got: ${r.stdout || "(empty)"}`;
+      if (!ctx.includes("no rule catalog yet")) return `expected "no rule catalog yet": ${ctx}`;
+      return null;
+    },
+  },
+  {
+    name: "session start: a broken catalog is named in the status line",
+    run: () => runHook({ hook_event_name: "SessionStart", source: "startup" }, "{ this is not valid JSON"),
+    check: (r) => {
+      if (r.status !== 0) return `expected exit 0, got ${r.status}`;
+      const ctx = parseContext(r.stdout);
+      if (!ctx) return "expected a status line";
+      if (!ctx.includes("hook live")) return `status line missing: ${ctx}`;
+      if (!ctx.includes("could not be read")) return `broken catalog not named: ${ctx}`;
       return null;
     },
   },

@@ -34,7 +34,7 @@ Claude: Using pnpm — your rule says npm broke the lockfile twice.
 The setup script runs pnpm install.
 ```
 
-The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its full text arrived with this message. The reply follows what Claude was handed, not what it remembered.
+The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its full text arrived with this message. The reply line is illustrative — the hook guarantees delivery, not obedience.
 
 ## Install
 
@@ -64,8 +64,8 @@ Using Codex instead? The same repository installs as a Codex plugin — `codex p
 
 - **Zero dependencies, zero network** — the hook is one script, imports only `fs`/`os`/`path`; it reads local files and prints. ballast itself sends nothing anywhere (the optional verifier/researcher commands are local CLIs you configure, and the separate verify script only spawns `node` to re-run the hook)
 - **One hook + twelve skills** — only the hook is code-enforced, and the docs label which is which
-- **Ships empty** — the hook stays silent until rules enter your catalog; [Quick start](#quick-start) is how they get there
-- **[Hook verified on 7 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog says so, broken catalog still never blocks, and the hook manifest is in the shape Claude Code loads; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
+- **Ships empty, and says so** — every session opens with one line, `[ballast] hook live — N rules loaded`, zero at first; on messages the hook stays silent until a rule matches. [Quick start](#quick-start) is how rules get there. Standing cost: the twelve skill descriptions are about 490 words; skill bodies load only when a skill is invoked
+- **[Hook verified on 10 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog says so, broken catalog still never blocks, the manifest is in the shape Claude Code loads, and the session-start line appears with rules, without a catalog, and with a broken one. The harness checks what the hook emits, not whether the model obeys; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
 
 </details>
@@ -189,11 +189,11 @@ Start from [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json
 
 Three design choices to keep in mind:
 
-- **Fail-silent, with one exception** — a bad regex or an internal error never breaks your session and says nothing. A catalog that exists but will not parse is the exception: it gets one line back to you, because a dropped catalog otherwise looks exactly like a quiet one.
+- **Fail-silent, with two exceptions** — a bad regex or an internal error never breaks your session and says nothing. The exceptions: a catalog that exists but will not parse gets one line back to you, because a dropped catalog otherwise looks exactly like a quiet one; and every session opens with one status line, because a dead hook otherwise looks exactly like a quiet one too.
 - **Fail-open** — if the hook cannot run at all (`node` missing from PATH, catalog unreadable), `block` rules do not fire either. Treat blocks as a guardrail, not a sandbox.
-- **Install alone changes nothing observable** — the hook ships empty, and the skills are conventions that wake on their cues: a correction cues pin, a session's first reply cues recall (which, before `/ballast:brain-init`, has no memory files to sweep). `BALLAST_DISABLE=1` turns the hook off; the skills leave with the plugin.
+- **Install changes one thing you can see** — the line at session start (`[ballast] hook live — no rule catalog yet`, until your catalog has a rule). Everything else waits for its cue: a correction cues pin, a session's first reply cues recall (which, before `/ballast:brain-init`, has no memory files to sweep). `BALLAST_DISABLE=1` turns the hook off, `BALLAST_QUIET=1` only the status line; the skills leave with the plugin. A project catalog travels with its repo: a cloned project's `.claude/ballast.rules.json` is someone else's standing instructions — the status line counts them, and how many are always-on, so read it when you open an unfamiliar repo.
 
-Fail-open has no error screen — the only symptom is a missing `[ballast]` block on a message that should match. When you see that symptom, check these three in order.
+Fail-open has no error screen — the symptoms are a missing `[ballast] hook live` line at session start and a missing `[ballast]` block on a message that should match. When you see either, check these three in order.
 
 1. Check that `node --version` prints 18+ — install Node if it doesn't
 2. Restart Claude Code if the plugin was installed this session

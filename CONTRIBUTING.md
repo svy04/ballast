@@ -13,4 +13,4 @@ Issues and pull requests are welcome.
 - Docs must match behavior. If you change what the engine reads (`hooks/scripts/ballast-rules.mjs`), update the skills and README that describe it — and vice versa.
 - Skills are plain markdown (`SKILL.md` with `name`/`description` frontmatter); no build step.
 - Add your change to `CHANGELOG.md`.
-- English docs are the source of truth; mirror user-facing changes in `README.ko.md`.
+- English docs are the source of truth; mirror user-facing changes in `README.ko.md` and `README.zh-CN.md`.
