@@ -4,7 +4,7 @@
 
 ![ballast — a ship that holds steady because of the weight riding low in its hull](assets/banner.png)
 
-**ballast is a Claude Code plugin that takes a goal you have no expertise in, builds it up from the foundations, and carries it through — then keeps every solved path so the next goal starts further along.**
+**ballast is a Claude Code and Codex plugin that takes a goal you have no expertise in, builds it up from the foundations, and carries it through — then keeps every solved path so the next goal starts further along.**
 
 A few weeks into working with Claude, this piles up:
 
