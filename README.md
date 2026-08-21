@@ -48,7 +48,7 @@ Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) 
 Using Codex instead? No marketplace there — a short manual setup (clone + one `AGENTS.md` block + the example catalog) carries the twelve skills over: [docs/CODEX.md](docs/CODEX.md). Interactive Codex sessions run on convention (instructions, no enforcement), and `codex exec` gets real rule delivery through a bundled wrapper (same guide).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="Version 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="Version 0.8.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
@@ -65,7 +65,7 @@ Using Codex instead? No marketplace there — a short manual setup (clone + one 
 - **Zero dependencies, zero network** — the hook is one script, imports only `fs`/`os`/`path`; it reads local files and prints. ballast itself sends nothing anywhere (the optional verifier/researcher commands are local CLIs you configure, and the separate verify script only spawns `node` to re-run the hook)
 - **One hook + twelve skills** — only the hook is code-enforced, and the docs label which is which
 - **Ships empty** — the hook stays silent until rules enter your catalog; [Quick start](#quick-start) is how they get there
-- **[Hook verified on 6 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog says so, broken catalog still never blocks; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
+- **[Hook verified on 7 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog says so, broken catalog still never blocks, and the hook manifest is in the shape Claude Code loads; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
 
 </details>

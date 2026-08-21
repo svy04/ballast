@@ -50,7 +50,7 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 用 Codex 的话 — 那边没有插件市场，一次简短的手动设置（clone + 一段 `AGENTS.md` + 示例规则目录）就能把那十二个 skills 原样搬过去：[docs/CODEX.md](docs/CODEX.md)（英文）。交互式 Codex 会话靠约定（无代码强制的指令）运行，而 `codex exec` 路径可以通过随附的 wrapper 获得真实的规则送达（见同一文档）。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="版本 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="版本 0.8.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 
@@ -67,7 +67,7 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 - **零依赖、零网络** — hook 是一个脚本，import 只有 `fs`/`os`/`path`。ballast 本身不向外发送任何东西（可选接入的 verifier/researcher 命令是你自己挑的本地 CLI；检查用的 verify 脚本是独立的，只是再起一个 `node` 把 hook 重跑一遍）
 - **1 个 hook + 12 个 skills** — 代码强制的只有 hook 一个，哪块是代码、哪块是约定，表里全部写明
 - **出厂为空** — 规则目录（存规则的文件）里没有规则之前，hook 保持沉默。怎么放进第一条见[快速开始](#快速开始)
-- **[hook 实测 6 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
+- **[hook 实测 7 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话 · hook 声明文件是 Claude Code 能加载的形状；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
 - **MIT** — 整套机制一个下午就能读完
 
 </details>

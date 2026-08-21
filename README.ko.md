@@ -49,7 +49,7 @@ Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클
 대화형 Codex는 규약(코드 강제 없는 지침)으로 돌고, `codex exec` 경로는 동봉된 래퍼로 규칙이 실제 배달돼요(같은 문서에 있어요).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.0-blue" alt="버전 0.8.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.8.1-blue" alt="버전 0.8.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 
@@ -67,7 +67,7 @@ Codex를 쓰신다면 — 마켓플레이스는 없고, 짧은 수동 셋업(클
   (선택으로 연결하는 verifier/researcher 명령은 사용자가 고른 로컬 CLI고, 검사용 verify 스크립트는 별개라 `node`를 띄워 훅만 다시 돌려요)
 - **훅 1개 + 스킬 12종** — 코드로 강제되는 건 훅 하나뿐이고, 어느 조각이 코드고 어느 조각이 규약인지 표에 다 적어놨어요
 - **빈 채로 출발** — 카탈로그(규칙을 모아두는 파일)에 규칙이 들어오기 전까지 훅은 조용해요. 넣는 법은 [빠른 시작](#빠른-시작)이에요
-- **[훅 실동작 6케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그는 그렇다고 알림 · 그래도 세션은 안 막음, 저장소를 클론하면 `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
+- **[훅 실동작 7케이스 통과](hooks/scripts/verify-hook.mjs)** — 키워드 주입 · 미일치 침묵 · 차단 · 구버전 필드 호환 · 깨진 카탈로그는 그렇다고 알림 · 그래도 세션은 안 막음 · 훅 선언 파일이 Claude Code가 읽는 모양인지, 저장소를 클론하면 `node hooks/scripts/verify-hook.mjs`로 직접 재확인돼요
 - **MIT** — 장치 전체가 한나절이면 다 읽히는 분량이에요
 
 </details>

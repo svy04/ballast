@@ -2,8 +2,9 @@
 /**
  * ballast — hook verification harness
  *
- * Runs ballast-rules.mjs as a child process against six cases and checks
- * the observable contract (stdout / stderr / exit code):
+ * Runs ballast-rules.mjs as a child process against seven cases and checks
+ * the observable contract (stdout / stderr / exit code), plus the shape of
+ * the plugin's hook manifest:
  *
  *   1. keyword match      -> injects matching rule bodies as additionalContext
  *   2. no match           -> stays silent (no stdout, exit 0)
@@ -11,6 +12,9 @@
  *   4. legacy input field -> accepts "prompt" as well as "prompt_text"
  *   5. broken catalog     -> says so, and delivers no rules
  *   6. broken catalog     -> still never blocks the session (exit 0)
+ *   7. hooks/hooks.json   -> every event entry wraps its commands in a nested
+ *                            "hooks" array (the shape Claude Code and Codex load;
+ *                            the flat shape fails plugin load — fixed in 0.8.1)
  *
  * Self-contained: builds its own temp catalogs, isolates the child's home
  * and project directories from the real machine, and cleans up after itself.
@@ -20,12 +24,13 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HOOK = join(dirname(fileURLToPath(import.meta.url)), "ballast-rules.mjs");
+const MANIFEST = join(dirname(fileURLToPath(import.meta.url)), "..", "hooks.json");
 
 const CATALOG = {
   rules: [
@@ -146,6 +151,30 @@ const cases = [
     check: (r) => {
       if (r.status === 2) return "a parse failure must not block the prompt";
       if (r.status !== 0) return `expected exit 0, got ${r.status}`;
+      return null;
+    },
+  },
+  {
+    name: "hooks.json wraps every command in a nested hooks array",
+    run: () => JSON.parse(readFileSync(MANIFEST, "utf8")),
+    check: (manifest) => {
+      const events = manifest && manifest.hooks;
+      if (!events || typeof events !== "object") return "manifest has no top-level hooks object";
+      const names = Object.keys(events);
+      if (names.length === 0) return "manifest declares no events";
+      for (const name of names) {
+        const entries = events[name];
+        if (!Array.isArray(entries) || entries.length === 0) return `${name}: expected a non-empty array of entries`;
+        entries.forEach((entry, i) => {
+          if (!entry || !Array.isArray(entry.hooks) || entry.hooks.length === 0)
+            throw new Error(`${name}[${i}]: expected a nested "hooks" array (flat type/command entries fail to load)`);
+          entry.hooks.forEach((h, j) => {
+            if (!h || h.type !== "command" || typeof h.command !== "string" || !h.command)
+              throw new Error(`${name}[${i}].hooks[${j}]: expected { type: "command", command: "..." }`);
+            if (!h.command.includes("ballast-rules.mjs")) throw new Error(`${name}[${i}].hooks[${j}]: command does not run ballast-rules.mjs`);
+          });
+        });
+      }
       return null;
     },
   },

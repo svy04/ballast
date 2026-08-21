@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.1 — 2026-08-21
+
+- **The plugin failed to load on current Claude Code — fixed.** `hooks/hooks.json` declared its `UserPromptSubmit` entry flat (`type`/`command` directly on the entry). Claude Code loads the documented shape — each entry wraps its commands in a nested `hooks` array — and rejected the manifest: `claude plugin list` showed `failed to load … expected array, received undefined`, so a marketplace install ran no hook. Reproduced on Claude Code 2.1.201 here and on 2.1.235 in the report; after the fix the same install reads `enabled`, and a probe rule arrived in a live `claude -p` session. The fix is [PR #2](https://github.com/svy04/ballast/pull/2) by @biggieb327-lgtm — the project's first outside contribution. Thank you.
+- **Why the harness did not catch it:** `verify-hook.mjs` exercised the rule engine, never the manifest, and the install-from-marketplace check had been carried forward since 0.4 without being run. Case 7 now parses `hooks/hooks.json` and fails if any event entry lacks a nested `hooks` array — 7/7 passing. The README specs line says 7 in all three languages.
+- **If you installed before this release:** `/plugin update ballast@ballast` (or uninstall and install again), then `claude plugin list` should read `enabled`. Nothing else changed — engine, skills, and catalog format are as in 0.8.0.
+
 ## 0.8.0 — 2026-08-17
 
 - **`codex exec` gets real rule delivery** — new `hooks/scripts/ballast-codex.mjs` wraps `codex exec`: it runs the same rule engine, prepends matching rules to the prompt, and honors `block` rules (refuse + reason, exit 2). Verified live on codex-cli 0.130: a spending prompt arrived with the cost-gate rule and Codex opened with an estimate and approval request; the block path stops before Codex is invoked.
