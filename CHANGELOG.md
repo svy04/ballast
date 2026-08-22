@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.1 — 2026-08-22
+
+- **Compression tools stay out of `memory/`.** A memory-file compressor removes the load-bearing words first — negations, numbers, sources, labels, supersede links — and the loss is silent. decision-ledger gains rule 7 ("No compression tool rewrites this file"), knowledge-base gains a *Compression tools stay out* section, and the example catalog gains `memory-compress-guard`, which fires on prompts that aim a compressor at the ledger, knowledge, or checkpoint files. Prompted by reading the caveman project's `caveman-compress`, which overwrites memory files by design (with a backup) — a fine tool for CLAUDE.md, the wrong tool for an append-only ledger.
+- **`reader-first` example rule.** Plain replies for the reader: no filler or hedging, grammar markers kept, negations and numbers never dropped, each technical term glossed once with the original in parentheses. Distilled from the caveman skill's *lite* mode (MIT) and the KIISE 쉬운 전문용어 principles (easyword.kr/tips). It is an example to copy and edit, not a default — ballast does not shape how the model talks.
+- **Verify and stop.** goal Phase 5 now says it outright: turn the definition of done into the smallest sufficient checks, report each as pass / fail / unavailable / blocked, and stop when the proof is complete — no polish after the criteria pass. Wording after caveman's `verify-and-stop` pattern (MIT).
+- README (EN/KO/ZH): one paragraph on pairing ballast with a style skill and the single place they meet.
+- Versions: manifests and badges read 0.9.1. Hook engine unchanged; harness unchanged.
+
 ## 0.9.0 — 2026-08-21
 
 - **The hook now says it is alive.** A `SessionStart` entry prints one line per session — `[ballast] hook live — N rules loaded (…; K always-on)`, or `no rule catalog yet` — to you (`systemMessage`) and to the model (`additionalContext`). Until now a dead hook — node missing, manifest rejected, Codex hook untrusted — looked exactly like a quiet one, and 0.8.1's own bug hid behind that for a week. `BALLAST_QUIET=1` turns the line off. Harness 7 → 10 cases: the line with rules, without any catalog, and with a broken one. The Codex project-hook example carries the same entry.

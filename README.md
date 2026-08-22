@@ -45,10 +45,12 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other twelve pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.)
 
+Pairing it with a style skill? ballast does not shape how the model talks — it shapes what the model remembers and what counts as done. Terse-reply skills such as caveman sit beside it without conflict; the one place they meet is `memory/`: keep compression tools away from the ledger and knowledge files (see the `memory-compress-guard` rule in the example catalog, and the decision-ledger skill). If you want plain-language replies, the example catalog ships a `reader-first` rule to copy and edit.
+
 Using Codex instead? The same repository installs as a Codex plugin — `codex plugin marketplace add svy04/ballast`, then `codex plugin add ballast@ballast` — and the same hook runs there: Codex loads `hooks/hooks.json` once you trust it in `/hooks`. Without the plugin, a project-level `.codex/hooks.json` does the same, and the bundled `codex exec` wrapper stays for builds without hooks: [docs/CODEX.md](docs/CODEX.md).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="Version 0.9.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.1-blue" alt="Version 0.9.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 

@@ -47,10 +47,12 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十二个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
 
+要和控制语气的技能一起用？ballast 不决定模型怎么说话，只决定它记住什么、什么才算完成。像 caveman 这样让回复更简短的技能可以并排使用，互不冲突；两者唯一的交点是 `memory/`：别让压缩工具碰决策账本和知识文件（见示例目录里的 `memory-compress-guard` 规则和 decision-ledger 技能）。想让回复更通俗，可以复制示例目录里的 `reader-first` 规则来改。
+
 用 Codex 的话 — 同一个仓库也能装成 Codex 插件：`codex plugin marketplace add svy04/ballast`，再 `codex plugin add ballast@ballast`。同一个 hook 在那边照样跑：Codex 会读取 `hooks/hooks.json`，在 `/hooks` 里信任一次就生效。不装插件的话，项目里一份 `.codex/hooks.json` 也能做同样的事；没有 hook 的构建还保留了 `codex exec` wrapper：[docs/CODEX.md](docs/CODEX.md)（英文）。它不碰模型供应商与路由，和 CC Switch / claude-code-router 可以并存。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="版本 0.9.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.1-blue" alt="版本 0.9.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 

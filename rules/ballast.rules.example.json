@@ -128,6 +128,40 @@
         ]
       },
       "body": "This request matched a configured danger pattern and was stopped before the agent saw it. This stops the prompt, not the tool: a later turn can still run the same command without these words, so treat blocks as a guardrail, not a sandbox (README, Know the limits). If you really mean it, re-issue the request explicitly, or edit .claude/ballast.rules.json."
+    },
+    {
+      "id": "reader-first",
+      "title": "Say it for the reader",
+      "when": {
+        "keywords": [
+          "explain",
+          "summarize",
+          "summary",
+          "why does",
+          "what is",
+          "walk me through",
+          "설명",
+          "요약",
+          "왜",
+          "뭐야",
+          "알려줘",
+          "解释",
+          "总结",
+          "为什么"
+        ]
+      },
+      "body": "Write for the reader, in the reader's language. Cut filler, hedging, and pleasantries; keep grammar markers (particles, postpositions) — they are grammar, not filler. Never drop not/never/no/only, numbers, or units. A technical term gets a one-line plain gloss at first use with the original in parentheses; plain beats pure (쉬운 말 > 순우리말). Security warnings and irreversible actions stay in full sentences. (Rules distilled from the caveman skill's lite mode, MIT, and the KIISE 쉬운 전문용어 principles, easyword.kr/tips.)"
+    },
+    {
+      "id": "memory-compress-guard",
+      "title": "Compression tools stay out of memory/",
+      "when": {
+        "patterns": [
+          "caveman-compress",
+          "(compress|shrink|condense|shorten|압축|줄여).{0,40}(memory|CLAUDE\\.md|DECISIONS|OPEN-QUESTIONS|knowledge|ledger|원장|기억 파일)"
+        ]
+      },
+      "body": "Do not let a compression tool rewrite ballast memory files. DECISIONS.md is append-only; knowledge entries carry sources and labels; checkpoints carry orders. Compression drops the load-bearing words first — negations, numbers, sources, labels — and the loss is silent. If a file must shrink: keep the original beside it, shorten by hand, and compare part by part before accepting. This is a ballast rule, not a judgment on the tool."
     }
   ]
 }

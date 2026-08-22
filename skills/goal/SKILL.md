@@ -61,6 +61,8 @@ Four signals send you back up the tree — do not wait for a scheduled review:
 
 ## Phase 5 — Done means verified
 
+- Verify and stop. Turn the definition of done into the smallest sufficient set of checks, run those, and report each as pass / fail / unavailable / blocked — exactly one of the four. When the proof is complete, stop: no polish, no cleanup, no unrelated tests after the criteria pass. (Wording after the caveman project's `verify-and-stop` pattern, MIT.)
+
 - Before showing the evidence, re-read the one-line restatement from Phase 0 and say plainly whether the deliverable answers *that* — a passed check on the wrong goal is still a miss.
 - "Done" is a claim and passes the same gate as any claim: show the evidence (the thing runs, the test passes, the deliverable survived rehearsal — see the rehearsal skill; its round log is the citable part).
 - Remaining expectations are registered as hypotheses with a judgment date — not folded into the victory lap.

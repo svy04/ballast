@@ -37,6 +37,10 @@ The first time you create `memory/knowledge/`, add a row for it to the File map 
 
 When a draft is promoted (or rejected), annotate it in place: `→ recorded in memory/knowledge/db-pooling.md (2026-08-14)` or `→ rejected: failed refutation`. Without the back-note, the same finding resurfaces as a candidate in the next session and gets re-verified from scratch — the exact duplication this skill exists to end.
 
+## Compression tools stay out
+
+A knowledge entry is its source, its sample, and its label; a compression pass aimed at token savings removes exactly those first. Do not run memory-file compressors (caveman-compress and the like) over `memory/knowledge/`. Shorten by hand if you must, with the original kept and a part-by-part comparison before accepting.
+
 ## Freshness
 
 Verified knowledge expires. Before relying on an entry older than 90 days, re-verify it and update the date; if it no longer holds, supersede the entry with what is now true rather than deleting the history. The date on an entry is a promise about when it was true, not forever.

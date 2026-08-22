@@ -45,12 +45,16 @@ Claude: pnpm으로 갈게요 — npm이 락파일을 두 번 깨뜨렸다는 규
 
 Claude Code(터미널·IDE에서 쓰는 Claude 에이전트)에서 위 두 줄이면 끝나요. 훅은 PATH에 이미 있는 `node`(18 이상)로 돌아가고, 나머지 열두 조각은 마크다운 스킬이에요. (설치 명령의 표기는 `플러그인@마켓플레이스`인데, 여긴 둘 다 이름이 ballast라 두 번 나와요.)
 
+말투를 정하는 스킬과 같이 쓰실 수도 있어요. ballast는 모델이 어떻게 말하느냐가 아니라 무엇을 기억하고 무엇을 완료로 치느냐를 정해요.
+짧게 답하게 하는 caveman 같은 스킬과 나란히 두어도 부딪히지 않고, 둘이 만나는 자리는 `memory/` 하나예요: 압축 도구를 원장·지식 파일에 대지 마세요
+(예시 카탈로그의 `memory-compress-guard` 규칙과 decision-ledger 스킬에 적어 두었어요). 쉬운 말로 답하게 하고 싶다면 예시 카탈로그의 `reader-first` 규칙을 복사해 고쳐 쓰세요.
+
 Codex를 쓰신다면 — 같은 저장소가 Codex 플러그인으로도 설치돼요: `codex plugin marketplace add svy04/ballast` 다음 `codex plugin add ballast@ballast`.
 같은 훅이 거기서도 돌아요 — Codex가 `hooks/hooks.json`을 읽고, `/hooks`에서 한 번 신뢰하면 켜져요.
 플러그인 없이도 프로젝트의 `.codex/hooks.json` 하나면 같은 일을 하고, 훅이 없는 빌드를 위해 `codex exec` 래퍼도 남겨 뒀어요: [docs/CODEX.md](docs/CODEX.md)(영문).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.0-blue" alt="버전 0.9.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.1-blue" alt="버전 0.9.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="라이선스: MIT"></a>
 </p>
 
