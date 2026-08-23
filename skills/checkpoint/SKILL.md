@@ -57,3 +57,7 @@ On resume — new session, context reset, or the user asking where things stand:
 3. Scan for unfinished signals: work whose start is recorded (session log, open questions) but whose conclusion is nowhere. Surface each one — never let it dissolve silently. Include the readings in force: one relied on again since the last checkpoint is due its question in this briefing.
 
 Then execute the next first action, unless the user redirects.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

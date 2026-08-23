@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "_comment": "Copy this file to <project>/.claude/ballast.rules.json (project rules) or ~/.claude/ballast.rules.json (user rules). Project rules override user rules on duplicate ids. Keywords are literal substring matches — pair them in every language you chat in, as these examples pair English with Korean and Chinese. Keep bodies short and imperative — every injected character competes with the actual work. To inject a rule into every request regardless of keywords, set \"when\": {\"always\": true} — use it for at most one or two rules; an always-on rule you stop reading is worse than no rule, and the session-start status line counts how many you have.",
+  "_comment": "Copy this file to <project>/.claude/ballast.rules.json (project rules) or ~/.claude/ballast.rules.json (user rules). Project rules override user rules on duplicate ids. Keywords are literal substring matches — pair them in every language you chat in, as these examples pair English with Korean and Chinese. Keep bodies short and imperative — every injected character competes with the actual work. To inject a rule into every request regardless of keywords, set \"when\": {\"always\": true} — use it for at most one or two rules; an always-on rule you stop reading is worse than no rule, and the session-start status line counts how many you have. A rule with \"when\": {\"tools\": [...]} moves to the action layer: it fires when the named tool's command or file path matches, instead of on the prompt — see tool-layer-example below.",
   "rules": [
     {
       "id": "label-claims",
@@ -162,6 +162,15 @@
         ]
       },
       "body": "Do not let a compression tool rewrite ballast memory files. DECISIONS.md is append-only; knowledge entries carry sources and labels; checkpoints carry orders. Compression drops the load-bearing words first — negations, numbers, sources, labels — and the loss is silent. If a file must shrink: keep the original beside it, shorten by hand, and compare part by part before accepting. This is a ballast rule, not a judgment on the tool."
+    },
+    {
+      "id": "tool-layer-example",
+      "title": "pnpm, not npm",
+      "when": {
+        "tools": ["Bash"],
+        "patterns": ["\\bnpm (install|i|add|ci)\\b"]
+      },
+      "body": "This project uses pnpm — run the pnpm equivalent (pnpm install / pnpm add) instead. This rule rides the action layer: because its \"when\" names a tool, it arrives at the matching Bash call itself, not at the prompt. Talking about npm stays silent; running it does not."
     }
   ]
 }

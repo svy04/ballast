@@ -33,3 +33,7 @@ pin promotes a **one-line rule** — a correction or preference that should arri
 ## Freshness
 
 A procedure is a claim that these steps still work. Three triggers force a refresh: the verification date is more than 90 days old, the procedure fails when followed, or the knowledge entry this procedure rests on changed. Any of them, re-run it, fix what changed, and update the date and evidence — a skill that silently stopped working is worse than no skill, because it carries the authority of a past success.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

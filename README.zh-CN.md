@@ -38,6 +38,13 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 
 `[ballast]` 那一块就是 ballast 保证的部分。"npm" 命中了规则，整段规则原文随这条消息一起送达。下面的回答那一行是示意 — hook 保证的是送达，不是服从。
 
+## 一眼看清
+
+- **它是什么**：一个 Claude Code · Codex CLI 插件 — 一个 hook 脚本（node，零依赖、零网络）挂在四个事件上（`UserPromptSubmit`·`PreToolUse`·`PreCompact`·`SessionStart`），外加十五个 markdown skills。
+- **hook 做什么**：把你自己写下的常驻规则从 JSON 目录里取出，原文送达命中的请求 — 在 prompt 上、在规则点名的工具调用上、在上下文压缩之前。每次送达只记录规则 id 和数量，绝不记录 prompt 内容。
+- **skills 覆盖什么**：只追加的决策台账、主张的验证标签、对外主张的证据标准、目标分解、检查点、记忆全扫、纠正入规则（pin）、彩排、收集委托、知识库、记忆骨架、锻造 skill，以及三个运维 skill（setup·doctor·report）。
+- **它不是什么**：不是多智能体编排，不是自动记忆收集或摘要，不是模型供应商切换或路由，也不是语气包。规则由你来写，插件负责送达。
+
 ## 安装
 
 ```
@@ -45,14 +52,14 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 /plugin install ballast@ballast
 ```
 
-在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十二个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）
+在 Claude Code（终端和 IDE 里用的 Claude 智能体）里这两行就装完了。hook 用 PATH 里已有的 `node`（18+）运行，其余十五个部件是 markdown skills。（安装命令的格式是 `插件名@市场名`，这里两个名字恰好都叫 ballast，所以出现了两次。）不想看 JSON 的话，说一句"帮我设置 ballast"或者调用 `/ballast:setup` — 四个问题以内陪你把第一份规则目录建好。
 
 要和控制语气的技能一起用？ballast 不决定模型怎么说话，只决定它记住什么、什么才算完成。像 caveman 这样让回复更简短的技能可以并排使用，互不冲突；两者唯一的交点是 `memory/`：别让压缩工具碰决策账本和知识文件（见示例目录里的 `memory-compress-guard` 规则和 decision-ledger 技能）。想让回复更通俗，可以复制示例目录里的 `reader-first` 规则来改。
 
 用 Codex 的话 — 同一个仓库也能装成 Codex 插件：`codex plugin marketplace add svy04/ballast`，再 `codex plugin add ballast@ballast`。同一个 hook 在那边照样跑：Codex 会读取 `hooks/hooks.json`，在 `/hooks` 里信任一次就生效。不装插件的话，项目里一份 `.codex/hooks.json` 也能做同样的事；没有 hook 的构建还保留了 `codex exec` wrapper：[docs/CODEX.md](docs/CODEX.md)（英文）。它不碰模型供应商与路由，和 CC Switch / claude-code-router 可以并存。
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.9.1-blue" alt="版本 0.9.1"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.10.0-blue" alt="版本 0.10.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="许可证：MIT"></a>
 </p>
 
@@ -67,9 +74,10 @@ Claude: 那我走 pnpm — 有条规则在提醒 npm 弄坏过两次锁文件。
 <summary><strong>规格</strong> — 依赖、强制范围、出厂为空</summary>
 
 - **零依赖、零网络** — hook 是一个脚本，import 只有 `fs`/`os`/`path`。ballast 本身不向外发送任何东西（可选接入的 verifier/researcher 命令是你自己挑的本地 CLI；检查用的 verify 脚本是独立的，只是再起一个 `node` 把 hook 重跑一遍）
-- **1 个 hook + 12 个 skills** — 代码强制的只有 hook 一个，哪块是代码、哪块是约定，表里全部写明
-- **出厂为空，但会说出来** — 每次会话开始都有一行：`[ballast] hook live — 已加载 N 条规则`，起初是 0；消息上要等规则命中才会出声。怎么放进第一条见[快速开始](#快速开始)。常驻开销：十二个 skill 的描述约 490 个英文词，skill 正文只在被调用时才加载
-- **[hook 实测 10 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话 · hook 声明文件的形状 · 会话开始那一行（有规则时、没有目录时、目录损坏时）。这套测试检查 hook 输出了什么，不检查模型是否服从；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
+- **1 个 hook（四个事件）+ 15 个 skills** — 代码强制的只有 hook 一个，哪块是代码、哪块是约定，表里全部写明
+- **出厂为空，但会说出来** — 每次会话开始都有一行：`[ballast] hook live — 已加载 N 条规则`，起初是 0；消息上要等规则命中才会出声。怎么放进第一条见[快速开始](#快速开始)。常驻开销：十五个 skill 的描述约 620 个英文词，skill 正文只在被调用时才加载
+- **送达日志只记 id** — 每次送达在 `~/.claude/ballast/log.jsonl` 追加一行（时间、规则 id、字符数 — 绝无 prompt 或工具输入内容），超过约 512 KB 轮转一次；`--report` 汇总出每条规则的触发数，并点名**从未触发过的规则**；`BALLAST_NO_LOG=1` 可关闭
+- **[hook 实测 20 个用例通过](hooks/scripts/verify-hook.mjs)** — 关键词注入 · 未命中沉默 · 拦截 · 旧字段兼容 · 目录损坏会说明 · 但绝不卡死会话 · hook 声明文件的形状 · 会话开始那一行（有规则时、没有目录时、损坏时、压缩之后）· 日志只有 id 没有内容 · `BALLAST_NO_LOG` 时什么都不写 · 工具规则不混进 prompt · 行动层注入/拒绝/无关工具沉默 · 压缩前的提醒 · `--report`/`--check` 点名触发过的、死掉的、写坏的规则。这套测试检查 hook 输出了什么，不检查模型是否服从；clone 仓库后 `node hooks/scripts/verify-hook.mjs` 可以自己复验
 - **MIT** — 整套机制一个下午就能读完
 
 </details>
@@ -115,15 +123,15 @@ flowchart TD
     W --> RH["彩排 — 零上下文<br/>读者实际跑一遍"] --> D["完成 = 通过检查"]
 ```
 
-这一切里由代码执行的只有 hook：一个每条 prompt 都会运行的脚本，Claude 配不配合它都会触发。十二个 skills 是约定 — Claude 遵守多少就保住多少的 markdown 指令。约定会漂移：`CLAUDE.md` 只在开头被读一次、工作越往后越远，约定也会以同样的方式远去。
+这一切里由代码执行的只有 hook：一个在每条 prompt、每个被盯上的工具调用上都会运行的脚本，Claude 配不配合它都会触发。十五个 skills 是约定 — Claude 遵守多少就保住多少的 markdown 指令。约定会漂移：`CLAUDE.md` 只在开头被读一次、工作越往后越远，约定也会以同样的方式远去。
 
-ballast 不装作不是这样。把约定强行拉回来的通道是 **pin**：哪条约定滑了，你纠正一次，pin 把这次纠正写进规则目录，之后由 hook 负责送达。
+把约定强行拉回来的通道是 **pin**：哪条约定滑了，你纠正一次，pin 把这次纠正写进规则目录，之后由 hook 负责送达。每条规则实际触发了几次，是记录而不是感觉 — 每次送达都进日志，**report** skill 会点名从未触发过的规则。
 
 ## 部件清单
 
 | 部件 | 类型 | 职责 |
 |---|---|---|
-| **rules hook** | 代码 — 每个 prompt 运行的脚本 | 把命中的规则原文随消息送达 — 每条消息的上限写死在源码里（最多 12 条 · 约 6,000 字符）；`block` 规则会拦停 prompt，并把那条规则当理由亮出来 |
+| **rules hook** | 代码 — 每个 prompt、被盯上的工具调用、压缩之前运行的脚本 | 把命中的规则原文随消息送达；点名了工具的规则（`when.tools`）直接送达那次工具调用 — 每条消息的上限写死在源码里（最多 12 条 · 约 6,000 字符）；`block` 规则会拦停 prompt 或拒绝工具调用，并把那条规则当理由亮出来；压缩之前送达一行检查点提醒；每次送达都以 id 和数量进日志 |
 | **decision-ledger** | 约定 — markdown skill | 只追加的 `DECISIONS.md` — 推翻用替代（supersede）链接，不存在悄悄修改；没回答不算决定 — 用户没确认的解读留在未决问题里，标为 `assumed` |
 | **verify-gate** | 约定 — markdown skill | 扛住反驳、给出出处之前，调研结果和模型知识一律按草稿对待 |
 | **knowledge-base** | 约定 — markdown skill | 过了关的发现存进 `memory/knowledge/` — 新问题先看这里再去调研 |
@@ -136,6 +144,9 @@ ballast 不装作不是这样。把约定强行拉回来的通道是 **pin**：�
 | **pin** | 约定 — markdown skill | 把刚收到的纠正写进 hook 的规则目录，变成永久规则 — 一步完成 |
 | **recall** | 约定 — markdown skill | 会话首答和话题切换的瞬间，回答前把索引·知识·决定·规则·skills 五处翻一遍 — 不在第一个命中就停手 |
 | **skill-forge** | 约定 — markdown skill | 把还会再来、且通过了检查的流程锻成 skill 文件 — 下次从打通的路上出发 |
+| **setup** | 约定 — markdown skill | 用对话完成首次设置 — 先证明 hook 是活的，再让你从示例规则里挑选、替你建好第一份目录。问题不超过四个，不给你看 JSON |
+| **doctor** | 约定 — markdown skill | 四状态体检（健康/关闭/损坏/未验证）— 实弹打一发状态行、用 `--check` 查目录，查不了的绝不隐瞒 |
+| **report** | 约定 — markdown skill | 用 `--report` 汇总送达日志 — 每条规则触发几次；没触发的当症状读（关键词语言不对/本来就该安静的护栏/死规则），清理一次只提一条 |
 
 verify-gate 的标签有五种：`confirmed` / `observed`（观察到）/ `assumed`（假定）/ `hearsay`（传闻）/ `unknown`（未知）。proof-standard 用四个状态追踪代码：已实现 · 已接通 · 可运行 · 已验证。
 
@@ -185,9 +196,11 @@ verify-gate 的标签有五种：`confirmed` / `observed`（观察到）/ `assum
 - `keywords` — 不分大小写的子串匹配。消息里必须原样含有那个字符串才命中 — 用中文对话就像上面那样把中文关键词并排写上（规则正文也可以用你想要的语言写）。短关键词在长单词里也会命中 — `npm` 也会被 `pnpm` 触发
 - `patterns` — 正则（不熟悉可以不用，`keywords` 就够）
 - `always: true` — 每条消息都触发，省着用，1~2 条为宜
-- `action: "block"` — 拦停 prompt，把 `body` 作为理由亮出来
+- `tools` — 把规则挪到行动层：写成 `"when": {"tools": ["Bash"], "patterns": ["\\bnpm (install|add)\\b"]}`，它就在点名的工具的命令或文件路径命中时触发，而不是在 prompt 上。`"tools": true` 盯住所有工具；配上 `always: true` 则那些工具每次调用都触发
+- `action: "block"` — 拦停 prompt，把 `body` 作为理由亮出来；放在工具规则上则拒绝那次工具调用
 - `BALLAST_DISABLE=1` — 关闭 hook（环境变量设在启动 Claude Code 的环境里）
 - `BALLAST_DEBUG=1` — 把目录加载失败、写坏的正则打到 stderr。平时 hook 吞掉并保持安静
+- `BALLAST_NO_LOG=1` — 关闭送达日志
 
 起步可以直接复制 [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json)，或者交给 **pin**。
 
@@ -196,7 +209,7 @@ verify-gate 的标签有五种：`confirmed` / `observed`（观察到）/ `assum
 设计上有三件事要先知道：
 
 - **静默失败，只有两个例外** — 正则写错、内部出错，会话都不会崩、也不会说话。例外一是目录存在却读不出来 — 这时会提示一行，不然"规则整包丢失"和"只是没命中"看起来一模一样；例外二是每次会话开始那一行状态 — 不然"hook 已死"和"hook 安静"也一模一样。
-- **fail-open** — hook 完全跑不起来时（PATH 里没有 `node`、目录读取失败），`block` 规则也一起失效。拦截当护栏用，不要当成攻不破的沙箱。
+- **fail-open** — hook 完全跑不起来时（PATH 里没有 `node`、目录读取失败），`block` 规则也一起失效 — prompt 上和工具调用上都一样。拦截当护栏用，不要当成攻不破的沙箱。
 - **只装上会多出一样看得见的东西** — 会话开始那一行（`[ballast] hook live — 还没有规则目录`，直到你的目录里有了规则）。其余都等信号才醒：纠正一次唤醒 pin，会话首答唤醒 recall（跑 `/ballast:brain-init` 之前，recall 连可翻的记忆文件都没有）。`BALLAST_DISABLE=1` 关掉 hook，`BALLAST_QUIET=1` 只关状态行；skills 随插件卸载一起离开。项目目录会跟着仓库走：clone 来的项目里的 `.claude/ballast.rules.json` 是别人的常驻指令 — 状态行会数出规则数和 always 规则数，打开陌生仓库时先看那一行。
 
 fail-open 没有报错界面 — 症状有两个：会话开始时没有出现 `[ballast] hook live` 那一行，或者本该命中的消息上没有出现 `[ballast]` 块。看到任一个就按顺序查三样：
@@ -238,7 +251,7 @@ ballast 的出发点很平常。一个没有开发背景的人，在一个个没
 - **实绩是 `hearsay`。** 那几个月的日常使用发生在不公开的公司工作区里，这个公开仓库始于 2026 年 8 月 — 这里没有可以翻看的历史。
 - **新颖性主张是 `unknown`。** prompt 提交时注入上下文是有文档的 Claude Code hook 模式，只追加的记录比软件本身还古老。ballast 能说的最大限度是"没在别处见过把整条闭环捆在一起的"。
 
-但机制本身可以核查 — hook、十二个 skills、规则格式全在这个仓库里。知道这条闭环的先例的话，请开 [issue](https://github.com/svy04/ballast/issues) 告诉我们，我们会链接上去。
+但机制本身可以核查 — hook、十五个 skills、规则格式全在这个仓库里。知道这条闭环的先例的话，请开 [issue](https://github.com/svy04/ballast/issues) 告诉我们，我们会链接上去。
 
 ## 维护
 

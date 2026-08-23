@@ -47,3 +47,7 @@ Say in one line what you swept and what you opened — including when nothing ma
 - **goal's mobilize phase** splits a stated goal top-down and asks what each branch needs. It starts from the task and reasons down.
 - **knowledge-base's lookup** runs before researching a topic.
 - **recall runs before answering at all**, and it reasons the other way: from what is held, upward. Top-down mobilization only summons what the task is already known to need — it cannot summon what you did not know was there. That gap is where this skill lives, and it is why a project can have both and still be caught by *"that was already written down."*
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

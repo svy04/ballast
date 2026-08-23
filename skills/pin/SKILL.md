@@ -50,3 +50,7 @@ The last two are worth separating from the first: they happen with the rule alre
 - **Keep catalogs lean.** Past ~20 rules, suggest pruning before adding: an injected rule nobody reads is worse than none. The hook caps injection at 12 rules / ~6,000 characters.
 - **User-level vs project-level.** Rules about how the user works everywhere go to `~/.claude/ballast.rules.json`; rules about this project stay in the project. Ask only when it's genuinely ambiguous.
 - **Blocks are for danger, not style.** Reserve `action: "block"` for irreversible or costly actions; style preferences are injections.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

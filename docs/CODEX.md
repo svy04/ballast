@@ -2,11 +2,13 @@
 
 ballast takes a goal in a field you have no expertise in and builds up to it: it splits the goal into the foundations it actually needs, mobilizes the ones you already hold, learns the ones you are missing, and leaves every path it solves behind — as a rule, a verified note, or a skill the next goal starts from. Nothing is called done until a check passes.
 
-It is packaged as a Claude Code plugin, and since 0.9.0 it installs on Codex CLI too: the same twelve markdown skills, and the same rules hook. Codex runs `UserPromptSubmit` hooks in the JSON shape ballast already speaks, so the engine did not change — only the wiring. This guide covers the ways to wire it in, what is enforced on each, and what was actually observed.
+It is packaged as a Claude Code plugin, and since 0.9.0 it installs on Codex CLI too: the same fifteen markdown skills, and the same rules hook. Codex runs `UserPromptSubmit` hooks in the JSON shape ballast already speaks, so the engine did not change — only the wiring. This guide covers the ways to wire it in, what is enforced on each, and what was actually observed.
+
+One honesty note for 0.10.0: the two hook events added in that release — `PreToolUse` (rules that fire at the tool call) and `PreCompact` (the checkpoint reminder before compaction) — were verified on Claude Code only. Whether Codex loads them from a plugin manifest has not been tested here; the `UserPromptSubmit` and `SessionStart` entries below are the ones observed running on Codex. If you test the new events on Codex, an issue with the log line is a welcome contribution.
 
 | Path | What you get | Enforced? |
 |---|---|---|
-| **Plugin** — `codex plugin …` | the twelve skills + the rules hook | hook: yes, after a one-time trust review in `/hooks` |
+| **Plugin** — `codex plugin …` | the fifteen skills + the rules hook | hook: yes, after a one-time trust review in `/hooks` |
 | **Project hook** — `<project>/.codex/hooks.json` | the rules hook (skills via the AGENTS.md block) | yes, after project trust + `/hooks` review |
 | **User hook** — `~/.codex/hooks.json` | the rules hook in every project | yes, after `/hooks` review |
 | **AGENTS.md block** | skills + catalog as instructions | no — convention |
@@ -66,7 +68,7 @@ Copy [`rules/ballast.codex-hooks.example.json`](../rules/ballast.codex-hooks.exa
 
 Two trust steps, both one-time: project-local hooks load only when Codex trusts the project's `.codex` layer (it asks when you open the folder), and the hook itself waits for review in `/hooks`. The same file at `~/.codex/hooks.json` runs in every project. `commandWindows` is an optional Windows-only override.
 
-Observed 2026-08-21, codex-cli 0.147.0, Windows: a project hook in a trusted folder delivered a probe rule on the first prompt (`hook: UserPromptSubmit … Completed` in the exec log). The engine behind it is the one the 10-case harness covers.
+Observed 2026-08-21, codex-cli 0.147.0, Windows: a project hook in a trusted folder delivered a probe rule on the first prompt (`hook: UserPromptSubmit … Completed` in the exec log). The engine behind it is the one the 20-case harness covers.
 
 ## Automation: `codex exec`
 

@@ -45,3 +45,7 @@ At session start (or when context resets), read the ledger before substantive wo
 ## Why this works
 
 An LLM session forgets; a file does not. But a file that can be silently edited is worse than no file — it *feels* authoritative while drifting. Append-only + supersede gives you both: current truth at a glance, and the full history of how you got there.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

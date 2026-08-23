@@ -49,3 +49,7 @@ Two things to get right when reading what comes back:
 ## Success is also a claim
 
 "Task done" passes the same gate: verify the thing actually happened (file exists, test passes, output is correct) before reporting success. An enthusiastic user reaction is sense-data, not verification — log it as a hypothesis and design a check.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

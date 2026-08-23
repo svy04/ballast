@@ -50,3 +50,7 @@ The correction runs downstream too: when an entry changes, update the skills tha
 ## Scope
 
 This is a convention skill — plain markdown files, no tooling required. If the project already runs a wiki or knowledge-management plugin, the two coexist: `memory/knowledge/` remains the lookup-first layer, and the wiki can serve as the deeper archive behind it.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

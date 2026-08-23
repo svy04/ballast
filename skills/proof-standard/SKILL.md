@@ -43,3 +43,7 @@ Copy that says "we do X" requires `operational` or better. "X is available" requ
 Every entry carries the date it was last checked against the code, not only the date it was written. Before an entry older than 90 days is used in a claim, re-confirm it — open the path, run the test, look at the screen — and stamp the new date. A date says when the entry was true, not that it still is.
 
 **"Not implemented" is the section that leaks the other way.** A stale Implemented entry pushes you toward claiming too much, and everyone watches that direction. A stale "Not implemented" line does the reverse: the capability shipped weeks ago, the line never moved, and the truth file is now talking you out of a claim you have already earned — understating instead of overstating. Sweep that section on the same 90-day clock, and check it again every time something ships.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

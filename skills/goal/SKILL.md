@@ -74,3 +74,7 @@ Four signals send you back up the tree — do not wait for a scheduled review:
 - Anything that spends money or is hard to reverse: estimate → explicit approval → act.
 - Anything externally visible ships only with the user's click.
 - Keep a checkpoint note so the user can return at any moment and catch up in thirty seconds: where we are, what's decided, the one thing they need to decide, the next move (the checkpoint skill owns the format).
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

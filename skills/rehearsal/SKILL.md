@@ -32,3 +32,7 @@ One redesign is normal. A second redesign that still isn't clean ends the loop: 
 - **Keep the log.** Rounds, stalls, fixes — beside the deliverable, or in the goal file's done-check (`memory/goal/<slug>.md`) when the work runs under goal. The log is citable evidence that the deliverable survived contact (`observed`, dated); "it reads fine to me" cites nothing.
 
 ballast's own READMEs went through this procedure before release (v0.5 converged in three rounds); the round logs live in the maintainer's workspace, not in this repository.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*

@@ -44,3 +44,7 @@ The brief *is* the question: everything below travels inside that final argument
 ## One warning about synthesis
 
 When several collected sources start merging into one clean conclusion, that forming headline is the signal to stop: are these even the same kind of evidence? Different layers — experiments, market observation, one project's logs — sit side by side; they don't fuse into one claim.
+
+---
+
+*Part of [ballast](https://github.com/svy04/ballast) — foundations first, every solved path kept, done means checks pass.*
