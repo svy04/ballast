@@ -52,7 +52,7 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other fifteen pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.) For a guided first setup — no JSON in sight — say "set up ballast" or call `/ballast:setup`.
 
-Pairing it with a style skill? ballast does not shape how the model talks — it shapes what the model remembers and what counts as done. Terse-reply skills such as caveman sit beside it without conflict; the one place they meet is `memory/`: keep compression tools away from the ledger and knowledge files (see the `memory-compress-guard` rule in the example catalog, and the decision-ledger skill). If you want plain-language replies, the example catalog ships a `reader-first` rule to copy and edit.
+Pairing it with a style skill? ballast shapes what the model remembers and what counts as done, not how it talks, so terse-reply skills such as caveman sit beside it without conflict. The one place they meet is `memory/`: keep compression tools away from the ledger and knowledge files — the `memory-compress-guard` example rule guards exactly that. For plain-language replies, copy the example catalog's `reader-first` rule.
 
 Using Codex instead? The same repository installs as a Codex plugin — `codex plugin marketplace add svy04/ballast`, then `codex plugin add ballast@ballast` — and the same hook runs there: Codex loads `hooks/hooks.json` once you trust it in `/hooks`. Without the plugin, a project-level `.codex/hooks.json` does the same, and the bundled `codex exec` wrapper stays for builds without hooks: [docs/CODEX.md](docs/CODEX.md).
 
@@ -75,7 +75,7 @@ Using Codex instead? The same repository installs as a Codex plugin — `codex p
 - **One hook (four events) + fifteen skills** — only the hook is code-enforced, and the docs label which is which
 - **Ships empty, and says so** — every session opens with one line, `[ballast] hook live — N rules loaded`, zero at first; on messages the hook stays silent until a rule matches. [Quick start](#quick-start) is how rules get there. Standing cost: the fifteen skill descriptions are about 620 words; skill bodies load only when a skill is invoked
 - **Delivery log, ids only** — each delivery appends one JSON line (timestamp, rule ids, sizes — never prompt or tool text) to `~/.claude/ballast/log.jsonl`, rotated past ~512 KB; `--report` aggregates it into fires per rule and names the rules that never fired; `BALLAST_NO_LOG=1` turns it off
-- **[Hook verified on 20 cases](hooks/scripts/verify-hook.mjs)** — keyword inject, silence on no match, block, legacy input fields, broken catalog says so, broken catalog still never blocks, the manifest is in the shape Claude Code loads, the session-start line appears with rules / without a catalog / with a broken one / after compaction, the log holds ids and never text, `BALLAST_NO_LOG` writes nothing, tool-scoped rules stay out of prompts, the tool layer injects / denies / stays silent for unnamed tools, the compaction reminder is emitted, and `--report` / `--check` name fired, dead and broken rules. The harness checks what the hook emits, not whether the model obeys; run `node hooks/scripts/verify-hook.mjs` in a clone of this repo to re-check
+- **[Hook verified on 20 cases](hooks/scripts/verify-hook.mjs)**, in five groups — delivery (keyword inject, silence on no match, block, legacy input fields) · failure (a broken catalog says so, and still never blocks; the manifest is in the shape Claude Code loads) · status line (with rules, without a catalog, with a broken one, after compaction) · log (ids only, never text; `BALLAST_NO_LOG` writes nothing) · tool layer and modes (injects, denies, silent for unnamed tools, out of prompts; the compaction reminder; `--report`/`--check` naming fired, dead and broken rules). The harness checks what the hook emits, not whether the model obeys; run `node hooks/scripts/verify-hook.mjs` in a clone to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
 
 </details>
@@ -84,15 +84,15 @@ Using Codex instead? The same repository installs as a Codex plugin — `codex p
 
 Hand it something big — `/ballast:goal ship the pricing page` — and every piece attaches to that one goal, in order.
 
-**It starts from what is already held.** At the session's first reply, the recall skill has swept the files brain-init scaffolded on day one: index, knowledge, decisions, rules, skills. All five, and it keeps going past the first hit. The goal skill then splits the objective into branches and judges each one against that inventory.
+**It starts from what is already held.** At the session's first reply, the recall skill has swept the files brain-init scaffolded on day one — index, knowledge, decisions, rules, skills, all five, past the first hit. The goal skill then splits the objective into branches and judges each one against that inventory.
 
-A covered branch must use its file. The pricing rule already in the catalog and the brand facts in `memory/knowledge/` come along as they are; nothing already held gets re-researched. A bare branch makes learning its first task.
+A covered branch must use its file: the pricing rule already in the catalog and the brand facts in `memory/knowledge/` come along as they are, and nothing already held gets re-researched. A bare branch makes learning its first task.
 
 **A bare branch starts with questions, not answers.** In a field you have never worked in, your sense of what matters is the least reliable thing you have. So the terrain scan collects what is argued, what is settled, and where beginners get burned, and lays them out as a map.
 
 Then the branch is cut top-down into a pyramid of atomic pieces: no overlaps, nothing missing, each leaf small enough to verify on its own. A sub-field exposed mid-work is registered by name the moment it appears. Unfilled is allowed; unnamed is not.
 
-**Leaves fill bottom-up, and nothing bears weight unverified.** Collection can be handed to a second CLI (researcher); its findings arrive `hearsay`, because it can fetch but it cannot rule. Every leaf faces the verify gate — refuted first, sourced, labeled — and what survives lands in `memory/knowledge/`.
+**Leaves fill bottom-up, and nothing bears weight unverified.** Collection can be handed to a second CLI (researcher), whose findings arrive `hearsay` — it can fetch, but it cannot rule. Every leaf faces the verify gate — refuted first, sourced, labeled — and what survives lands in `memory/knowledge/`.
 
 The skeleton itself lives in `memory/goal/pricing-page.md`: the tree, its gaps, the next leaf. Tomorrow's session resumes from that file.
 
@@ -102,7 +102,9 @@ Anything said about the product outside the repo passes proof-standard first. Ex
 
 **Done is a claim, so done passes a check.** A zero-context reader walks the deliverable cold (rehearsal); the check passes when a round comes back stall-free, and that round's log is the evidence. A passed check is a file that exists, a test that runs, an output actually inspected.
 
-What the goal solved then stays. Decisions go to the ledger, changed only by supersede — and only what the user actually said goes in; a reading of their silence stays in open questions. A procedure that will recur becomes a skill (skill-forge). A pause becomes a thirty-second return (checkpoint). Next quarter's pricing page opens on the solved path.
+What the goal solved then stays. Decisions go to the ledger, changed only by supersede — and only what the user actually said goes in; a reading of their silence stays in open questions.
+
+A procedure that will recur becomes a skill (skill-forge), and a pause becomes a thirty-second return (checkpoint). Next quarter's pricing page opens on the solved path.
 
 The same loop, drawn — boxes are pieces, cylinders are files that outlive the session:
 
@@ -202,11 +204,12 @@ Start from [`rules/ballast.rules.example.json`](rules/ballast.rules.example.json
 
 ### Know the limits
 
-Three design choices to keep in mind:
+Four design choices to keep in mind:
 
-- **Fail-silent, with two exceptions** — a bad regex or an internal error never breaks your session and says nothing. The exceptions: a catalog that exists but will not parse gets one line back to you, because a dropped catalog otherwise looks exactly like a quiet one; and every session opens with one status line, because a dead hook otherwise looks exactly like a quiet one too.
+- **Fail-silent, with two exceptions** — a bad regex or an internal error never breaks your session and says nothing. The exceptions exist because dropped and dead both look exactly like quiet: a catalog that exists but will not parse gets one line back to you, and every session opens with one status line.
 - **Fail-open** — if the hook cannot run at all (`node` missing from PATH, catalog unreadable), `block` rules do not fire either — at the prompt or at the tool call. Treat blocks as a guardrail, not a sandbox.
-- **Install changes one thing you can see** — the line at session start (`[ballast] hook live — no rule catalog yet`, until your catalog has a rule). Everything else waits for its cue: a correction cues pin, a session's first reply cues recall (which, before `/ballast:brain-init`, has no memory files to sweep). `BALLAST_DISABLE=1` turns the hook off, `BALLAST_QUIET=1` only the status line; the skills leave with the plugin. A project catalog travels with its repo: a cloned project's `.claude/ballast.rules.json` is someone else's standing instructions — the status line counts them, and how many are always-on, so read it when you open an unfamiliar repo.
+- **Install changes one thing you can see** — the line at session start (`[ballast] hook live — no rule catalog yet`, until your catalog has a rule). Everything else waits for its cue: a correction cues pin, a session's first reply cues recall (which, before `/ballast:brain-init`, has no memory files to sweep). `BALLAST_DISABLE=1` turns the hook off, `BALLAST_QUIET=1` only the status line; the skills leave with the plugin.
+- **A project catalog travels with its repo** — a cloned project's `.claude/ballast.rules.json` is someone else's standing instructions. The status line counts them, and how many are always-on; read it when you open an unfamiliar repo.
 
 Fail-open has no error screen — the symptoms are a missing `[ballast] hook live` line at session start and a missing `[ballast]` block on a message that should match. When you see either, check these three in order.
 
@@ -237,7 +240,7 @@ What breaks it is memory and overconfidence. So rules live in files and arrive w
 
 Decisions live in a ledger that cannot be quietly rewritten. Claims carry labels until they earn `confirmed`.
 
-The pieces share one arrangement: the check stands before the mistake. That order came from months of fixing accidents after they shipped — the same months the disclosure below files under `hearsay`. ballast is built to leave those accidents no room to happen.
+The pieces share one arrangement: the check stands before the mistake. That order came from months of fixing accidents after they shipped — months you cannot inspect, which is why the first disclosure below reads `hearsay`. ballast is built to leave those accidents no room to happen.
 
 By those labels, this README owes you two disclosures:
 
