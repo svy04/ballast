@@ -38,9 +38,9 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 
 ## At a glance
 
-- **What it is**: a Claude Code / Codex CLI plugin — one hook script (node, zero dependencies, zero network) on four events (`UserPromptSubmit`, `PreToolUse`, `PreCompact`, `SessionStart`), plus fifteen markdown skills.
+- **What it is**: a Claude Code / Codex CLI plugin — one hook script (node, zero dependencies, zero network) on four events (`UserPromptSubmit`, `PreToolUse`, `PreCompact`, `SessionStart`), plus sixteen markdown skills.
 - **What the hook does**: delivers the full text of your own standing rules from a JSON catalog into the request they match — at the prompt, at the tool call a rule names, and just before context compaction. Every delivery is logged as rule ids and counts, never as prompt text.
-- **What the skills cover**: an append-only decision ledger, verification labels for claims, a proof standard for external claims, goal decomposition, checkpoints, recall, corrections-into-rules (pin), rehearsal, delegated research, a knowledge base, memory scaffolding, skill authoring, and three operations skills (setup, doctor, report).
+- **What the skills cover**: an append-only decision ledger, verification labels for claims, a proof standard for external claims, goal decomposition, checkpoints, recall, corrections-into-rules (pin), rehearsal, delegated research, a knowledge base, memory scaffolding, skill authoring, an agent-owned schedule (fixed dates, event triggers, launch bundles), and three operations skills (setup, doctor, report).
 - **What it is not**: not multi-agent orchestration, not automatic memory collection or summarization, not provider switching or routing, not a style pack. You write the rules; the plugin delivers them.
 
 ## Install
@@ -50,14 +50,14 @@ The `[ballast]` block is the guaranteed part: "npm" matched your rule, so its fu
 /plugin install ballast@ballast
 ```
 
-Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other fifteen pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.) For a guided first setup — no JSON in sight — say "set up ballast" or call `/ballast:setup`.
+Two lines in Claude Code and you are done. The hook runs on the `node` (≥ 18) already on your PATH; the other sixteen pieces are markdown skills. (The install id reads `plugin@marketplace` — both happen to be named ballast here.) For a guided first setup — no JSON in sight — say "set up ballast" or call `/ballast:setup`.
 
 Pairing it with a style skill? ballast shapes what the model remembers and what counts as done, not how it talks, so terse-reply skills such as caveman sit beside it without conflict. The one place they meet is `memory/`: keep compression tools away from the ledger and knowledge files — the `memory-compress-guard` example rule guards exactly that. For plain-language replies, copy the example catalog's `reader-first` rule.
 
 Using Codex instead? The same repository installs as a Codex plugin — `codex plugin marketplace add svy04/ballast`, then `codex plugin add ballast@ballast` — and the same hook runs there: Codex loads `hooks/hooks.json` once you trust it in `/hooks`. Without the plugin, a project-level `.codex/hooks.json` does the same, and the bundled `codex exec` wrapper stays for builds without hooks: [docs/CODEX.md](docs/CODEX.md).
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.10.0-blue" alt="Version 0.10.0"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.11.0-blue" alt="Version 0.11.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
 </p>
 
@@ -72,8 +72,8 @@ Using Codex instead? The same repository installs as a Codex plugin — `codex p
 <summary><strong>Specs</strong> — dependencies, what is enforced, what ships empty</summary>
 
 - **Zero dependencies, zero network** — the hook is one script, imports only `fs`/`os`/`path`; it reads local files and prints. ballast itself sends nothing anywhere (the optional verifier/researcher commands are local CLIs you configure, and the separate verify script only spawns `node` to re-run the hook)
-- **One hook (four events) + fifteen skills** — only the hook is code-enforced, and the docs label which is which
-- **Ships empty, and says so** — every session opens with one line, `[ballast] hook live — N rules loaded`, zero at first; on messages the hook stays silent until a rule matches. [Quick start](#quick-start) is how rules get there. Standing cost: the fifteen skill descriptions are about 620 words; skill bodies load only when a skill is invoked
+- **One hook (four events) + sixteen skills** — only the hook is code-enforced, and the docs label which is which
+- **Ships empty, and says so** — every session opens with one line, `[ballast] hook live — N rules loaded`, zero at first; on messages the hook stays silent until a rule matches. [Quick start](#quick-start) is how rules get there. Standing cost: the sixteen skill descriptions are about 665 words; skill bodies load only when a skill is invoked
 - **Delivery log, ids only** — each delivery appends one JSON line (timestamp, rule ids, sizes — never prompt or tool text) to `~/.claude/ballast/log.jsonl`, rotated past ~512 KB; `--report` aggregates it into fires per rule and names the rules that never fired; `BALLAST_NO_LOG=1` turns it off
 - **[Hook verified on 20 cases](hooks/scripts/verify-hook.mjs)**, in five groups — delivery (keyword inject, silence on no match, block, legacy input fields) · failure (a broken catalog says so, and still never blocks; the manifest is in the shape Claude Code loads) · status line (with rules, without a catalog, with a broken one, after compaction) · log (ids only, never text; `BALLAST_NO_LOG` writes nothing) · tool layer and modes (injects, denies, silent for unnamed tools, out of prompts; the compaction reminder; `--report`/`--check` naming fired, dead and broken rules). The harness checks what the hook emits, not whether the model obeys; run `node hooks/scripts/verify-hook.mjs` in a clone to re-check
 - **MIT** — the whole mechanism is readable in an afternoon
@@ -123,7 +123,7 @@ flowchart TD
     W --> RH["rehearsal — a zero-context<br/>reader executes it"] --> D["done = a check passed"]
 ```
 
-Only the hook in all of this is code: a script that runs on every prompt and every tool call it watches, whether Claude cooperates or not. The fifteen skills are conventions — markdown instructions that hold exactly as well as Claude follows them. Conventions drift: `CLAUDE.md` is read once and recedes as the work goes on, and a convention recedes the same way.
+Only the hook in all of this is code: a script that runs on every prompt and every tool call it watches, whether Claude cooperates or not. The sixteen skills are conventions — markdown instructions that hold exactly as well as Claude follows them. Conventions drift: `CLAUDE.md` is read once and recedes as the work goes on, and a convention recedes the same way.
 
 The route from convention to enforcement is **pin**: when a convention slips, you correct it once, pin writes the correction into the rule catalog, and the hook delivers it from then on. Whether each rule then actually fires is a recorded fact, not a feeling — the delivery log counts every arrival, and the **report** skill names the rules that never fired.
 
@@ -144,6 +144,7 @@ The route from convention to enforcement is **pin**: when a convention slips, yo
 | **pin** | convention — markdown skill | Turns the correction you just made into a permanent rule in the hook's catalog, in one step |
 | **recall** | convention — markdown skill | At a session's first reply and at every subject shift, sweeps index, knowledge, decisions, rules, and skills before answering — and does not stop at the first hit |
 | **skill-forge** | convention — markdown skill | A procedure that recurred and passed its check becomes a skill file; the next run starts from the solved path |
+| **schedule** | convention — markdown skill | `memory/SCHEDULE.md` holds fixed dates, event entries with freshness limits, and launch bundles that fire all-staged or not at all — the agent notices, judges, and prepares; the human fires anything outward |
 | **setup** | convention — markdown skill | First-time setup as a conversation — proves the hook is alive first, then builds the first catalog from choices; four questions or fewer, no JSON shown |
 | **doctor** | convention — markdown skill | Health check in four states (healthy / off / broken / unchecked) — live-fires the status line, runs `--check` on the catalogs, and never hides what it could not verify |
 | **report** | convention — markdown skill | Reads the delivery log via `--report`: fires per rule, never-fired rules as symptoms (wrong-language keywords / safe-by-default / dead weight), pruning proposed one rule at a time |
@@ -247,7 +248,7 @@ By those labels, this README owes you two disclosures:
 - **The track record is `hearsay`.** Those months of daily use happened in a private company workspace, and this public repo dates from August 2026 — there is no public history here to open.
 - **The novelty claim is `unknown`.** Injecting context on prompt submit is a documented Claude Code hook pattern, and append-only records long predate software. "We have not seen the whole loop elsewhere" is the most ballast can say.
 
-What you can check is the mechanism: the hook, the fifteen skills, and the rule format are all in this repo. If you know prior art for the loop, [open an issue](https://github.com/svy04/ballast/issues) and we'll link it.
+What you can check is the mechanism: the hook, the sixteen skills, and the rule format are all in this repo. If you know prior art for the loop, [open an issue](https://github.com/svy04/ballast/issues) and we'll link it.
 
 ## Maintenance
 
